@@ -1,12 +1,9 @@
 import { Router } from 'express';
 import type { ApiResponse } from '@uit-volunteer-map/shared';
+import { validate } from '../middleware/validate.js';
+import { loginSchema, type LoginInput } from '../schemas/auth.js';
 
 const router = Router();
-
-interface LoginRequest {
-  email: string;
-  password: string;
-}
 
 interface User {
   id: string;
@@ -33,8 +30,8 @@ const MOCK_USERS: (User & { password: string })[] = [
   },
 ];
 
-router.post('/login', (req, res) => {
-  const { email, password } = req.body as LoginRequest;
+router.post('/login', validate(loginSchema), (req, res) => {
+  const { email, password } = req.body as LoginInput;
 
   const user = MOCK_USERS.find(
     (u) => u.email === email && u.password === password

@@ -14,6 +14,9 @@
     "build:backend": "npm run build -w @uit-volunteer-map/backend",
     "start": "npm run start -w @uit-volunteer-map/backend",
     "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test:run --workspaces --if-present",
+    "test:frontend": "npm run test -w @uit-volunteer-map/frontend",
+    "test:backend": "npm run test -w @uit-volunteer-map/backend",
     "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules"
   },
   "engines": {
