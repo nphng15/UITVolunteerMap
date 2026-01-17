@@ -1,16 +1,9 @@
 import { Router } from 'express';
-import type { ApiResponse } from '@uit-volunteer-map/shared';
+import type { ApiResponse, User } from '@uit-volunteer-map/shared';
 import { validate } from '../middleware/validate.js';
 import { loginSchema, type LoginInput } from '../schemas/auth.js';
 
 const router = Router();
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: 'admin' | 'user';
-}
 
 // Mock users - replace with database
 const MOCK_USERS: (User & { password: string })[] = [

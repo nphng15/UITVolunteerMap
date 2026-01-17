@@ -1,8 +1,9 @@
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
+import type { UserRole } from '@uit-volunteer-map/shared';
 
 interface ProtectedRouteProps {
-  requiredRole?: 'admin' | 'user';
+  requiredRole?: UserRole;
 }
 
 export default function ProtectedRoute({ requiredRole }: ProtectedRouteProps) {

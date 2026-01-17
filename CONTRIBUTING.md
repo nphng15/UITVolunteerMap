@@ -198,14 +198,14 @@ import { User, ApiResponse } from '@uit-volunteer-map/shared';
 ## Testing
 
 ```bash
-# Run all tests
+# Run all tests once (CI mode)
 npm test
 
-# Watch mode
-npm run test:frontend
-npm run test:backend
+# Watch mode (development)
+cd packages/frontend && npm run test
+cd packages/backend && npm run test
 
-# With coverage
+# With coverage (frontend only)
 cd packages/frontend && npm run test:coverage
 ```
 
@@ -248,7 +248,8 @@ it('returns 200', async () => {
 |---------|-------------|
 | `npm run dev` | Start all packages |
 | `npm run build` | Build all packages |
-| `npm test` | Run all tests |
+| `npm test` | Run all tests (once) |
+| `npm run typecheck` | TypeScript check all packages |
 | `npm run lint` | Lint all packages |
 | `npm run clean` | Remove node_modules & dist |
 

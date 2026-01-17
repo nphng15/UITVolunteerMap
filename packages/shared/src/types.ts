@@ -1,10 +1,13 @@
 // Shared types between frontend and backend
 
+export type UserRole = 'admin' | 'user';
+
 export interface User {
   id: string;
   email: string;
   name: string;
-  createdAt: Date;
+  role: UserRole;
+  createdAt?: Date;
 }
 
 export interface VolunteerLocation {
