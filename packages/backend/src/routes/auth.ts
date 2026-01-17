@@ -1,0 +1,72 @@
+import { Router } from 'express';
+import type { ApiResponse } from '@uit-volunteer-map/shared';
+
+const router = Router();
+
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'user';
+}
+
+// Mock users - replace with database
+const MOCK_USERS: (User & { password: string })[] = [
+  {
+    id: '1',
+    email: 'admin@example.com',
+    password: 'admin123',
+    name: 'Admin User',
+    role: 'admin',
+  },
+  {
+    id: '2',
+    email: 'user@example.com',
+    password: 'user123',
+    name: 'Normal User',
+    role: 'user',
+  },
+];
+
+router.post('/login', (req, res) => {
+  const { email, password } = req.body as LoginRequest;
+
+  const user = MOCK_USERS.find(
+    (u) => u.email === email && u.password === password
+  );
+
+  if (!user) {
+    const response: ApiResponse<null> = {
+      success: false,
+      error: 'Invalid email or password',
+    };
+    res.status(401).json(response);
+    return;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password: _, ...userWithoutPassword } = user;
+
+  const response: ApiResponse<{ user: User }> = {
+    success: true,
+    data: { user: userWithoutPassword },
+    message: 'Login successful',
+  };
+
+  res.json(response);
+});
+
+router.post('/logout', (_req, res) => {
+  const response: ApiResponse<null> = {
+    success: true,
+    message: 'Logged out successfully',
+  };
+  res.json(response);
+});
+
+export { router as authRouter };
