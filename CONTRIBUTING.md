@@ -4,6 +4,80 @@
 
 - Node.js >= 18
 - npm >= 9
+- Git
+
+## Git Workflow
+
+### Branch Strategy
+
+```
+main              ← Production (protected)
+  │
+develop           ← Integration branch (protected)
+  │
+feature/*         ← New features
+bugfix/*          ← Bug fixes
+hotfix/*          ← Urgent fixes for production
+```
+
+### Quy trình làm việc
+
+```bash
+# 1. Clone repo (lần đầu)
+git clone <repo-url>
+cd uit-volunteer-map
+npm install
+
+# 2. Luôn bắt đầu từ develop mới nhất
+git checkout develop
+git pull origin develop
+
+# 3. Tạo branch mới
+git checkout -b feature/ten-tinh-nang
+# hoặc: git checkout -b bugfix/ten-loi
+
+# 4. Code và commit thường xuyên
+git add .
+git commit -m "feat: add map component"
+
+# 5. Push branch lên remote
+git push origin feature/ten-tinh-nang
+
+# 6. Tạo Pull Request trên GitHub
+#    - Base: develop
+#    - Compare: feature/ten-tinh-nang
+
+# 7. Sau khi PR được merge, xóa branch local
+git checkout develop
+git pull origin develop
+git branch -d feature/ten-tinh-nang
+```
+
+### Commit Message Convention
+
+Format: `type: message`
+
+| Type | Mô tả |
+|------|-------|
+| `feat` | Tính năng mới |
+| `fix` | Sửa lỗi |
+| `refactor` | Refactor code |
+| `docs` | Documentation |
+| `test` | Thêm/sửa tests |
+| `chore` | Config, dependencies |
+
+Ví dụ:
+```
+feat: add campaign map view
+fix: resolve login redirect issue
+docs: update API documentation
+```
+
+### Code Review
+
+- Mỗi PR cần ít nhất 1 approval
+- CI phải pass (tests, lint, typecheck)
+- Resolve tất cả comments trước khi merge
 
 ## Getting Started
 

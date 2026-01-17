@@ -1,0 +1,52 @@
+name: Feature Request
+description: Đề xuất tính năng mới
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cảm ơn bạn đã đề xuất tính năng mới!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Mô tả tính năng
+      description: Mô tả rõ ràng tính năng bạn muốn thêm
+      placeholder: Tôi muốn có tính năng...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Lý do cần tính năng này
+      description: Tại sao tính năng này hữu ích?
+      placeholder: Tính năng này giúp...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Giải pháp đề xuất
+      description: Nếu có ý tưởng về cách implement
+      placeholder: Có thể implement bằng cách...
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Giải pháp thay thế
+      description: Các cách khác để giải quyết vấn đề
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Mockups
+      description: Thêm ảnh hoặc mockup nếu có
+    validations:
+      required: false

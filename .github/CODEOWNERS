@@ -1,0 +1,17 @@
+# CODEOWNERS - Định nghĩa ai review code cho phần nào
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners cho toàn bộ repo
+* @YOUR_ORG/tech-lead
+
+# Frontend
+/packages/frontend/ @YOUR_ORG/frontend-team
+
+# Backend
+/packages/backend/ @YOUR_ORG/backend-team
+
+# Shared types
+/packages/shared/ @YOUR_ORG/tech-lead
+
+# CI/CD & Config
+/.github/ @YOUR_ORG/tech-lead
