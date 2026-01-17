@@ -1,12 +1,6 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: 'admin' | 'user';
-}
+import type { User } from '@uit-volunteer-map/shared';
 
 interface AuthContextType {
   user: User | null;
