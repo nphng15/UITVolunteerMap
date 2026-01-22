@@ -1,7 +1,9 @@
+import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import { AppDataSource } from './db/data-source.js';
 import { healthRouter } from './routes/health.js';
 import { authRouter } from './routes/auth.js';
 import { errorHandler } from './middleware/errorHandler.js';
@@ -24,10 +26,19 @@ app.use('/api/auth', authRouter);
 // Error handling
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-  console.log(`Health check: http://localhost:${PORT}/api/health`);
-});
+// Initialize database and start server
+AppDataSource.initialize()
+  .then(() => {
+    console.log('Database connected successfully');
+    
+    app.listen(PORT, () => {
+      console.log(`Server is running on http://localhost:${PORT}`);
+      console.log(`Health check: http://localhost:${PORT}/api/health`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error connecting to database:', error);
+    process.exit(1);
+  });
 
 export default app;
