@@ -1,0 +1,20 @@
+import { DataSource } from "typeorm";
+import { Role } from "../../entities/Role.js";
+
+export const seedRoles = async (dataSource: DataSource) => {
+    const roleRepo = dataSource.getRepository(Role);
+
+    const roles = [
+        { roleId: 1, roleName: 'admin' },
+        { roleId: 2, roleName: 'commander' },    
+    ];
+
+    for (const r of roles) {
+        const exists = await roleRepo.findOneBy({ roleId: r.roleId });
+        if (!exists) {
+            await roleRepo.save(roleRepo.create(r));
+        }
+    }
+
+    console.log('Role seeded');
+};
