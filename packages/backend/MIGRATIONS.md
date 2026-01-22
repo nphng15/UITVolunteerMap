@@ -14,6 +14,9 @@ npm run migration:generate -- src/db/migrations/MigrationName
 
 # Create empty migration
 npm run migration:create -- src/db/migrations/MigrationName
+
+# Import seed (database insertion)
+npm run seed
 ```
 
 ## Workflow
