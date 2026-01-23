@@ -20,7 +20,11 @@ export class Photo {
   @Column("text", { name: "UploadedAt", nullable: false })
   uploadedAt!: string;
 
-  @ManyToOne("Post", (post: any) => post.photos)
+  @ManyToOne("Post", (post: any) => post.photos, { nullable: true })
   @JoinColumn({ name: "PostID" })
-  post!: any;
+  post?: any;
+
+  @ManyToOne("Team", (team: any) => team.photos, { nullable: true })
+  @JoinColumn({ name: "TeamId" })
+  team?: any;
 }

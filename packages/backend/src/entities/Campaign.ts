@@ -1,8 +1,6 @@
 import {
   Column,
   Entity,
-  JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -23,10 +21,6 @@ export class Campaign {
 
   @Column("text", { name: "Description", nullable: true })
   description?: string | null;
-
-  @ManyToOne("User", (user: any) => user.campaigns)
-  @JoinColumn({ name: "UserId" })
-  user!: any;
 
   @OneToMany("Team", (team: any) => team.campaign)
   teams!: any[];
