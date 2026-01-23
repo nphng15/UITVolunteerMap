@@ -24,6 +24,12 @@ export class Post {
   @Column("integer", { name: "IsDeleted", nullable: false, default: 0 })
   isDeleted!: number;
 
+  @Column("text", { name: "CreatedAt", nullable: false })
+  createdAt!: string;
+
+  @Column("text", { name: "UpdatedAt", nullable: false })
+  updatedAt!: string;
+
   @ManyToOne("Campaign", (campaign: any) => campaign.posts)
   @JoinColumn({ name: "CampaignId" })
   campaign!: any;

@@ -28,9 +28,6 @@ export class User {
   @Column("text", { name: "PhoneNumber", nullable: true })
   phoneNumber?: string | null;
 
-  @OneToMany("Campaign", (campaign: any) => campaign.user)
-  campaigns!: any[];
-
   @ManyToOne("Team", (team: any) => team.users)
   @JoinColumn({ name: "TeamId" })
   team!: any;

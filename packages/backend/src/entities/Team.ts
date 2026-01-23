@@ -21,6 +21,9 @@ export class Team {
   @OneToMany("User", (user: any) => user.team)
   users!: any[];
 
+  @OneToMany("Photo", (photo: any) => photo.team)
+  photos!: any[];
+
   @ManyToOne("Campaign", (campaign: any) => campaign.teams)
   @JoinColumn({ name: "CampaignId" })
   campaign!: any;
