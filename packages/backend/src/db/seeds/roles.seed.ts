@@ -1,12 +1,13 @@
 import { DataSource } from "typeorm";
 import { Role } from "../../entities/Role.js";
+import { RoleEnum } from "../../enums/RoleEnum.js";
 
 export const seedRoles = async (dataSource: DataSource) => {
     const roleRepo = dataSource.getRepository(Role);
 
     const roles = [
-        { roleId: 1, roleName: 'admin' },
-        { roleId: 2, roleName: 'commander' },    
+        { roleId: 1, roleName: RoleEnum.ADMIN },
+        { roleId: 2, roleName: RoleEnum.LEADER },    
     ];
 
     for (const r of roles) {

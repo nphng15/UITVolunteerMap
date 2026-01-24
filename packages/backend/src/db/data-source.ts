@@ -20,7 +20,6 @@ export const AppDataSource = new DataSource({
   entities: [User, Account, Role, Team, Campaign, Post, Photo],
   migrations: [
     join(__dirname, './migrations/**/*.{ts,js}'),
-    join(__dirname, './seeds/**/*.{ts,js}')
   ],
   subscribers: [],
 });

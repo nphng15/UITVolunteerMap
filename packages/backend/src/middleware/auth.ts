@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { RoleEnum } from '../enums/RoleEnum.js';
 
 interface JwtPayload {
     accId: number;
@@ -33,9 +34,10 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const requireRole = (roles: string[]) => {
+export const requireRole = (roles: RoleEnum[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    const user = req.user;
+    if (!user || !roles.includes(user.role as RoleEnum)) {
       return res.status(403).json({ message: "Permission denied" });
     }
     next();
