@@ -6,7 +6,11 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
+import type { Team } from "./Team.js";
+import type { Account } from "./Account.js";
+import type { Post } from "./Post.js";
 
 @Entity("User")
 export class User {
@@ -28,14 +32,14 @@ export class User {
   @Column("text", { name: "PhoneNumber", nullable: true })
   phoneNumber?: string | null;
 
-  @ManyToOne("Team", (team: any) => team.users)
+  @ManyToOne("Team", "users")
   @JoinColumn({ name: "TeamId" })
-  team!: any;
+  team!: Relation<Team>;
 
-  @OneToOne("Account", (account: any) => account.user)
+  @OneToOne("Account", "user")
   @JoinColumn({ name: "AccId" })
-  account?: any;
+  account?: Relation<Account>;
 
-  @OneToMany("Post", (post: any) => post.author)
-  posts!: any[];
+  @OneToMany("Post", "author")
+  posts!: Relation<Post[]>;
 }

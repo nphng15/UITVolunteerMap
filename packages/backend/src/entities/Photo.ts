@@ -4,7 +4,10 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
+import type { Post } from "./Post.js";
+import type { Team } from "./Team.js";
 
 @Entity("Photo")
 export class Photo {
@@ -20,11 +23,11 @@ export class Photo {
   @Column("text", { name: "UploadedAt", nullable: false })
   uploadedAt!: string;
 
-  @ManyToOne("Post", (post: any) => post.photos, { nullable: true })
+  @ManyToOne("Post", "photos", { nullable: true })
   @JoinColumn({ name: "PostID" })
-  post?: any;
+  post?: Relation<Post>;
 
-  @ManyToOne("Team", (team: any) => team.photos, { nullable: true })
+  @ManyToOne("Team", "photos", { nullable: true })
   @JoinColumn({ name: "TeamId" })
-  team?: any;
+  team?: Relation<Team>;
 }

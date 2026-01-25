@@ -3,10 +3,10 @@ import { useAuth } from '@/hooks/useAuth';
 import type { UserRole } from '@uit-volunteer-map/shared';
 
 interface ProtectedRouteProps {
-  requiredRole?: UserRole;
+  requiredRoles?: UserRole[];
 }
 
-export default function ProtectedRoute({ requiredRole }: ProtectedRouteProps) {
+export default function ProtectedRoute({ requiredRoles }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
 
@@ -22,7 +22,7 @@ export default function ProtectedRoute({ requiredRole }: ProtectedRouteProps) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requiredRole && user?.role !== requiredRole) {
+  if (requiredRoles && user && !requiredRoles.includes(user.role)) {
     return <Navigate to="/dashboard" replace />;
   }
 

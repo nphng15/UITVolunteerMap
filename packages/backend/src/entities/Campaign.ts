@@ -3,7 +3,10 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
+import type { Team } from "./Team.js";
+import type { Post } from "./Post.js";
 
 @Entity("Campaign")
 export class Campaign {
@@ -22,9 +25,9 @@ export class Campaign {
   @Column("text", { name: "Description", nullable: true })
   description?: string | null;
 
-  @OneToMany("Team", (team: any) => team.campaign)
-  teams!: any[];
+  @OneToMany("Team", "campaign")
+  teams!: Relation<Team[]>;
 
-  @OneToMany("Post", (post: any) => post.campaign)
-  posts!: any[];
+  @OneToMany("Post", "campaign")
+  posts!: Relation<Post[]>;
 }
