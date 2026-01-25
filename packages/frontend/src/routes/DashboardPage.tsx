@@ -22,7 +22,7 @@ export default function DashboardPage() {
 
       <div className="bg-white rounded-lg shadow p-6 mb-4">
         <p className="text-gray-600">
-          Welcome back, <span className="font-medium">{user?.name}</span>
+          Welcome back, <span className="font-medium">{user?.username}</span>
         </p>
         <p className="text-sm text-gray-500 mt-1">
           Role: {user?.role}

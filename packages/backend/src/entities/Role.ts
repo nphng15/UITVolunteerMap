@@ -1,4 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, type Relation } from "typeorm";
+import type { Account } from "./Account.js";
 
 @Entity("Role")
 export class Role {
@@ -8,6 +9,6 @@ export class Role {
   @Column("text", { name: "RoleName" })
   roleName!: string;
 
-  @OneToMany("Account", (account: any) => account.role)
-  accounts!: any[];
+  @OneToMany("Account", "role")
+  accounts!: Relation<Account[]>;
 }

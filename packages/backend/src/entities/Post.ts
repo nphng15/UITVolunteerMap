@@ -5,7 +5,11 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
+import type { Campaign } from "./Campaign.js";
+import type { User } from "./User.js";
+import type { Photo } from "./Photo.js";
 
 @Entity("Post")
 export class Post {
@@ -30,14 +34,14 @@ export class Post {
   @Column("text", { name: "UpdatedAt", nullable: false })
   updatedAt!: string;
 
-  @ManyToOne("Campaign", (campaign: any) => campaign.posts)
+  @ManyToOne("Campaign", "posts")
   @JoinColumn({ name: "CampaignId" })
-  campaign!: any;
+  campaign!: Relation<Campaign>;
 
-  @ManyToOne("User", (user: any) => user.posts)
+  @ManyToOne("User", "posts")
   @JoinColumn({ name: "AuthorId" })
-  author!: any;
+  author!: Relation<User>;
 
-  @OneToMany("Photo", (photo: any) => photo.post)
-  photos!: any[];
+  @OneToMany("Photo", "post")
+  photos!: Relation<Photo[]>;
 }

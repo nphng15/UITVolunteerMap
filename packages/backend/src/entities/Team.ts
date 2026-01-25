@@ -5,7 +5,11 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
+import type { User } from "./User.js";
+import type { Photo } from "./Photo.js";
+import type { Campaign } from "./Campaign.js";
 
 @Entity("Team")
 export class Team {
@@ -18,13 +22,13 @@ export class Team {
   @Column("text", { name: "Description", nullable: true })
   description?: string | null;
 
-  @OneToMany("User", (user: any) => user.team)
-  users!: any[];
+  @OneToMany("User", "team")
+  users!: Relation<User[]>;
 
-  @OneToMany("Photo", (photo: any) => photo.team)
-  photos!: any[];
+  @OneToMany("Photo", "team")
+  photos!: Relation<Photo[]>;
 
-  @ManyToOne("Campaign", (campaign: any) => campaign.teams)
+  @ManyToOne("Campaign", "teams")
   @JoinColumn({ name: "CampaignId" })
-  campaign!: any;
+  campaign!: Relation<Campaign>;
 }
