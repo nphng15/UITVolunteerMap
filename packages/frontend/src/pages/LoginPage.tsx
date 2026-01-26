@@ -17,23 +17,29 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/admin/dashboard';
-
   // Redirect if already logged in, with admin/leader specific redirects
   useEffect(() => {
-    if (isAuthenticated) {
-      switch (user?.role) {
-        case RoleEnum.ADMIN:
-          navigate('/admin/dashboard', { replace: true });
-          break;
-        case RoleEnum.LEADER:
-          navigate('/leader', { replace: true });
-          break;
-        default:
-          navigate('/', { replace: true });
+    if (isAuthenticated && user) {
+      // If redirected from a protected page, go back there
+      const redirectTo = location.state?.from?.pathname;
+
+      if (redirectTo) {
+        navigate(redirectTo, { replace: true });
+      } else {
+        // Otherwise, redirect based on role
+        switch (user.role) {
+          case RoleEnum.ADMIN:
+            navigate('/admin/dashboard', { replace: true });
+            break;
+          case RoleEnum.LEADER:
+            navigate('/leader', { replace: true });
+            break;
+          default:
+            navigate('/', { replace: true });
+        }
       }
     }
-  }, [isAuthenticated, user, navigate]);
+  }, [isAuthenticated, user, navigate, location.state]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +48,7 @@ export default function LoginPage() {
 
     try {
       await login(username, password);
-      navigate(from, { replace: true });
+      // Redirect handled by useEffect after auth state changes
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {

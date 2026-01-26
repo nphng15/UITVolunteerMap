@@ -20,7 +20,7 @@ export default function ProtectedRoute({ requiredRoles }: ProtectedRouteProps) {
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
-  } else if (requiredRoles && !requiredRoles.includes(user!.role)) {
+  } else if (requiredRoles && user && !requiredRoles.includes(user.role)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-500">Bạn không có quyền truy cập trang này.</div>
