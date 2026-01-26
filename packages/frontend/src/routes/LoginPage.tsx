@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
 
-import FloatingInput from '@/components/ui/FloatingInput';
+import FloatingInput from '../components/ui/FloatingInput';
 
 import EyeIcon from '@/assets/icons/eye.svg';
 
