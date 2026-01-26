@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter } from "react-router";
 import RootLayout from "@/components/layouts/RootLayout";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import HomePage from "@/pages/HomePage";
@@ -10,8 +10,8 @@ import { RoleEnum } from "@uit-volunteer-map/shared";
 import LeaderLayout from "@/components/layouts/LeaderLayout";
 import CampaignPage from "@/pages/CampaignPage";
 import TeamPage from "@/pages/TeamPage";
-import PostModal from "@/pages/PostModal";
 import MyTeamPage from "@/pages/leader/MyTeamPage";
+import TeamModalWrapper from "@/components/layouts/TeamModalWrapper";
 
 export const router = createBrowserRouter([
   {
@@ -26,12 +26,10 @@ export const router = createBrowserRouter([
           { index: true, element: <CampaignPage /> },
           {
             path: "team/:teamId",
+            element: <TeamModalWrapper />,
             children: [
               { index: true, element: <TeamPage /> },
-              {
-                path: "post/:postId",
-                element: <PostModal />,
-              },
+              { path: "post/:postId", element: null },      
             ],
           },
         ],
