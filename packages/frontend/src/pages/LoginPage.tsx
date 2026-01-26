@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
+import { RoleEnum } from '@uit-volunteer-map/shared';
+
+
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -8,17 +11,27 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from?.pathname || '/admin/dashboard';
 
-  // Redirect if already logged in
-  if (isAuthenticated) {
-    navigate(from, { replace: true });
-    return null;
-  }
+  // Redirect if already logged in, with admin/leader specific redirects
+  useEffect(() => {
+    if (isAuthenticated) {
+      switch (user?.role) {
+        case RoleEnum.ADMIN:
+          navigate('/admin/dashboard', { replace: true });
+          break;
+        case RoleEnum.LEADER:
+          navigate('/leader', { replace: true });
+          break;
+        default:
+          navigate('/', { replace: true });
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

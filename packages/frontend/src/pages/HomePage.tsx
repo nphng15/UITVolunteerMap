@@ -9,7 +9,7 @@ export default function HomePage() {
         </h1>
         <div className="flex gap-4 justify-center">
           <Link
-            to="/login"
+            to="login"
             className="px-6 py-3 bg-white text-primary-700 font-medium rounded-lg hover:bg-primary-50 transition-colors"
           >
             Đăng nhập (cho Admin/Leader)

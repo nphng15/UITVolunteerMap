@@ -1,17 +1,17 @@
 import { createBrowserRouter, Navigate } from "react-router";
-import RootLayout from "@/layouts/RootLayout";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import HomePage from "@/routes/HomePage";
-import LoginPage from "@/routes/LoginPage";
-import AdminLayout from "@/layouts/AdminLayout";
-import AdminDashboard from "@/routes/admin/AdminDashboard";
-import NotFoundPage from "@/routes/NotFoundPage";
+import RootLayout from "@/components/layouts/RootLayout";
+import ProtectedRoute from "@/routes/ProtectedRoute";
+import HomePage from "@/pages/HomePage";
+import LoginPage from "@/pages/LoginPage";
+import AdminLayout from "@/components/layouts/AdminLayout";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import NotFoundPage from "@/pages/NotFoundPage";
 import { RoleEnum } from "@uit-volunteer-map/shared";
-import LeaderLayout from "@/layouts/LeaderLayout";
-import CampaignPage from "@/routes/CampaignPage";
-import TeamPage from "@/routes/TeamPage";
-import PostModal from "@/routes/PostModal";
-import MyTeamPage from "@/routes/leader/MyTeamPage";
+import LeaderLayout from "@/components/layouts/LeaderLayout";
+import CampaignPage from "@/pages/CampaignPage";
+import TeamPage from "@/pages/TeamPage";
+import PostModal from "@/pages/PostModal";
+import MyTeamPage from "@/pages/leader/MyTeamPage";
 
 export const router = createBrowserRouter([
   {
