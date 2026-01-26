@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
 import { RoleEnum } from '@uit-volunteer-map/shared';
-import FloatingInput from '../components/ui/FloatingInput';
+import FloatingInput from '@/components/ui/FloatingInput';
 import EyeIcon from '@/assets/icons/eye.svg';
 
 
