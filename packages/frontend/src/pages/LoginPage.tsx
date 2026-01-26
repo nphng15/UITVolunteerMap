@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
+import { RoleEnum } from '@uit-volunteer-map/shared';
+
+
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -8,17 +11,27 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = location.state?.from?.pathname || '/admin/dashboard';
 
-  // Redirect if already logged in
-  if (isAuthenticated) {
-    navigate(from, { replace: true });
-    return null;
-  }
+  // Redirect if already logged in, with admin/leader specific redirects
+  useEffect(() => {
+    if (isAuthenticated) {
+      switch (user?.role) {
+        case RoleEnum.ADMIN:
+          navigate('/admin/dashboard', { replace: true });
+          break;
+        case RoleEnum.LEADER:
+          navigate('/leader', { replace: true });
+          break;
+        default:
+          navigate('/', { replace: true });
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,7 +68,7 @@ export default function LoginPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               disabled={isSubmitting}
               required
             />
@@ -68,7 +81,7 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               disabled={isSubmitting}
               required
             />
@@ -78,12 +91,12 @@ export default function LoginPage() {
             disabled={isSubmitting}
             className="w-full py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Signing in...' : 'Sign In'}
+            {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </button>
         </form>
         <p className="mt-4 text-center text-sm text-gray-600">
           <Link to="/" className="text-primary-600 hover:underline">
-            Back to home
+            Quay lại trang chủ
           </Link>
         </p>
       </div>
