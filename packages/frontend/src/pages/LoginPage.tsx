@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
 import { RoleEnum } from '@uit-volunteer-map/shared';
-
+import FloatingInput from '@/components/ui/FloatingInput';
+import EyeIcon from '@/assets/icons/eye.svg';
 
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -15,23 +17,29 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/admin/dashboard';
-
   // Redirect if already logged in, with admin/leader specific redirects
   useEffect(() => {
-    if (isAuthenticated) {
-      switch (user?.role) {
-        case RoleEnum.ADMIN:
-          navigate('/admin/dashboard', { replace: true });
-          break;
-        case RoleEnum.LEADER:
-          navigate('/leader', { replace: true });
-          break;
-        default:
-          navigate('/', { replace: true });
+    if (isAuthenticated && user) {
+      // If redirected from a protected page, go back there
+      const redirectTo = location.state?.from?.pathname;
+
+      if (redirectTo) {
+        navigate(redirectTo, { replace: true });
+      } else {
+        // Otherwise, redirect based on role
+        switch (user.role) {
+          case RoleEnum.ADMIN:
+            navigate('/admin/dashboard', { replace: true });
+            break;
+          case RoleEnum.LEADER:
+            navigate('/leader', { replace: true });
+            break;
+          default:
+            navigate('/', { replace: true });
+        }
       }
     }
-  }, [isAuthenticated, user, navigate]);
+  }, [isAuthenticated, user, navigate, location.state]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +48,7 @@ export default function LoginPage() {
 
     try {
       await login(username, password);
-      navigate(from, { replace: true });
+      // Redirect handled by useEffect after auth state changes
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
@@ -48,58 +56,91 @@ export default function LoginPage() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
+return (
+    <div className="min-h-screen bg-linear-to-b from-[#0480BA] to-[#023A54] flex items-center justify-center">
+      {/* Card */}
+      <form
+        onSubmit={handleSubmit}
+        className="relative w-full max-w-180 h-139.75 bg-white rounded-[40px] shadow-md"
+      >
+        {/* Header Logo */}
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 flex items-start gap-1">
+          <div className="w-6 h-6 bg-[#4D5358]" />
+          <div className="flex flex-col items-end">
+            <div className="text-[48px] font-bold leading-[52.8px] text-[#697077]">
+              UITVolunteer
+            </div>
+            <div className="text-[24px] font-normal leading-[33.6px] text-[#697077]">
+              xxxxxxxxxxx
+            </div>
+          </div>
+        </div>
 
+        {/* Title */}
+        <div className="absolute top-48.25 left-1/2 -translate-x-1/2 w-140 text-center text-[42px] font-bold leading-11.5 text-[#21272A]">
+          Đăng nhập
+        </div>
+
+        {/* Error */}
         {error && (
-          <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+          <div className="absolute top-60 left-1/2 -translate-x-1/2 w-140 text-center text-red-600 text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Username
-            </label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              disabled={isSubmitting}
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              disabled={isSubmitting}
-              required
-            />
-          </div>
-          <button
-            type="submit"
+        {/* Username */}
+        <div className="absolute top-67.25 left-1/2 -translate-x-1/2 w-140">
+          <FloatingInput
+            label="Tên đăng nhập"
+            value={username}
+            onChange={setUsername}
             disabled={isSubmitting}
-            className="w-full py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          />
+        </div>
+
+        {/* Password */}
+        <div className="absolute top-87.25 left-1/2 -translate-x-1/2 w-140">
+          <FloatingInput
+            label="Mật khẩu"
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={setPassword}
+            disabled={isSubmitting}
+          />
+
+          {/* Eye button */}
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6"
           >
-            {isSubmitting ? 'Đang đăng nhập...' : 'Đăng nhập'}
+            <div className="relative w-6 h-6">
+              {/* Eye icon */}
+              <img src={EyeIcon} alt="eye" className="w-6 h-6" />
+
+              {/* Slash when hidden */}
+              {!showPassword && (
+                <div className="absolute left-0 top-1/2 w-full h-0.5 bg-[#21272A] -rotate-45" />
+              )}
+            </div>
           </button>
-        </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
-          <Link to="/" className="text-primary-600 hover:underline">
-            Quay lại trang chủ
-          </Link>
-        </p>
-      </div>
+        </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="absolute top-107.25 left-1/2 -translate-x-1/2 w-140 h-12.5
+            rounded-lg bg-[#023A54]
+            text-white font-bold text-[20px]
+            hover:opacity-90 disabled:opacity-50"
+        >
+          {isSubmitting ? 'Đang đăng nhập...' : 'ĐĂNG NHẬP'}
+        </button>
+
+        {/* Divider */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-140 border-t border-[#DDE1E6]" />
+      </form>
     </div>
   );
 }

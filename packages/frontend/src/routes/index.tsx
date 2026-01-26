@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import RootLayout from "@/components/layouts/RootLayout";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 import HomePage from "@/pages/HomePage";
@@ -38,6 +38,10 @@ export const router = createBrowserRouter([
         path: "admin",
         element: <ProtectedRoute requiredRoles={[RoleEnum.ADMIN]} />,
         children: [
+          {
+            index: true,
+            element:<Navigate to="/admin/dashboard" replace />,
+          },
           {
             element: <AdminLayout />,
             children: [{ path: "dashboard", element: <AdminDashboard /> }],
