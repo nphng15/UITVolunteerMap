@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
-
+import { RoleEnum } from '@uit-volunteer-map/shared';
 import FloatingInput from '../components/ui/FloatingInput';
-
 import EyeIcon from '@/assets/icons/eye.svg';
 
 
@@ -14,17 +13,27 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = location.state?.from?.pathname || '/admin/dashboard';
 
-  // Redirect if already logged in
-  if (isAuthenticated) {
-    navigate(from, { replace: true });
-    return null;
-  }
+  // Redirect if already logged in, with admin/leader specific redirects
+  useEffect(() => {
+    if (isAuthenticated) {
+      switch (user?.role) {
+        case RoleEnum.ADMIN:
+          navigate('/admin/dashboard', { replace: true });
+          break;
+        case RoleEnum.LEADER:
+          navigate('/leader', { replace: true });
+          break;
+        default:
+          navigate('/', { replace: true });
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,14 +51,14 @@ export default function LoginPage() {
   };
 
 return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0480BA] to-[#023A54] flex items-center justify-center">
+    <div className="min-h-screen bg-linear-to-b from-[#0480BA] to-[#023A54] flex items-center justify-center">
       {/* Card */}
       <form
         onSubmit={handleSubmit}
-        className="relative w-full max-w-[720px] h-[559px] bg-white rounded-[40px] shadow-md"
+        className="relative w-full max-w-180 h-139.75 bg-white rounded-[40px] shadow-md"
       >
         {/* Header Logo */}
-        <div className="absolute top-[80px] left-1/2 -translate-x-1/2 flex items-start gap-1">
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 flex items-start gap-1">
           <div className="w-6 h-6 bg-[#4D5358]" />
           <div className="flex flex-col items-end">
             <div className="text-[48px] font-bold leading-[52.8px] text-[#697077]">
@@ -62,19 +71,19 @@ return (
         </div>
 
         {/* Title */}
-        <div className="absolute top-[193px] left-1/2 -translate-x-1/2 w-[560px] text-center text-[42px] font-bold leading-[46px] text-[#21272A]">
+        <div className="absolute top-48.25 left-1/2 -translate-x-1/2 w-140 text-center text-[42px] font-bold leading-11.5 text-[#21272A]">
           Đăng nhập
         </div>
 
         {/* Error */}
         {error && (
-          <div className="absolute top-[240px] left-1/2 -translate-x-1/2 w-[560px] text-center text-red-600 text-sm">
+          <div className="absolute top-60 left-1/2 -translate-x-1/2 w-140 text-center text-red-600 text-sm">
             {error}
           </div>
         )}
 
         {/* Username */}
-        <div className="absolute top-[269px] left-1/2 -translate-x-1/2 w-[560px]">
+        <div className="absolute top-67.25 left-1/2 -translate-x-1/2 w-140">
           <FloatingInput
             label="Tên đăng nhập"
             value={username}
@@ -84,7 +93,7 @@ return (
         </div>
 
         {/* Password */}
-        <div className="absolute top-[349px] left-1/2 -translate-x-1/2 relative w-[560px]">
+        <div className="absolute top-87.25 left-1/2 -translate-x-1/2 w-140">
           <FloatingInput
             label="Mật khẩu"
             type={showPassword ? 'text' : 'password'}
@@ -105,7 +114,7 @@ return (
 
               {/* Slash when hidden */}
               {!showPassword && (
-                <div className="absolute left-0 top-1/2 w-full h-[2px] bg-[#21272A] rotate-[-45deg]" />
+                <div className="absolute left-0 top-1/2 w-full h-0.5 bg-[#21272A] -rotate-45" />
               )}
             </div>
           </button>
@@ -115,7 +124,7 @@ return (
         <button
           type="submit"
           disabled={isSubmitting}
-          className="absolute top-[429px] left-1/2 -translate-x-1/2 w-[560px] h-[50px]
+          className="absolute top-107.25 left-1/2 -translate-x-1/2 w-140 h-12.5
             rounded-lg bg-[#023A54]
             text-white font-bold text-[20px]
             hover:opacity-90 disabled:opacity-50"
@@ -124,7 +133,7 @@ return (
         </button>
 
         {/* Divider */}
-        <div className="absolute bottom-[40px] left-1/2 -translate-x-1/2 w-[560px] border-t border-[#DDE1E6]" />
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-140 border-t border-[#DDE1E6]" />
       </form>
     </div>
   );
