@@ -1,8 +1,10 @@
-import { Link } from "react-router";
+import { Link,useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 
 const SECTIONS = ["info", "teams", "activities"] as const;
 type SectionId = (typeof SECTIONS)[number];
+const navigate = useNavigate();
+
 
 export default function GuestHeader() {
   const [active, setActive] = useState<SectionId | null>(null);
@@ -17,7 +19,7 @@ export default function GuestHeader() {
         });
       },
       {
-        rootMargin: "-80px 0px -50% 0px", // trừ chiều cao header
+        rootMargin: "-80px 0px -50% 0px",
         threshold: 0,
       }
     );
@@ -30,9 +32,15 @@ export default function GuestHeader() {
     return () => observer.disconnect();
   }, []);
 
+  // 👇 THÊM Ở ĐÂY
+  const handleClick = (id: SectionId) => {
+    setActive(id);
+  };
+
   const navItem = (id: SectionId, label: string) => (
     <a
       href={`#${id}`}
+      onClick={() => handleClick(id)} // 👈 THÊM DÒNG NÀY
       className={`relative text-xs font-bold transition
         ${active === id ? "text-blue-600" : "text-black"}
       `}
@@ -58,12 +66,13 @@ export default function GuestHeader() {
           {navItem("activities", "Hoạt động")}
         </nav>
 
-        <Link
-          to="/login"
+        <button
+          onClick={() => navigate("/login")}
           className="text-xs font-bold px-3 py-1 border border-black/20 rounded hover:bg-gray-100"
         >
           Đăng nhập
-        </Link>
+        </button>
+
       </div>
     </header>
   );
