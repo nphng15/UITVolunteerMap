@@ -8,6 +8,7 @@ import { authRouter } from './routes/auth.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { adminRouter } from './routes/admin.route.js';
 import { leaderRouter } from './routes/leader.route.js';
+import { campaignRouter } from './routes/campaign.js';
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ app.use('/api/health', healthRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/leader', leaderRouter);
+app.use('/api/campaigns', campaignRouter);
+
 // Error handling
 app.use(errorHandler);
 
