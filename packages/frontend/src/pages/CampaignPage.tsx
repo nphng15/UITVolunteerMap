@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router";
 import GuestHeader from "@/components/layouts/GuestHeader";
 import Footer from "@/components/layouts/Footer";
+import MapView from "@/components/layouts/MapView";
 
 export default function CampaignPage() {
   const { campaignId } = useParams<{ campaignId: string }>();
@@ -16,7 +17,7 @@ export default function CampaignPage() {
         <section className="max-w-4xl mx-auto px-4">
           <div className="bg-white p-3 rounded-md">
             <div className="border-4 border-black aspect-[16/9] flex items-center justify-center">
-              <span className="text-5xl font-black">Map</span>
+              <MapView />
             </div>
           </div>
         </section>

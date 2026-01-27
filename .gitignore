@@ -141,5 +141,5 @@ vite.config.ts.timestamp-*
 # Database
 *.sqlite
 
-# GeoJson files
+# Map data
 *.geojson

@@ -6,8 +6,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#CFCFCF]">
       <PublicHeader />
-
-
       <main className="flex-1">
         <section className="max-w-5xl mx-auto px-4 pt-4">
           <div className="bg-[#BDBDBD] h-80 flex flex-col items-center justify-center gap-6">
