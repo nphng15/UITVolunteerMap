@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router";
 import GuestHeader from "@/components/layouts/GuestHeader";
 import Footer from "@/components/layouts/Footer";
+import MapView from "@/components/layouts/MapView";
 
 export default function CampaignPage() {
   const { campaignId } = useParams<{ campaignId: string }>();
@@ -12,21 +13,21 @@ export default function CampaignPage() {
     <div className="min-h-screen flex flex-col bg-[#BDBDBD]">
       <GuestHeader />
 
-      <main className="flex-1 pt-20 pb-6">
+      <main className="flex-1 py-6">
         <section className="max-w-4xl mx-auto px-4">
           <div className="bg-white p-3 rounded-md">
-            <div className="border-4 border-black aspect-[16/9] flex items-center justify-center">
-              <span className="text-5xl font-black">Map</span>
-            </div>
+            <div className="border-4 border-black h-[60vh] min-h-[320px]">
+            <MapView />
+          </div>
           </div>
         </section>
 
         <section
           id="info"
-          className="max-w-4xl mx-auto mt-10 px-4 scroll-mt-20"
+          className="max-w-4xl mx-auto mt-10 px-4"
         >
           <h2 className="text-center font-black tracking-widest mb-6">
-            THÔNG TIN CHUNG
+            THÔNG TIN CHUNG CHIẾN DỊCH {campaignId}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -41,7 +42,7 @@ export default function CampaignPage() {
         </section>
         <section
           id="teams"
-          className="max-w-4xl mx-auto mt-12 px-4 scroll-mt-20"
+          className="max-w-4xl mx-auto mt-12 px-4"
         >
           <h2 className="text-center font-black tracking-widest mb-6">
             ĐỘI HÌNH
@@ -76,7 +77,7 @@ export default function CampaignPage() {
 
         <section
           id="activities"
-          className="max-w-4xl mx-auto mt-14 px-4 scroll-mt-20"
+          className="max-w-4xl mx-auto mt-14 px-4"
         >
           <h2 className="text-center font-black tracking-widest mb-6">
             HOẠT ĐỘNG
