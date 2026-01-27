@@ -16,7 +16,7 @@ export default function CampaignPage() {
       <main className="flex-1 py-6">
         <section className="max-w-4xl mx-auto px-4">
           <div className="bg-white p-3 rounded-md">
-            <div className="border-4 border-black aspect-[16/9] flex items-center justify-center">
+            <div className="border-4 border-black aspect-video flex items-center justify-center">
               <MapView />
             </div>
           </div>
@@ -27,7 +27,7 @@ export default function CampaignPage() {
           className="max-w-4xl mx-auto mt-10 px-4"
         >
           <h2 className="text-center font-black tracking-widest mb-6">
-            THÔNG TIN CHUNG
+            THÔNG TIN CHUNG CHIẾN DỊCH {campaignId}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
