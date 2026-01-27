@@ -16,7 +16,7 @@ export default function CampaignPage() {
       <main className="flex-1 py-6">
         <section className="max-w-4xl mx-auto px-4">
           <div className="bg-white p-3 rounded-md">
-        <div className="border-4 border-black h-[280px] md:h-[320px] overflow-hidden relative">
+        <div className="border-4 border-black relative overflow-hidden h-[360px] md:h-[420px] lg:h-[480px]">
           <MapView />
         </div>
           </div>
