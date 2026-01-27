@@ -16,11 +16,12 @@ export default function CampaignPage() {
       <main className="flex-1 py-6">
         <section className="max-w-4xl mx-auto px-4">
           <div className="bg-white p-3 rounded-md">
-          <div className="border-4 border-black h-[280px] md:h-[320px]">
-            <MapView />
-          </div>
+            <div className="border-4 border-black aspect-video flex items-center justify-center">
+              <MapView />
+            </div>
           </div>
         </section>
+
         <section
           id="info"
           className="max-w-4xl mx-auto mt-10 px-4"
