@@ -1,16 +1,18 @@
 import { Link } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const SECTIONS = ["info", "teams", "activities"] as const;
 type SectionId = (typeof SECTIONS)[number];
 
-
 export default function GuestHeader() {
   const [active, setActive] = useState<SectionId | null>(null);
+  const isClickingRef = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        if (isClickingRef.current) return;
+
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActive(entry.target.id as SectionId);
@@ -32,13 +34,18 @@ export default function GuestHeader() {
   }, []);
 
   const handleClick = (id: SectionId) => {
+    isClickingRef.current = true;
     setActive(id);
+
+    setTimeout(() => {
+      isClickingRef.current = false;
+    }, 400);
   };
 
   const navItem = (id: SectionId, label: string) => (
     <a
       href={`#${id}`}
-      onClick={() => handleClick(id)} 
+      onClick={() => handleClick(id)}
       className={`relative text-xs font-bold transition
         ${active === id ? "text-blue-600" : "text-black"}
       `}
@@ -70,7 +77,6 @@ export default function GuestHeader() {
         >
           Đăng nhập
         </Link>
-
       </div>
     </header>
   );
