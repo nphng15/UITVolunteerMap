@@ -10,7 +10,7 @@ export default function HomePage() {
 
       <main className="flex-1">
         <section className="max-w-5xl mx-auto px-4 pt-4">
-          <div className="bg-[#BDBDBD] h-[320px] flex flex-col items-center justify-center gap-6">
+          <div className="bg-[#BDBDBD] h-80 flex flex-col items-center justify-center gap-6">
 
             <div className="flex gap-4">
               <div className="w-28 h-16 bg-black rounded-sm" />
