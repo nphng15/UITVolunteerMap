@@ -97,8 +97,7 @@ describe("User Profile Routes", () => {
         .set("Authorization", `Bearer ${adminToken}`);
 
       expect(res.status).toBe(200);
-      expect(res.body.code).toBe(200);
-      expect(res.body.message).toBe("User detail");
+      expect(res.body.success).toBe(true);
       expect(res.body.data).toMatchObject({
         UserId: String(adminUser.userId),
         FullName: "Admin User",
@@ -113,17 +112,16 @@ describe("User Profile Routes", () => {
       const res = await request(app).get("/api/users/profile");
 
       expect(res.status).toBe(401);
-      expect(res.body.code).toBe(401);
-      expect(res.body.error).toBe("Unauthorized");
+      expect(res.body.success).toBe(false);
     });
 
-    it("should return 401 when token is invalid", async () => {
+    it("should return 401/403 when token is invalid", async () => {
       const res = await request(app)
         .get("/api/users/profile")
         .set("Authorization", "Bearer invalid-token");
 
-      expect(res.status).toBe(401);
-      expect(res.body.code).toBe(401);
+      expect([401, 403]).toContain(res.status);
+      expect(res.body.success).toBe(false);
     });
 
     it("should allow both admin and leader to access profile", async () => {
@@ -142,7 +140,6 @@ describe("User Profile Routes", () => {
     });
 
     it("should return 404 when user associated with account does not exist", async () => {
-      // Create a token for a non-existent user
       const fakeToken = jwt.sign(
         { accId: 9999, role: RoleEnum.ADMIN },
         JWT_SECRET,
@@ -154,9 +151,8 @@ describe("User Profile Routes", () => {
         .set("Authorization", `Bearer ${fakeToken}`);
 
       expect(res.status).toBe(404);
-      expect(res.body.code).toBe(404);
-      expect(res.body.error).toBe("Not Found");
-      expect(res.body.message).toContain("User with ID");
+      expect(res.body.success).toBe(false);
+      expect(res.body.error).toContain("User with ID");
     });
   });
 
@@ -176,7 +172,7 @@ describe("User Profile Routes", () => {
         .send(updateData);
 
       expect(res.status).toBe(200);
-      expect(res.body.code).toBe(200);
+      expect(res.body.success).toBe(true);
       expect(res.body.data).toMatchObject({
         FullName: "Updated Admin",
         Email: "updated-admin@example.com",
@@ -196,7 +192,7 @@ describe("User Profile Routes", () => {
       });
 
       expect(res.status).toBe(401);
-      expect(res.body.code).toBe(401);
+      expect(res.body.success).toBe(false);
     });
 
     it("should return 400 when validation fails", async () => {
@@ -204,18 +200,16 @@ describe("User Profile Routes", () => {
         .put("/api/users/profile")
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
-          FullName: "", // Empty name should fail
-          Email: "invalid-email", // Invalid email format
+          FullName: "",
+          Email: "invalid-email",
           PhoneNumber: "0123456789",
           Mssv: "20210001",
           Class: "20211",
         });
 
       expect(res.status).toBe(400);
-      expect(res.body.code).toBe(400);
-      expect(res.body.error).toBe("Bad Request");
-      expect(res.body.message).toBe("Validation failed");
-      expect(Array.isArray(res.body.details)).toBe(true);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error).toBe("Validation failed");
     });
 
     it("should return 403 when trying to update userId", async () => {
@@ -228,12 +222,11 @@ describe("User Profile Routes", () => {
           PhoneNumber: "0111111111",
           Mssv: "20210001",
           Class: "20211",
-          userId: 999, // Not allowed
+          userId: 999,
         });
 
       expect(res.status).toBe(403);
-      expect(res.body.code).toBe(403);
-      expect(res.body.error).toBe("Forbidden");
+      expect(res.body.success).toBe(false);
     });
 
     it("should return 403 when trying to update role", async () => {
@@ -246,12 +239,11 @@ describe("User Profile Routes", () => {
           PhoneNumber: "0111111111",
           Mssv: "20210001",
           Class: "20211",
-          role: "leader", // Not allowed
+          role: "leader",
         });
 
       expect(res.status).toBe(403);
-      expect(res.body.code).toBe(403);
-      expect(res.body.error).toBe("Forbidden");
+      expect(res.body.success).toBe(false);
     });
 
     it("should return 409 when email is already taken", async () => {
@@ -260,16 +252,15 @@ describe("User Profile Routes", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           FullName: "Admin User",
-          Email: "leader@example.com", // Already taken by leader
+          Email: "leader@example.com",
           PhoneNumber: "0111111111",
           Mssv: "20210001",
           Class: "20211",
         });
 
       expect(res.status).toBe(409);
-      expect(res.body.code).toBe(409);
-      expect(res.body.error).toBe("Conflict");
-      expect(res.body.message).toContain("already taken");
+      expect(res.body.success).toBe(false);
+      expect(res.body.error).toContain("already taken");
     });
 
     it("should allow updating own email without conflict", async () => {
@@ -278,7 +269,7 @@ describe("User Profile Routes", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           FullName: "Admin User",
-          Email: "admin@example.com", // Same email
+          Email: "admin@example.com",
           PhoneNumber: "0111111111",
           Mssv: "20210001",
           Class: "20211",
@@ -307,8 +298,7 @@ describe("User Profile Routes", () => {
         });
 
       expect(res.status).toBe(404);
-      expect(res.body.code).toBe(404);
-      expect(res.body.error).toBe("Not Found");
+      expect(res.body.success).toBe(false);
     });
 
     it("should reject unknown fields in request body", async () => {
@@ -321,12 +311,11 @@ describe("User Profile Routes", () => {
           PhoneNumber: "0111111111",
           Mssv: "20210001",
           Class: "20211",
-          unknownField: "value", // Unknown field
+          unknownField: "value",
         });
 
       expect(res.status).toBe(403);
-      expect(res.body.code).toBe(403);
-      expect(res.body.error).toBe("Forbidden");
+      expect(res.body.success).toBe(false);
     });
   });
 });

@@ -85,7 +85,7 @@ describe('Auth Middleware', () => {
       expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_INVALID);
     });
 
-    it('should return 403 when token is expired', async () => {
+    it('should return 401 when token is expired', async () => {
       const expiredToken = jwt.sign(
         { accId: 1, role: RoleEnum.ADMIN },
         JWT_SECRET,
@@ -96,8 +96,8 @@ describe('Auth Middleware', () => {
         .get('/api/admin/admin-only')
         .set('Authorization', `Bearer ${expiredToken}`);
 
-      expect(res.status).toBe(403);
-      expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_INVALID);
+      expect(res.status).toBe(401);
+      expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_EXPIRED);
     });
 
     it('should return 401 when Authorization header is malformed', async () => {
