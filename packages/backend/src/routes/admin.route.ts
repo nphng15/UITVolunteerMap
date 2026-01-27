@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticateToken, requireRole } from '../middleware/auth.js';
-import { RoleEnum } from '../enums/RoleEnum.js';
+import { RoleEnum } from '@uit-volunteer-map/shared';
 
 const router = Router();
 

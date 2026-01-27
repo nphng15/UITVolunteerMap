@@ -5,7 +5,10 @@ import {
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
+  type Relation,
 } from "typeorm";
+import type { Role } from "./Role.js";
+import type { User } from "./User.js";
 
 @Entity("Account")
 export class Account {
@@ -22,15 +25,15 @@ export class Account {
   roleId!: number;
 
   @Column("text", { name: "CreateAt", nullable: true })
-  createAt?: string | null;
+  createdAt?: string | null;
 
   @Column("text", { name: "UpdatedAt", nullable: true })
   updatedAt?: string | null;
 
-  @ManyToOne("Role", (role: any) => role.accounts)
+  @ManyToOne("Role", "accounts")
   @JoinColumn({ name: "RoleId" })
-  role!: any;
+  role!: Relation<Role>;
 
-  @OneToOne("User", (user: any) => user.account)
-  user?: any;
+  @OneToOne("User", "account")
+  user?: Relation<User>;
 }

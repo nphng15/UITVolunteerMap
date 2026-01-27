@@ -11,8 +11,8 @@ import { Campaign } from '../entities/Campaign.js';
 import { Team } from '../entities/Team.js';
 import { Post } from '../entities/Post.js';
 import { Photo } from '../entities/Photo.js';
+import { RoleEnum, AUTH_ERRORS } from '@uit-volunteer-map/shared';
 
-// Use the same secret as vitest.config.ts
 const JWT_SECRET = process.env.JWT_SECRET!;
 
 describe('Auth Middleware', () => {
@@ -37,8 +37,8 @@ describe('Auth Middleware', () => {
     const roleRepo = AppDataSource.getRepository(Role);
     const accRepo = AppDataSource.getRepository(Account);
 
-    const adminRole = await roleRepo.save({ roleName: 'admin' });
-    const leaderRole = await roleRepo.save({ roleName: 'leader' });
+    const adminRole = await roleRepo.save({ roleName: RoleEnum.ADMIN });
+    const leaderRole = await roleRepo.save({ roleName: RoleEnum.LEADER });
 
     const adminPass = await bcrypt.hash('admin123', 10);
     const leaderPass = await bcrypt.hash('leader123', 10);
@@ -56,13 +56,13 @@ describe('Auth Middleware', () => {
     });
 
     adminToken = jwt.sign(
-      { accId: adminAcc.accId, role: 'admin' },
+      { accId: adminAcc.accId, role: RoleEnum.ADMIN },
       JWT_SECRET,
       { expiresIn: '1h' }
     );
 
     leaderToken = jwt.sign(
-      { accId: leaderAcc.accId, role: 'leader' },
+      { accId: leaderAcc.accId, role: RoleEnum.LEADER },
       JWT_SECRET,
       { expiresIn: '1h' }
     );
@@ -73,7 +73,7 @@ describe('Auth Middleware', () => {
       const res = await request(app).get('/api/admin/admin-only');
 
       expect(res.status).toBe(401);
-      expect(res.body.message).toBe('Access token required');
+      expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_REQUIRED);
     });
 
     it('should return 403 when token is invalid', async () => {
@@ -82,12 +82,12 @@ describe('Auth Middleware', () => {
         .set('Authorization', 'Bearer invalid-token');
 
       expect(res.status).toBe(403);
-      expect(res.body.message).toBe('Invalid or expired token');
+      expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_INVALID);
     });
 
     it('should return 403 when token is expired', async () => {
       const expiredToken = jwt.sign(
-        { accId: 1, role: 'admin' },
+        { accId: 1, role: RoleEnum.ADMIN },
         JWT_SECRET,
         { expiresIn: '-1s' }
       );
@@ -97,7 +97,7 @@ describe('Auth Middleware', () => {
         .set('Authorization', `Bearer ${expiredToken}`);
 
       expect(res.status).toBe(403);
-      expect(res.body.message).toBe('Invalid or expired token');
+      expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_INVALID);
     });
 
     it('should return 401 when Authorization header is malformed', async () => {
@@ -106,7 +106,7 @@ describe('Auth Middleware', () => {
         .set('Authorization', 'InvalidFormat');
 
       expect(res.status).toBe(401);
-      expect(res.body.message).toBe('Access token required');
+      expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_REQUIRED);
     });
   });
 
@@ -126,7 +126,7 @@ describe('Auth Middleware', () => {
         .set('Authorization', `Bearer ${leaderToken}`);
 
       expect(res.status).toBe(403);
-      expect(res.body.message).toBe('Permission denied');
+      expect(res.body.error).toBe(AUTH_ERRORS.PERMISSION_DENIED);
     });
 
     it('should allow leader to access leader-only route', async () => {
@@ -144,7 +144,7 @@ describe('Auth Middleware', () => {
         .set('Authorization', `Bearer ${adminToken}`);
 
       expect(res.status).toBe(403);
-      expect(res.body.message).toBe('Permission denied');
+      expect(res.body.error).toBe(AUTH_ERRORS.PERMISSION_DENIED);
     });
   });
 });

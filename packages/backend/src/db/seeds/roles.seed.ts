@@ -1,21 +1,21 @@
 import { DataSource } from "typeorm";
 import { Role } from "../../entities/Role.js";
-import { RoleEnum } from "../../enums/RoleEnum.js";
+import { RoleEnum } from "@uit-volunteer-map/shared";
 
 export const seedRoles = async (dataSource: DataSource) => {
-    const roleRepo = dataSource.getRepository(Role);
+  const roleRepo = dataSource.getRepository(Role);
 
-    const roles = [
-        { roleId: 1, roleName: RoleEnum.ADMIN },
-        { roleId: 2, roleName: RoleEnum.LEADER },    
-    ];
+  const roles = [
+    { roleId: 1, roleName: RoleEnum.ADMIN },
+    { roleId: 2, roleName: RoleEnum.LEADER },
+  ];
 
-    for (const r of roles) {
-        const exists = await roleRepo.findOneBy({ roleId: r.roleId });
-        if (!exists) {
-            await roleRepo.save(roleRepo.create(r));
-        }
+  for (const r of roles) {
+    const exists = await roleRepo.findOneBy({ roleId: r.roleId });
+    if (!exists) {
+      await roleRepo.save(roleRepo.create(r));
     }
+  }
 
-    console.log('Role seeded');
+  console.log("Roles seeded");
 };
