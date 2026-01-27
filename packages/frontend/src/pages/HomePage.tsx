@@ -1,4 +1,4 @@
-import MapView from '@/components/MapView';
+import MapView from '@/components/layouts/MapView';
 import { Link } from 'react-router';
 
 export default function HomePage() {
