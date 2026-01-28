@@ -6,6 +6,9 @@ declare module 'leaflet' {
   interface Layer {
     __labelMarker?: L.Marker;
   }
+  interface GeoJSONOptions {
+    renderer?: L.Renderer;
+  }
 }
 
 const highlightLabel = (marker: L.Marker) => {
@@ -154,6 +157,7 @@ const MapView: React.FC = () => {
         // ===== Tạo GeoJSON layer =====
         const geoJsonLayer = L.geoJSON(data, {
           style: baseStyle,
+          renderer: canvasRenderer,
           onEachFeature: (feature, featureLayer) => {
             const layer = featureLayer as L.Path;
             const polygonLayer = featureLayer as L.Polygon | L.Polyline;
@@ -205,9 +209,6 @@ const MapView: React.FC = () => {
             });
           },
         });
-
-        // ===== Gán canvas renderer (TS-safe) =====
-        (geoJsonLayer.options as any).renderer = canvasRenderer;
 
         // ===== Add vào map (QUAN TRỌNG) =====
         geoJsonLayer.addTo(areasGroup);
