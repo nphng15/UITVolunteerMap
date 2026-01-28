@@ -1,13 +1,14 @@
 import { Router } from 'express';
-import { RoleEnum } from '@uit-volunteer-map/shared';
+import { RoleEnum, HTTP_STATUS, ERROR_MESSAGES, USER_PROFILE_FIELDS } from '@uit-volunteer-map/shared';
 import { authenticateToken, requireRole } from '../middleware/auth.js';
 import { updateUserProfileSchema } from '../schemas/userProfile.js';
 import { UserProfileService } from '../service/userProfileService.js';
+import { HttpError } from '../errors/HttpError.js';
 
 const router = Router();
 const service = new UserProfileService();
 
-const ALLOWED_KEYS = new Set(['FullName', 'Mssv', 'Class', 'Email', 'PhoneNumber']);
+const ALLOWED_KEYS = new Set<string>(USER_PROFILE_FIELDS);
 
 function forbidden(body: unknown): boolean {
   if (!body || typeof body !== 'object') return false;
@@ -24,12 +25,15 @@ router.get(
   async (req, res) => {
     try {
       const data = await service.getUserProfile(req.user!.accId);
-      return res.status(200).json({ success: true, data });
+      return res.status(HTTP_STATUS.OK).json({ success: true, data });
     } catch (err: unknown) {
-      if (err instanceof Error && (err as any).statusCode === 404) {
-        return res.status(404).json({ success: false, error: err.message });
+      if (err instanceof HttpError) {
+        return res.status(err.statusCode).json({ success: false, error: err.message });
       }
-      return res.status(500).json({ success: false, error: 'Internal Server Error' });
+      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
     }
   }
 );
@@ -41,9 +45,9 @@ router.put(
   async (req, res) => {
     try {
       if (forbidden(req.body)) {
-        return res.status(403).json({
+        return res.status(HTTP_STATUS.FORBIDDEN).json({
           success: false,
-          error: 'You are not allowed to update this field',
+          error: ERROR_MESSAGES.FORBIDDEN_FIELD,
         });
       }
 
@@ -53,23 +57,23 @@ router.put(
           .map((i) => `${i.path.join('.') || 'field'}: ${i.message}`)
           .join(', ');
 
-        return res.status(400).json({
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
           success: false,
-          error: 'Validation failed',
+          error: ERROR_MESSAGES.VALIDATION_FAILED,
           message: errors,
         });
       }
 
       const data = await service.updateUserProfile(req.user!.accId, parsed.data);
-      return res.status(200).json({ success: true, data });
+      return res.status(HTTP_STATUS.OK).json({ success: true, data });
     } catch (err: unknown) {
-      if (err instanceof Error && (err as any).statusCode === 404) {
-        return res.status(404).json({ success: false, error: err.message });
+      if (err instanceof HttpError) {
+        return res.status(err.statusCode).json({ success: false, error: err.message });
       }
-      if (err instanceof Error && (err as any).statusCode === 409) {
-        return res.status(409).json({ success: false, error: err.message });
-      }
-      return res.status(500).json({ success: false, error: 'Internal Server Error' });
+      return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
     }
   }
 );

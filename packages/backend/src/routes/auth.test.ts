@@ -10,7 +10,7 @@ import { Team } from '../entities/Team.js';
 import { Post } from '../entities/Post.js';
 import { Photo } from '../entities/Photo.js';
 import bcrypt from 'bcrypt';
-import { RoleEnum, AUTH_ERRORS } from '@uit-volunteer-map/shared';
+import { RoleEnum, HTTP_STATUS, AUTH_ERRORS, SUCCESS_MESSAGES } from '@uit-volunteer-map/shared';
 
 describe('POST /api/auth/login', () => {
 
@@ -57,7 +57,7 @@ describe('POST /api/auth/login', () => {
       .post('/api/auth/login')
       .send({ username: 'admin', password: 'admin123' });
 
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(HTTP_STATUS.OK);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('token');
     expect(res.body.data.user).toMatchObject({
@@ -71,7 +71,7 @@ describe('POST /api/auth/login', () => {
       .post('/api/auth/login')
       .send({ username: 'leader', password: 'leader123' });
 
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(HTTP_STATUS.OK);
     expect(res.body.success).toBe(true);
     expect(res.body.data.user).toMatchObject({
       username: 'leader',
@@ -84,7 +84,7 @@ describe('POST /api/auth/login', () => {
       .post('/api/auth/login')
       .send({ username: 'admin', password: 'wrongpassword' });
 
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
     expect(res.body.success).toBe(false);
     expect(res.body.error).toBe(AUTH_ERRORS.INVALID_CREDENTIALS);
   });
@@ -94,7 +94,7 @@ describe('POST /api/auth/login', () => {
       .post('/api/auth/login')
       .send({ username: '', password: 'admin123' });
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toBe('username: Username is required');
   });
@@ -104,7 +104,7 @@ describe('POST /api/auth/login', () => {
       .post('/api/auth/login')
       .send({ username: 'admin' , password: ''});
 
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
     expect(res.body.success).toBe(false);
     expect(res.body.message).toContain('Password is required');
   });
@@ -113,8 +113,8 @@ describe('POST /api/auth/login', () => {
 describe('POST /api/auth/logout', () => {
   it('should logout successfully', async () => {
     const res = await request(app).post('/api/auth/logout');
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(HTTP_STATUS.OK);
     expect(res.body.success).toBe(true);
-    expect(res.body.message).toBe('Logged out successfully');
+    expect(res.body.message).toBe(SUCCESS_MESSAGES.LOGGED_OUT);
   });
 });

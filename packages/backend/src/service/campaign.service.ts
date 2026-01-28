@@ -1,6 +1,8 @@
-import { AppDataSource } from "../db/data-source.js"; 
-import { Campaign } from "../entities/Campaign.js";
-import { CreateCampaignInput, UpdateCampaignInput } from "../schemas/campaign.js";
+import { AppDataSource } from '../db/data-source.js';
+import { Campaign } from '../entities/Campaign.js';
+import { CreateCampaignInput, UpdateCampaignInput } from '../schemas/campaign.js';
+import { HttpError } from '../errors/HttpError.js';
+import { HTTP_STATUS, CAMPAIGN_ERRORS } from '@uit-volunteer-map/shared';
 
 export class CampaignService {
   private campaignRepo = AppDataSource.getRepository(Campaign);
@@ -13,14 +15,14 @@ export class CampaignService {
   // 2. GET ONE
   async getOne(id: number) {
     const campaign = await this.campaignRepo.findOneBy({ campaignId: id });
-    if (!campaign) throw new Error("CAMPAIGN_NOT_FOUND");
+    if (!campaign) throw new HttpError(CAMPAIGN_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     return campaign;
   }
 
   // 3. CREATE
   async create(data: CreateCampaignInput) {
     const existing = await this.campaignRepo.findOneBy({ campaignName: data.campaignName });
-    if (existing) throw new Error("CAMPAIGN_EXISTS");
+    if (existing) throw new HttpError(CAMPAIGN_ERRORS.ALREADY_EXISTS, HTTP_STATUS.CONFLICT);
 
     const newCampaign = this.campaignRepo.create(data);
     return await this.campaignRepo.save(newCampaign);
@@ -36,7 +38,7 @@ export class CampaignService {
   // 5. DELETE
   async delete(id: number) {
     const result = await this.campaignRepo.delete(id);
-    if (result.affected === 0) throw new Error("CAMPAIGN_NOT_FOUND");
+    if (result.affected === 0) throw new HttpError(CAMPAIGN_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     return true;
   }
 }

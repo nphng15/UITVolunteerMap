@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticateToken, requireRole } from '../middleware/auth.js';
-import { RoleEnum } from '@uit-volunteer-map/shared';
+import { RoleEnum, HTTP_STATUS, SUCCESS_MESSAGES } from '@uit-volunteer-map/shared';
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.get(
   authenticateToken,
   requireRole([RoleEnum.ADMIN]),
   async (_req, res) => {
-    res.json({ message: "Message by admin" });
+    res.status(HTTP_STATUS.OK).json({ success: true, message: SUCCESS_MESSAGES.ADMIN_ACCESS_GRANTED });
   }
 );
 

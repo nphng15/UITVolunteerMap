@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect, beforeAll, beforeEach } from "vitest";
 import request from "supertest";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -11,7 +11,7 @@ import { Campaign } from "../entities/Campaign.js";
 import { Team } from "../entities/Team.js";
 import { Post } from "../entities/Post.js";
 import { Photo } from "../entities/Photo.js";
-import { RoleEnum } from "@uit-volunteer-map/shared";
+import { RoleEnum, ERROR_MESSAGES, HTTP_STATUS, USER_ERRORS } from "@uit-volunteer-map/shared";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -90,13 +90,28 @@ describe("User Profile Routes", () => {
     );
   });
 
+  beforeEach(async () => {
+    // Reset user data to original state before each test
+    const userRepo = AppDataSource.getRepository(User);
+    await userRepo.update(
+      { userId: adminUser.userId },
+      {
+        fullName: "Admin User",
+        email: "admin@example.com",
+        phoneNumber: "0111111111",
+        mssv: "20210001",
+        class: "20211",
+      }
+    );
+  });
+
   describe("GET /api/users/profile", () => {
     it("should return user profile with valid token", async () => {
       const res = await request(app)
         .get("/api/users/profile")
         .set("Authorization", `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
       expect(res.body.data).toMatchObject({
         UserId: String(adminUser.userId),
@@ -111,7 +126,7 @@ describe("User Profile Routes", () => {
     it("should return 401 when no token is provided", async () => {
       const res = await request(app).get("/api/users/profile");
 
-      expect(res.status).toBe(401);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
       expect(res.body.success).toBe(false);
     });
 
@@ -120,7 +135,7 @@ describe("User Profile Routes", () => {
         .get("/api/users/profile")
         .set("Authorization", "Bearer invalid-token");
 
-      expect([401, 403]).toContain(res.status);
+      expect([HTTP_STATUS.UNAUTHORIZED, HTTP_STATUS.FORBIDDEN]).toContain(res.status);
       expect(res.body.success).toBe(false);
     });
 
@@ -133,8 +148,8 @@ describe("User Profile Routes", () => {
         .get("/api/users/profile")
         .set("Authorization", `Bearer ${leaderToken}`);
 
-      expect(adminRes.status).toBe(200);
-      expect(leaderRes.status).toBe(200);
+      expect(adminRes.status).toBe(HTTP_STATUS.OK);
+      expect(leaderRes.status).toBe(HTTP_STATUS.OK);
       expect(adminRes.body.data.Email).toBe("admin@example.com");
       expect(leaderRes.body.data.Email).toBe("leader@example.com");
     });
@@ -150,9 +165,9 @@ describe("User Profile Routes", () => {
         .get("/api/users/profile")
         .set("Authorization", `Bearer ${fakeToken}`);
 
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain("User with ID");
+      expect(res.body.error).toBe(USER_ERRORS.NOT_FOUND);
     });
   });
 
@@ -171,7 +186,7 @@ describe("User Profile Routes", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send(updateData);
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
       expect(res.body.data).toMatchObject({
         FullName: "Updated Admin",
@@ -191,7 +206,7 @@ describe("User Profile Routes", () => {
         Class: "",
       });
 
-      expect(res.status).toBe(401);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
       expect(res.body.success).toBe(false);
     });
 
@@ -207,9 +222,9 @@ describe("User Profile Routes", () => {
           Class: "20211",
         });
 
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toBe("Validation failed");
+      expect(res.body.error).toBe(ERROR_MESSAGES.VALIDATION_FAILED);
     });
 
     it("should return 403 when trying to update userId", async () => {
@@ -225,7 +240,7 @@ describe("User Profile Routes", () => {
           userId: 999,
         });
 
-      expect(res.status).toBe(403);
+      expect(res.status).toBe(HTTP_STATUS.FORBIDDEN);
       expect(res.body.success).toBe(false);
     });
 
@@ -242,7 +257,7 @@ describe("User Profile Routes", () => {
           role: "leader",
         });
 
-      expect(res.status).toBe(403);
+      expect(res.status).toBe(HTTP_STATUS.FORBIDDEN);
       expect(res.body.success).toBe(false);
     });
 
@@ -258,9 +273,9 @@ describe("User Profile Routes", () => {
           Class: "20211",
         });
 
-      expect(res.status).toBe(409);
+      expect(res.status).toBe(HTTP_STATUS.CONFLICT);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain("already taken");
+      expect(res.body.error).toBe(USER_ERRORS.EMAIL_TAKEN);
     });
 
     it("should allow updating own email without conflict", async () => {
@@ -275,7 +290,7 @@ describe("User Profile Routes", () => {
           Class: "20211",
         });
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.data.Email).toBe("admin@example.com");
     });
 
@@ -297,7 +312,7 @@ describe("User Profile Routes", () => {
           Class: "20299",
         });
 
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
       expect(res.body.success).toBe(false);
     });
 
@@ -314,7 +329,7 @@ describe("User Profile Routes", () => {
           unknownField: "value",
         });
 
-      expect(res.status).toBe(403);
+      expect(res.status).toBe(HTTP_STATUS.FORBIDDEN);
       expect(res.body.success).toBe(false);
     });
   });

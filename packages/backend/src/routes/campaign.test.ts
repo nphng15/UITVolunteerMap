@@ -11,7 +11,7 @@ import { Campaign } from '../entities/Campaign.js';
 import { Team } from '../entities/Team.js';
 import { Post } from '../entities/Post.js';
 import { Photo } from '../entities/Photo.js';
-import { RoleEnum } from '@uit-volunteer-map/shared';
+import { RoleEnum, CAMPAIGN_ERRORS, HTTP_STATUS } from '@uit-volunteer-map/shared';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -79,7 +79,7 @@ describe('Campaign CRUD Routes', () => {
         .get('/api/campaigns')
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
       expect(res.body.data).toEqual([]);
     });
@@ -102,7 +102,7 @@ describe('Campaign CRUD Routes', () => {
         .get('/api/campaigns')
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
       expect(res.body.data).toHaveLength(2);
     });
@@ -110,7 +110,7 @@ describe('Campaign CRUD Routes', () => {
     it('should return 401 without token', async () => {
       const res = await request(app).get('/api/campaigns');
 
-      expect(res.status).toBe(401);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
       expect(res.body.success).toBe(false);
     });
 
@@ -119,7 +119,7 @@ describe('Campaign CRUD Routes', () => {
         .get('/api/campaigns')
         .set('Authorization', `Bearer ${leaderToken}`);
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
     });
   });
@@ -138,7 +138,7 @@ describe('Campaign CRUD Routes', () => {
         .get(`/api/campaigns/${campaign.campaignId}`)
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
       expect(res.body.data.campaignName).toBe('Test Campaign');
     });
@@ -148,7 +148,7 @@ describe('Campaign CRUD Routes', () => {
         .get('/api/campaigns/9999')
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
       expect(res.body.success).toBe(false);
     });
 
@@ -157,9 +157,9 @@ describe('Campaign CRUD Routes', () => {
         .get('/api/campaigns/invalid')
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toBe('Invalid campaign ID');
+      expect(res.body.error).toBe(CAMPAIGN_ERRORS.INVALID_ID);
     });
   });
 
@@ -177,7 +177,7 @@ describe('Campaign CRUD Routes', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send(campaignData);
 
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(HTTP_STATUS.CREATED);
       expect(res.body.success).toBe(true);
       expect(res.body.data.campaignName).toBe('New Campaign');
       expect(res.body.data.campaignId).toBeDefined();
@@ -189,7 +189,7 @@ describe('Campaign CRUD Routes', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ campaignName: 'Test' });
 
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
       expect(res.body.success).toBe(false);
     });
 
@@ -210,9 +210,9 @@ describe('Campaign CRUD Routes', () => {
           endDate: '2024-02-28',
         });
 
-      expect(res.status).toBe(409);
+      expect(res.status).toBe(HTTP_STATUS.CONFLICT);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toContain('already exists');
+      expect(res.body.error).toBe(CAMPAIGN_ERRORS.ALREADY_EXISTS);
     });
 
     it('should allow leader to create campaign', async () => {
@@ -225,7 +225,7 @@ describe('Campaign CRUD Routes', () => {
           endDate: '2024-04-30',
         });
 
-      expect(res.status).toBe(201);
+      expect(res.status).toBe(HTTP_STATUS.CREATED);
       expect(res.body.success).toBe(true);
     });
   });
@@ -248,7 +248,7 @@ describe('Campaign CRUD Routes', () => {
           endDate: '2024-02-15',
         });
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
       expect(res.body.data.campaignName).toBe('Updated Name');
     });
@@ -263,7 +263,7 @@ describe('Campaign CRUD Routes', () => {
           endDate: '2024-01-31',
         });
 
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
       expect(res.body.success).toBe(false);
     });
 
@@ -273,7 +273,7 @@ describe('Campaign CRUD Routes', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ campaignName: 'Test' });
 
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
       expect(res.body.success).toBe(false);
     });
 
@@ -291,7 +291,7 @@ describe('Campaign CRUD Routes', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .send({ description: 'Updated description' });
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
       expect(res.body.data.description).toBe('Updated description');
       expect(res.body.data.campaignName).toBe('Original Name');
@@ -311,7 +311,7 @@ describe('Campaign CRUD Routes', () => {
         .delete(`/api/campaigns/${campaign.campaignId}`)
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(200);
+      expect(res.status).toBe(HTTP_STATUS.OK);
       expect(res.body.success).toBe(true);
 
       const deleted = await campaignRepo.findOneBy({ campaignId: campaign.campaignId });
@@ -323,7 +323,7 @@ describe('Campaign CRUD Routes', () => {
         .delete('/api/campaigns/9999')
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(404);
+      expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
       expect(res.body.success).toBe(false);
     });
 
@@ -332,7 +332,7 @@ describe('Campaign CRUD Routes', () => {
         .delete('/api/campaigns/invalid')
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
       expect(res.body.success).toBe(false);
     });
   });
@@ -340,7 +340,7 @@ describe('Campaign CRUD Routes', () => {
   describe('Authentication & Authorization', () => {
     it('should reject requests without token', async () => {
       const res = await request(app).get('/api/campaigns');
-      expect(res.status).toBe(401);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
     });
 
     it('should reject requests with invalid token', async () => {
@@ -348,7 +348,7 @@ describe('Campaign CRUD Routes', () => {
         .get('/api/campaigns')
         .set('Authorization', 'Bearer invalid-token');
 
-      expect([401, 403]).toContain(res.status);
+      expect([HTTP_STATUS.UNAUTHORIZED, HTTP_STATUS.FORBIDDEN]).toContain(res.status);
     });
 
     it('should reject expired tokens', async () => {
@@ -362,7 +362,7 @@ describe('Campaign CRUD Routes', () => {
         .get('/api/campaigns')
         .set('Authorization', `Bearer ${expiredToken}`);
 
-      expect(res.status).toBe(401);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
       expect(res.body.success).toBe(false);
     });
   });

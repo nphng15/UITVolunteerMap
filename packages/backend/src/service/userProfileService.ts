@@ -1,6 +1,8 @@
 import { AppDataSource } from '../db/data-source.js';
 import { User } from '../entities/User.js';
 import type { UpdateUserProfileInput } from '../schemas/userProfile.js';
+import { HttpError } from '../errors/HttpError.js';
+import { HTTP_STATUS, USER_ERRORS } from '@uit-volunteer-map/shared';
 
 export type UserProfileDto = {
   UserId: string;
@@ -34,9 +36,7 @@ export class UserProfileService {
     });
 
     if (!user) {
-      const err = new Error(`User with ID ${accId} not found.`);
-      (err as any).statusCode = 404;
-      throw err;
+      throw new HttpError(USER_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }
 
     return this.toDto(user);
@@ -49,16 +49,12 @@ export class UserProfileService {
     });
 
     if (!user) {
-      const err = new Error(`User with ID ${accId} not found.`);
-      (err as any).statusCode = 404;
-      throw err;
+      throw new HttpError(USER_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }
 
     const existed = await this.repo.findOne({ where: { email: data.Email } });
     if (existed && existed.userId !== user.userId) {
-      const err = new Error(`Email '${data.Email}' is already taken.`);
-      (err as any).statusCode = 409;
-      throw err;
+      throw new HttpError(USER_ERRORS.EMAIL_TAKEN, HTTP_STATUS.CONFLICT);
     }
 
     user.fullName = data.FullName;
