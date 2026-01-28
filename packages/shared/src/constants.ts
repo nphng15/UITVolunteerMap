@@ -9,7 +9,41 @@ export const HTTP_STATUS = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
+  CONFLICT: 409,
   INTERNAL_SERVER_ERROR: 500,
+} as const;
+
+export const ERROR_MESSAGES = {
+  INTERNAL_SERVER_ERROR: 'Internal Server Error',
+  INVALID_ID: 'Invalid ID',
+  FORBIDDEN_FIELD: 'You are not allowed to update this field',
+  VALIDATION_FAILED: 'Validation failed',
+} as const;
+
+export const CAMPAIGN_ERRORS = {
+  NOT_FOUND: 'Campaign not found',
+  ALREADY_EXISTS: 'Campaign name already exists',
+  INVALID_ID: 'Invalid campaign ID',
+} as const;
+
+export const CAMPAIGN_MESSAGES = {
+  DELETED: 'Campaign deleted successfully',
+} as const;
+
+export const USER_ERRORS = {
+  NOT_FOUND: 'User not found',
+  EMAIL_TAKEN: 'Email is already taken',
+} as const;
+
+export const SUCCESS_MESSAGES = {
+  LOGGED_OUT: 'Logged out successfully',
+  ADMIN_ACCESS_GRANTED: 'Admin access granted',
+  LEADER_ACCESS_GRANTED: 'Leader access granted',
+} as const;
+
+export const HEALTH_MESSAGES = {
+  STATUS_HEALTHY: 'healthy',
+  SERVER_RUNNING: 'Server is running',
 } as const;
 
 export const PAGINATION_DEFAULTS = {
@@ -17,3 +51,11 @@ export const PAGINATION_DEFAULTS = {
   LIMIT: 10,
   MAX_LIMIT: 100,
 } as const;
+
+export const USER_PROFILE_FIELDS = [
+  'FullName',
+  'Mssv',
+  'Class',
+  'Email',
+  'PhoneNumber',
+] as const;

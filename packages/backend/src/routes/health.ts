@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { HTTP_STATUS, HEALTH_MESSAGES } from '@uit-volunteer-map/shared';
 import type { ApiResponse } from '@uit-volunteer-map/shared';
 
 const router = Router();
@@ -13,14 +14,14 @@ router.get('/', (_req, res) => {
   const response: ApiResponse<HealthData> = {
     success: true,
     data: {
-      status: 'healthy',
+      status: HEALTH_MESSAGES.STATUS_HEALTHY,
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
     },
-    message: 'Server is running',
+    message: HEALTH_MESSAGES.SERVER_RUNNING,
   };
 
-  res.json(response);
+  res.status(HTTP_STATUS.OK).json(response);
 });
 
 export { router as healthRouter };

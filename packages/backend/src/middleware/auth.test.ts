@@ -11,7 +11,7 @@ import { Campaign } from '../entities/Campaign.js';
 import { Team } from '../entities/Team.js';
 import { Post } from '../entities/Post.js';
 import { Photo } from '../entities/Photo.js';
-import { RoleEnum, AUTH_ERRORS } from '@uit-volunteer-map/shared';
+import { RoleEnum, HTTP_STATUS, AUTH_ERRORS, SUCCESS_MESSAGES } from '@uit-volunteer-map/shared';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -72,7 +72,7 @@ describe('Auth Middleware', () => {
     it('should return 401 when no token is provided', async () => {
       const res = await request(app).get('/api/admin/admin-only');
 
-      expect(res.status).toBe(401);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
       expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_REQUIRED);
     });
 
@@ -81,11 +81,11 @@ describe('Auth Middleware', () => {
         .get('/api/admin/admin-only')
         .set('Authorization', 'Bearer invalid-token');
 
-      expect(res.status).toBe(403);
+      expect(res.status).toBe(HTTP_STATUS.FORBIDDEN);
       expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_INVALID);
     });
 
-    it('should return 403 when token is expired', async () => {
+    it('should return 401 when token is expired', async () => {
       const expiredToken = jwt.sign(
         { accId: 1, role: RoleEnum.ADMIN },
         JWT_SECRET,
@@ -96,8 +96,8 @@ describe('Auth Middleware', () => {
         .get('/api/admin/admin-only')
         .set('Authorization', `Bearer ${expiredToken}`);
 
-      expect(res.status).toBe(403);
-      expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_INVALID);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
+      expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_EXPIRED);
     });
 
     it('should return 401 when Authorization header is malformed', async () => {
@@ -105,7 +105,7 @@ describe('Auth Middleware', () => {
         .get('/api/admin/admin-only')
         .set('Authorization', 'InvalidFormat');
 
-      expect(res.status).toBe(401);
+      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
       expect(res.body.error).toBe(AUTH_ERRORS.TOKEN_REQUIRED);
     });
   });
@@ -116,8 +116,8 @@ describe('Auth Middleware', () => {
         .get('/api/admin/admin-only')
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(200);
-      expect(res.body.message).toBe('Message by admin');
+      expect(res.status).toBe(HTTP_STATUS.OK);
+      expect(res.body.message).toBe(SUCCESS_MESSAGES.ADMIN_ACCESS_GRANTED);
     });
 
     it('should deny leader from accessing admin-only route', async () => {
@@ -125,7 +125,7 @@ describe('Auth Middleware', () => {
         .get('/api/admin/admin-only')
         .set('Authorization', `Bearer ${leaderToken}`);
 
-      expect(res.status).toBe(403);
+      expect(res.status).toBe(HTTP_STATUS.FORBIDDEN);
       expect(res.body.error).toBe(AUTH_ERRORS.PERMISSION_DENIED);
     });
 
@@ -134,8 +134,8 @@ describe('Auth Middleware', () => {
         .get('/api/leader/leader-only')
         .set('Authorization', `Bearer ${leaderToken}`);
 
-      expect(res.status).toBe(200);
-      expect(res.body.message).toBe('Message by leader');
+      expect(res.status).toBe(HTTP_STATUS.OK);
+      expect(res.body.message).toBe(SUCCESS_MESSAGES.LEADER_ACCESS_GRANTED);
     });
 
     it('should deny admin from accessing leader-only route', async () => {
@@ -143,7 +143,7 @@ describe('Auth Middleware', () => {
         .get('/api/leader/leader-only')
         .set('Authorization', `Bearer ${adminToken}`);
 
-      expect(res.status).toBe(403);
+      expect(res.status).toBe(HTTP_STATUS.FORBIDDEN);
       expect(res.body.error).toBe(AUTH_ERRORS.PERMISSION_DENIED);
     });
   });
