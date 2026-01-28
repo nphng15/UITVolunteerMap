@@ -12,7 +12,7 @@ import type { User } from "./User.js";
 
 @Entity("Account")
 export class Account {
-  @PrimaryGeneratedColumn({ name: "AccID" })
+  @PrimaryGeneratedColumn({ name: "AccId" })
   accId!: number;
 
   @Column("text", { name: "Username", nullable: false, unique: true })

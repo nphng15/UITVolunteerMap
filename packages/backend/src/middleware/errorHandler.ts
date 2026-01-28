@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS, type ApiResponse } from '@uit-volunteer-map/shared';
+import { HTTP_STATUS, ERROR_MESSAGES, type ApiResponse } from '@uit-volunteer-map/shared';
 
 export interface AppError extends Error {
   statusCode?: number;
@@ -15,7 +15,7 @@ export const errorHandler = (
 
   const response: ApiResponse<null> = {
     success: false,
-    error: err.message || 'Internal Server Error',
+    error: err.message || ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
   };
 
   console.error(`[Error] ${err.message}`, err.stack);

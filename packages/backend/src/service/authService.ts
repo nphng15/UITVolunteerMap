@@ -1,9 +1,10 @@
-import { AppDataSource } from "../db/data-source.js";
-import { Account } from "../entities/Account.js";
-import { LoginInput } from "../schemas/auth.js";
-import { AUTH_ERRORS, type LoginResponse, type UserRole } from "@uit-volunteer-map/shared";
-import bcrypt from "bcrypt";
-import jwt, { SignOptions } from "jsonwebtoken";
+import { AppDataSource } from '../db/data-source.js';
+import { Account } from '../entities/Account.js';
+import { LoginInput } from '../schemas/auth.js';
+import { AUTH_ERRORS, HTTP_STATUS, type LoginResponse, type UserRole } from '@uit-volunteer-map/shared';
+import { HttpError } from '../errors/HttpError.js';
+import bcrypt from 'bcrypt';
+import jwt, { SignOptions } from 'jsonwebtoken';
 
 export class AuthService {
   private accountRepo = AppDataSource.getRepository(Account);
@@ -11,11 +12,11 @@ export class AuthService {
   async login(data: LoginInput): Promise<LoginResponse> {
     const account = await this.accountRepo.findOne({
       where: { username: data.username },
-      relations: ["role"],
+      relations: ['role'],
     });
 
     if (!account) {
-      throw new Error(AUTH_ERRORS.INVALID_CREDENTIALS);
+      throw new HttpError(AUTH_ERRORS.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -24,18 +25,22 @@ export class AuthService {
     );
 
     if (!isPasswordValid) {
-      throw new Error(AUTH_ERRORS.INVALID_CREDENTIALS);
+      throw new HttpError(AUTH_ERRORS.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
+    }
+
+    if (!account.role) {
+      throw new HttpError(AUTH_ERRORS.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
     }
 
     const JWT_SECRET = process.env.JWT_SECRET;
     const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
 
     if (!JWT_SECRET) {
-      throw new Error(AUTH_ERRORS.JWT_SECRET_MISSING);
+      throw new HttpError(AUTH_ERRORS.JWT_SECRET_MISSING, HTTP_STATUS.INTERNAL_SERVER_ERROR);
     }
 
     const options: SignOptions = {
-      expiresIn: JWT_EXPIRES_IN as SignOptions["expiresIn"],
+      expiresIn: JWT_EXPIRES_IN as SignOptions['expiresIn'],
     };
 
     const token = jwt.sign(

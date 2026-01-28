@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { ZodSchema } from 'zod';
 import type { ApiResponse } from '@uit-volunteer-map/shared';
+import { HTTP_STATUS, ERROR_MESSAGES } from '@uit-volunteer-map/shared';
 
 export function validate<T>(schema: ZodSchema<T>) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -13,10 +14,10 @@ export function validate<T>(schema: ZodSchema<T>) {
 
       const response: ApiResponse<null> = {
         success: false,
-        error: 'Validation failed',
+        error: ERROR_MESSAGES.VALIDATION_FAILED,
         message: errors,
       };
-      res.status(400).json(response);
+      res.status(HTTP_STATUS.BAD_REQUEST).json(response);
       return;
     }
 
