@@ -94,11 +94,10 @@ const MapView: React.FC = () => {
 
     const getOpacity = (tenXa?: string) => (tenXa ? 0.2 : 0.4);
 
-    const hoverStyle = () => ({
+    const hoverStyle = (): L.PathOptions => ({
       weight: 4,
       color: "#f39c12",
       fillOpacity: 0.6,
-      text: "bold",
     });
 
     // ===============================
