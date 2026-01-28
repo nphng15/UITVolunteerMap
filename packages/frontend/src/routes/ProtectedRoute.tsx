@@ -1,32 +1,10 @@
-import { Navigate, Outlet, useLocation } from 'react-router';
-import { useAuth } from '@/hooks/useAuth';
-import type { UserRole } from '@uit-volunteer-map/shared';
+import { ReactNode } from "react";
 
 interface ProtectedRouteProps {
-  requiredRoles?: UserRole[];
+  children: ReactNode;
 }
 
-export default function ProtectedRoute({ requiredRoles }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, user } = useAuth();
-  const location = useLocation();
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Đang tải...</div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  } else if (requiredRoles && user && !requiredRoles.includes(user.role)) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Bạn không có quyền truy cập trang này.</div>
-      </div>
-    );
-  }
-
-  return <Outlet />;
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+  // TODO: sau này check auth / role ở đây
+  return <>{children}</>;
 }
