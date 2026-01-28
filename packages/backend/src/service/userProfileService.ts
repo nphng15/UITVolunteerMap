@@ -52,16 +52,20 @@ export class UserProfileService {
       throw new HttpError(USER_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }
 
-    const existed = await this.repo.findOne({ where: { email: data.Email } });
-    if (existed && existed.userId !== user.userId) {
-      throw new HttpError(USER_ERRORS.EMAIL_TAKEN, HTTP_STATUS.CONFLICT);
+    // Check email uniqueness only if email is being updated
+    if (data.Email !== undefined) {
+      const existed = await this.repo.findOne({ where: { email: data.Email } });
+      if (existed && existed.userId !== user.userId) {
+        throw new HttpError(USER_ERRORS.EMAIL_TAKEN, HTTP_STATUS.CONFLICT);
+      }
+      user.email = data.Email;
     }
 
-    user.fullName = data.FullName;
-    user.mssv = data.Mssv;
-    user.class = data.Class;
-    user.email = data.Email;
-    user.phoneNumber = data.PhoneNumber;
+    // Only update fields that are provided
+    if (data.FullName !== undefined) user.fullName = data.FullName;
+    if (data.Mssv !== undefined) user.mssv = data.Mssv;
+    if (data.Class !== undefined) user.class = data.Class;
+    if (data.PhoneNumber !== undefined) user.phoneNumber = data.PhoneNumber;
 
     const saved = await this.repo.save(user);
     saved.account = user.account;
