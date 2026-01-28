@@ -1,9 +1,13 @@
+import { useRef } from "react";
+
 interface Props {
   onNext?: () => void;
   onClose?: () => void;
 }
 
 export default function PostCreatePopup({ onNext, onClose }: Props) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-[360px] rounded-xl overflow-hidden bg-[#1F2329] text-white">
@@ -18,7 +22,25 @@ export default function PostCreatePopup({ onNext, onClose }: Props) {
             Thả tệp vào đây
           </div>
 
-          <button className="bg-[#F4B400] text-black text-sm font-bold px-4 py-2 rounded">
+          {/* Hidden input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            hidden
+            onChange={(e) => {
+              const files = e.target.files;
+              if (files && files.length > 0) {
+                console.log("Selected files:", files);
+                onNext?.(); // ✅ dùng onNext → hết lỗi lint
+              }
+            }}
+          />
+
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="bg-[#F4B400] text-black text-sm font-bold px-4 py-2 rounded"
+          >
             Chọn tệp từ máy
           </button>
         </div>
