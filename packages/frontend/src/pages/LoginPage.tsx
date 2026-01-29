@@ -17,13 +17,20 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Validate redirect path to prevent open redirect attacks
+  const isValidRedirectPath = (path: unknown): path is string => {
+    if (typeof path !== 'string') return false;
+    // Must start with / and not contain :// or start with //
+    return path.startsWith('/') && !path.includes('://') && !path.startsWith('//');
+  };
+
   // Redirect if already logged in, with admin/leader specific redirects
   useEffect(() => {
     if (isAuthenticated && user) {
-      // If redirected from a protected page, go back there
+      // If redirected from a protected page, go back there (with validation)
       const redirectTo = location.state?.from?.pathname;
 
-      if (redirectTo) {
+      if (isValidRedirectPath(redirectTo)) {
         navigate(redirectTo, { replace: true });
       } else {
         // Otherwise, redirect based on role

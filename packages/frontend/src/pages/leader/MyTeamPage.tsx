@@ -1,11 +1,11 @@
 import { useParams, Link, useLocation } from "react-router";
 import editIcon from "@/assets/icons/edit.svg";
 import { useState } from "react";
-import FormationEditOverall from "@/components/popups/FormationEditOverall";
-import FormationEditRole from "@/components/popups/FormationEditRole";
-import PostCreatePopup from "@/components/popups/post/PostCreatePopup";
-import PostCreateChooseEditPopup from "@/components/popups/post/PostCreateChooseEditPopup";
-import PostCreatePublishEditPopup from "@/components/popups/post/PostCreatePublishEditPopup";
+import FormationEditOverall from "@/components/ui/popups/FormationEditOverall";
+import FormationEditRole from "@/components/ui/popups/FormationEditRole";
+import PostCreatePopup from "@/components/ui/popups/post/PostCreatePopup";
+import PostCreateChooseEditPopup from "@/components/ui/popups/post/PostCreateChooseEditPopup";
+import PostCreatePublishEditPopup from "@/components/ui/popups/post/PostCreatePublishEditPopup";
 
 
 export default function MyTeamPage() {

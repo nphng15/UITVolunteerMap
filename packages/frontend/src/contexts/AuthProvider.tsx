@@ -48,10 +48,11 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
+    const currentToken = localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN);
     try {
       await fetch(API_ROUTES.AUTH.LOGOUT, {
         method: 'POST',
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
+        headers: currentToken ? { 'Authorization': `Bearer ${currentToken}` } : {},
       });
     } catch {
       // Ignore logout API errors
@@ -60,7 +61,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
     localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.AUTH_USER);
-  }, [token]);
+  }, []);
 
   return (
     <AuthContext.Provider
