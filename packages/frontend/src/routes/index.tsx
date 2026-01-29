@@ -16,7 +16,6 @@ import CampaignManagementPage from "@/pages/admin/CampaignManagementPage";
 import TeamManagementPage from "@/pages/admin/TeamManagementPage";
 import AccountManagementPage from "@/pages/admin/AccountManagementPage";
 
-
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -33,27 +32,28 @@ export const router = createBrowserRouter([
             element: <TeamModalWrapper />,
             children: [
               { index: true, element: <TeamPage /> },
-              { path: "post/:postId", element: null },      
+              { path: "post/:postId", element: null },
             ],
           },
         ],
       },
       {
         path: "admin",
-        element: (
-          <ProtectedRoute requiredRoles={[RoleEnum.ADMIN]}>
-            <AdminLayout />
-          </ProtectedRoute>
-        ),
+        element: <ProtectedRoute requiredRoles={[RoleEnum.ADMIN]} />,
         children: [
           {
             index: true,
             element: <Navigate to="/admin/dashboard" replace />,
           },
-          { path: "dashboard", element: <AdminDashboard /> },
-          { path: "campaigns", element: <CampaignManagementPage /> },
-          { path: "teams", element: <TeamManagementPage /> },
-          { path: "accounts", element: <AccountManagementPage /> },
+          {
+            element: <AdminLayout />,
+            children: [
+              { path: "dashboard", element: <AdminDashboard /> },
+              { path: "campaigns", element: <CampaignManagementPage /> },
+              { path: "teams", element: <TeamManagementPage /> },
+              { path: "accounts", element: <AccountManagementPage /> },
+            ],
+          },
         ],
       },
       {
