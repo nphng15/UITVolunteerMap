@@ -9,7 +9,7 @@ export default function PostCreateChooseEditPopup({
 }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-[380px] h-[520px] rounded-xl overflow-hidden bg-[#1F2329] text-white flex flex-col">
+      <div className="w-95 h-130 rounded-xl overflow-hidden bg-[#1F2329] text-white flex flex-col">
         {/* Header */}
         <div className="bg-[#C4161C] flex items-center justify-between px-3 py-2">
           <button onClick={onBack}>＋</button>
