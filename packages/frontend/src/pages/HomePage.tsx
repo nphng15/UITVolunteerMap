@@ -31,7 +31,7 @@ export default function HomePage() {
             <img
               src={images[currentIndex]}
               alt="Banner"
-              className="w-full h-80 object-cover"
+              className="w-full h-80 object-cover opacity-100 filter-none"
             />
             <button
               onClick={prevSlide}
@@ -54,16 +54,13 @@ export default function HomePage() {
                   key={index}
                   onClick={() => setCurrentIndex(index)}
                   className={`border-2 rounded-sm overflow-hidden
-                    ${
-                      currentIndex === index
-                        ? "border-white"
-                        : "border-transparent opacity-60"
-                    }`}
+                    ${currentIndex === index ? "border-white" : "border-transparent"}
+                  `}
                 >
                   <img
                     src={img}
                     alt="thumb"
-                    className="w-24 h-14 object-cover"
+                    className="w-36 h-20 object-contain bg-black"
                   />
                 </button>
               ))}
