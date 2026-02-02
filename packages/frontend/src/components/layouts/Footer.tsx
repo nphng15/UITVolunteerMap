@@ -12,7 +12,7 @@ export default function Footer() {
           <img
             src={uitLogo}
             alt="UITVolunteer"
-            className="h-30 w-auto"
+            className="h-12 w-auto"
           />
 
           <div className="flex flex-col gap-3 flex-1">
@@ -50,7 +50,7 @@ export default function Footer() {
           <img
             src={creditIcon}
             alt="Credits"
-            className="w-14 h-14"
+            className="w-24 h-24"
           />
         </div>
       </div>
