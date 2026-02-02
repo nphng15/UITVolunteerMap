@@ -13,7 +13,7 @@ import bndHover from "@/assets/icons/bnd-ko-logo-1.png";
 
 export default function HomePage() {
   const [images, setImages] = useState<string[]>([img1, img2, img3]);
-  
+
   const handleThumbClick = (index: number) => {
     if (index === 1) return;
     setImages((imgs) => {
@@ -110,30 +110,38 @@ export default function HomePage() {
             </div>
 
             <div className="relative group w-28 h-28 flex items-center justify-center">
-              <img src={xtn} className="w-24 h-24 object-contain" />
-              <div
-                className="absolute -top-6 left-1/2 -translate-x-1/2
-                           flex gap-3 bg-white/95 p-2 rounded-xl shadow-lg
-                           opacity-0 scale-95 pointer-events-none
-                           transition-all duration-300
-                           group-hover:opacity-100
-                           group-hover:scale-100
-                           group-hover:pointer-events-auto"
-              >
-                {[2024, 2025, 2026].map((y) => (
-                  <Link
-                    key={y}
-                    to={`campaign/xtn/${y}`}
-                    className="w-16 h-16"
-                  >
-                    <img
-                      src={bndHover}
-                      className="w-full h-full object-contain"
-                    />
-                  </Link>
-                ))}
+                <Link to="/campaign/xtn">
+                  <img
+                    src={xtn}
+                    className="w-24 h-24 object-contain cursor-pointer"
+                    alt="Xuân Tình Nguyện"
+                  />
+                </Link>
+
+                <div
+                  className="absolute -top-6 left-1/2 -translate-x-1/2
+                            flex gap-3 bg-white/95 p-2 rounded-xl shadow-lg
+                            opacity-0 scale-95 pointer-events-none
+                            transition-all duration-300
+                            group-hover:opacity-100
+                            group-hover:scale-100
+                            group-hover:pointer-events-auto"
+                >
+                  {[2024, 2025, 2026].map((y) => (
+                    <Link
+                      key={y}
+                      to={`/campaign/xtn/${y}`}
+                      className="w-16 h-16"
+                    >
+                      <img
+                        src={bndHover}
+                        className="w-full h-full object-contain"
+                        alt={`XTN ${y}`}
+                      />
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
 
             {[1, 2, 3, 4].map((i) => (
               <div
