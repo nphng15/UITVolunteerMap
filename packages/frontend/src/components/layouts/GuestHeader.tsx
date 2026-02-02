@@ -45,20 +45,31 @@ export default function GuestHeader() {
     }, 400);
   };
 
-    const navItem = (id: SectionId, label: string) => (
-      <a
-        href={`#${id}`}
-        onClick={() => handleClick(id)}
-        className="
-          relative text-sm font-black text-black
-          transition-all duration-200
-          hover:text-red-600
-          hover:scale-105
-        "
-      >
-        {label}
-      </a>
-    );
+          const navItem = (id: SectionId, label: string) => (
+          <a
+            href={`#${id}`}
+            onClick={() => handleClick(id)}
+            className="
+              relative text-sm font-black text-black
+              transition-all duration-200
+              hover:text-red-600
+              hover:scale-105
+              group
+            "
+          >
+            {label}
+
+            <span
+              className="
+                absolute -bottom-2 left-0
+                h-[3px] w-0
+                bg-red-600
+                transition-all duration-200
+                group-hover:w-full
+              "
+            />
+          </a>
+        );
 
 
   return (
