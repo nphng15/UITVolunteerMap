@@ -49,26 +49,36 @@ export default function HomePage() {
               ›
             </button>
 
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-3">
-              {images.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentIndex(index)}
-                  className={`border-2 rounded-sm overflow-hidden
-                    ${
-                      currentIndex === index
-                        ? "border-white"
-                        : "border-transparent"
-                    }`}
-                >
-                  <img
-                    src={img}
-                    alt="thumb"
-                    className="w-40 h-20 object-contain"
-                  />
-                </button>
-              ))}
+           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-4">
+              {images.map((img, index) => {
+                const isActive = index === currentIndex;
+                const isNear =
+                  index === currentIndex - 1 || index === currentIndex + 1;
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentIndex(index)}
+                    className={`transition-all duration-300
+                      ${
+                        isActive
+                          ? "scale-110 opacity-100"
+                          : isNear
+                          ? "scale-95 opacity-70"
+                          : "scale-90 opacity-40"
+                      }
+                    `}
+                  >
+                    <img
+                      src={img}
+                      alt="thumb"
+                      className="w-40 h-20 object-cover rounded-md"
+                    />
+                  </button>
+                );
+              })}
             </div>
+
           </div>
         </section>
 
