@@ -58,13 +58,13 @@ export default function HomePage() {
                     ${
                       currentIndex === index
                         ? "border-white"
-                        : "border-transparent opacity-60"
+                        : "border-transparent"
                     }`}
                 >
                   <img
                     src={img}
                     alt="thumb"
-                    className="w-24 h-14 object-cover"
+                    className="w-40 h-20 object-contain"
                   />
                 </button>
               ))}
