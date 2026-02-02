@@ -25,49 +25,39 @@ export default function HomePage() {
       <PublicHeader />
 
       <main className="flex-1">
-        <section className="max-w-6xl mx-auto px-4 pt-4">
-          <div className="relative rounded-b-3xl overflow-hidden">
-            <div className="absolute top-4 left-4 bg-white px-4 py-2 rounded-full z-10">
-              <img
-                src="/Homepage_Logo.svg"
-                alt="UITVolunteer"
-                className="w-32"
-              />
-            </div>
 
+        <section className="max-w-6xl mx-auto px-4 pt-4">
+          <div className="relative rounded-2xl overflow-hidden">
             <img
               src={images[currentIndex]}
               alt="Banner"
               className="w-full h-80 object-cover"
             />
-
-            <div className="absolute inset-0 bg-[#0B4A6F]/40" />
-
             <button
               onClick={prevSlide}
               className="absolute left-4 top-1/2 -translate-y-1/2
-                         bg-black/50 text-white w-9 h-9 rounded-full z-10"
+                         bg-black/40 text-white w-9 h-9 rounded-full"
             >
               ‹
             </button>
             <button
               onClick={nextSlide}
               className="absolute right-4 top-1/2 -translate-y-1/2
-                         bg-black/50 text-white w-9 h-9 rounded-full z-10"
+                         bg-black/40 text-white w-9 h-9 rounded-full"
             >
               ›
             </button>
 
-            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-3">
               {images.map((img, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentIndex(index)}
-                  className={`border-2 rounded-sm overflow-hidden transition
+                  className={`border-2 rounded-sm overflow-hidden
                     ${
                       currentIndex === index
-                        ? "border-white opacity-100"
-                        : "border-transparent opacity-50"
+                        ? "border-white"
+                        : "border-transparent opacity-60"
                     }`}
                 >
                   <img
@@ -81,16 +71,16 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="bg-gradient-to-b from-[#0B4A6F] to-[#0E5F8C] text-white py-14">
-          <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 items-start">
+        <section className="bg-gradient-to-b from-[#0B4A6F] to-[#0E5F8C] text-white py-16">
+          <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-10">
             <img
               src="/Homepage_Logo.svg"
               alt="UITVolunteer"
-              className="w-48"
+              className="w-52"
             />
 
             <div>
-              <p className="font-bold text-sm leading-relaxed">
+              <p className="font-semibold text-base leading-relaxed">
                 UITVolunteer là một trang web tổng hợp các chiến dịch
                 tình nguyện đã và đang được tổ chức tại Trường Đại học
                 Công nghệ Thông tin – ĐHQG TP.HCM. Đây là nơi các bạn
@@ -99,60 +89,56 @@ export default function HomePage() {
                 đồng thời đóng góp những dấu ấn cá nhân của mình.
               </p>
 
-              <h2 className="text-center mt-12 font-bold tracking-widest">
+              <h2 className="text-center mt-14 text-xl font-bold tracking-widest">
                 CHIẾN DỊCH
               </h2>
             </div>
           </div>
 
-          <div className="mt-12 grid grid-cols-3 gap-12 justify-items-center">
-            {/* MÙA HÈ XANH */}
+          <div className="mt-14 flex justify-center gap-28">
             <Link
               to="campaign/mhx"
-              className="group relative w-24 h-24 flex items-center justify-center"
+              className="w-28 aspect-square flex items-center justify-center"
             >
               <img
                 src={mhx}
                 alt="Mùa hè xanh"
-                className="w-20 h-20 object-contain transition-opacity duration-300
-                           group-hover:opacity-0"
-              />
-              <img
-                src={bndHover}
-                alt="hover"
-                className="absolute inset-0 w-full h-full object-contain
-                           opacity-0 transition-opacity duration-300
-                           group-hover:opacity-100"
+                className="w-24 h-24 object-contain"
               />
             </Link>
 
-            {/* XUÂN TÌNH NGUYỆN */}
-            <Link
-              to="campaign/xtn"
-              className="group relative w-24 h-24 flex items-center justify-center"
-            >
+            <div className="relative group w-28 aspect-square flex items-center justify-center">
               <img
                 src={xtn}
                 alt="Xuân tình nguyện"
-                className="w-20 h-20 object-contain transition-opacity duration-300
-                           group-hover:opacity-0"
+                className="w-24 h-24 object-contain"
               />
-              <img
-                src={bndHover}
-                alt="hover"
-                className="absolute inset-0 w-full h-full object-contain
-                           opacity-0 transition-opacity duration-300
-                           group-hover:opacity-100"
-              />
-            </Link>
 
-            {/* PLACEHOLDER */}
-            {[1, 2, 3, 4].map((i) => (
               <div
-                key={i}
-                className="w-24 h-24 bg-white/30 rounded-md"
-              />
-            ))}
+                className="absolute -top-6 left-1/2 -translate-x-1/2
+                           flex gap-3 bg-white/95 p-2 rounded-xl shadow-lg
+                           opacity-0 scale-95 pointer-events-none
+                           transition-all duration-300
+                           group-hover:opacity-100
+                           group-hover:scale-100
+                           group-hover:pointer-events-auto"
+              >
+                {[2024, 2025, 2026].map((year) => (
+                  <Link
+                    key={year}
+                    to={`campaign/xtn/${year}`}
+                    className="w-16 h-16 flex items-center justify-center
+                               hover:scale-105 transition"
+                  >
+                    <img
+                      src={bndHover}
+                      alt={`XTN ${year}`}
+                      className="w-full h-full object-contain"
+                    />
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
       </main>
