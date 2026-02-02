@@ -30,6 +30,9 @@ export class Account {
   @Column("text", { name: "UpdatedAt", nullable: true })
   updatedAt?: string | null;
 
+  @Column({ type: "boolean", default: false })
+  isDeleted!: boolean;
+
   @ManyToOne("Role", "accounts")
   @JoinColumn({ name: "RoleId" })
   role!: Relation<Role>;
