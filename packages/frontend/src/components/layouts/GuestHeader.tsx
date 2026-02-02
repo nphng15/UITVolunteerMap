@@ -45,28 +45,21 @@ export default function GuestHeader() {
     }, 400);
   };
 
-  const navItem = (id: SectionId, label: string) => {
-    const isActive = active === id;
-
-    return (
+    const navItem = (id: SectionId, label: string) => (
       <a
         href={`#${id}`}
         onClick={() => handleClick(id)}
-        className={`relative text-sm font-black transition
-          ${isActive ? "text-red-600" : "text-black"}
+        className="
+          relative text-sm font-black text-black
+          transition-all duration-200
           hover:text-red-600
-        `}
+          hover:scale-105
+        "
       >
         {label}
-
-        <span
-          className={`absolute -bottom-2 left-0 h-[3px] bg-red-600 transition-all
-            ${isActive ? "w-full" : "w-0 group-hover:w-full"}
-          `}
-        />
       </a>
     );
-  };
+
 
   return (
     <header
