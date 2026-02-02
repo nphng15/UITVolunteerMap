@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import PublicHeader from "@/components/layouts/PublicHeader";
 import Footer from "@/components/layouts/Footer";
 
-
 import img1 from "@/assets/icons/Image Container.png";
 import img2 from "@/assets/icons/Image Container (1).png";
 import img3 from "@/assets/icons/Image Container (2).png";
@@ -26,7 +25,6 @@ export default function HomePage() {
       <PublicHeader />
 
       <main className="flex-1">
-
         <section className="max-w-6xl mx-auto px-4 pt-4">
           <div className="relative rounded-2xl overflow-hidden">
             <img
@@ -34,6 +32,8 @@ export default function HomePage() {
               alt="Banner"
               className="w-full h-80 object-cover"
             />
+
+
             <button
               onClick={prevSlide}
               className="absolute left-4 top-1/2 -translate-y-1/2
@@ -49,41 +49,31 @@ export default function HomePage() {
               ›
             </button>
 
-           <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-4">
-              {images.map((img, index) => {
-                const isActive = index === currentIndex;
-                const isNear =
-                  index === currentIndex - 1 || index === currentIndex + 1;
-
-                return (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentIndex(index)}
-                    className={`transition-all duration-300
-                      ${
-                        isActive
-                          ? "scale-110 opacity-100"
-                          : isNear
-                          ? "scale-95 opacity-70"
-                          : "scale-90 opacity-40"
-                      }
-                    `}
-                  >
-                    <img
-                      src={img}
-                      alt="thumb"
-                      className="w-40 h-20 object-cover rounded-md"
-                    />
-                  </button>
-                );
-              })}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-3">
+              {images.map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`border-2 rounded-sm overflow-hidden
+                    ${
+                      currentIndex === index
+                        ? "border-white"
+                        : "border-transparent opacity-60"
+                    }`}
+                >
+                  <img
+                    src={img}
+                    alt="thumb"
+                    className="w-32 h-14 object-cover"
+                  />
+                </button>
+              ))}
             </div>
-
           </div>
         </section>
-
         <section className="bg-gradient-to-b from-[#0B4A6F] to-[#0E5F8C] text-white py-16">
           <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-10">
+
             <img
               src="/Homepage_Logo.svg"
               alt="UITVolunteer"
@@ -124,7 +114,6 @@ export default function HomePage() {
                 alt="Xuân tình nguyện"
                 className="w-24 h-24 object-contain"
               />
-
               <div
                 className="absolute -top-6 left-1/2 -translate-x-1/2
                            flex gap-3 bg-white/95 p-2 rounded-xl shadow-lg
@@ -134,7 +123,7 @@ export default function HomePage() {
                            group-hover:scale-100
                            group-hover:pointer-events-auto"
               >
-                {[2024, 2025, 2026].map((year) => (
+                {[2022, 2023, 2024].map((year) => (
                   <Link
                     key={year}
                     to={`campaign/xtn/${year}`}
