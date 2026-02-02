@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import PublicHeader from "@/components/layouts/PublicHeader";
 import Footer from "@/components/layouts/Footer";
 
+
 import img1 from "@/assets/icons/Image Container.png";
 import img2 from "@/assets/icons/Image Container (1).png";
 import img3 from "@/assets/icons/Image Container (2).png";
@@ -31,7 +32,7 @@ export default function HomePage() {
             <img
               src={images[currentIndex]}
               alt="Banner"
-              className="w-full h-80 object-cover opacity-100 filter-none"
+              className="w-full h-80 object-cover"
             />
             <button
               onClick={prevSlide}
@@ -54,13 +55,16 @@ export default function HomePage() {
                   key={index}
                   onClick={() => setCurrentIndex(index)}
                   className={`border-2 rounded-sm overflow-hidden
-                    ${currentIndex === index ? "border-white" : "border-transparent"}
-                  `}
+                    ${
+                      currentIndex === index
+                        ? "border-white"
+                        : "border-transparent opacity-60"
+                    }`}
                 >
                   <img
                     src={img}
                     alt="thumb"
-                    className="w-36 h-20 object-contain bg-black"
+                    className="w-24 h-14 object-cover"
                   />
                 </button>
               ))}
