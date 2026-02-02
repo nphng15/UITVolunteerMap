@@ -1,6 +1,9 @@
 import { Link } from "react-router";
 import { useEffect, useState, useRef } from "react";
 
+import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
+import xtnLogo from "@/assets/icons/xtn.png";
+
 const SECTIONS = ["info", "teams", "activities"] as const;
 type SectionId = (typeof SECTIONS)[number];
 
@@ -12,7 +15,6 @@ export default function GuestHeader() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (isClickingRef.current) return;
-
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setActive(entry.target.id as SectionId);
@@ -36,7 +38,6 @@ export default function GuestHeader() {
   const handleClick = (id: SectionId) => {
     isClickingRef.current = true;
     setActive(id);
-
     setTimeout(() => {
       isClickingRef.current = false;
     }, 400);
@@ -60,9 +61,17 @@ export default function GuestHeader() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-black/10">
       <div className="max-w-6xl mx-auto h-14 px-6 flex items-center justify-between">
-        <div className="flex items-center gap-2 font-bold text-xs text-gray-700">
-          <span>✉</span>
-          <span>Logo chiến dịch</span>
+        <div className="flex items-center gap-3">
+          <img
+            src={bndLogo}
+            alt="Xuân Tình Nguyện"
+            className="h-7 w-auto"
+          />
+          <img
+            src={xtnLogo}
+            alt="XTN"
+            className="h-8 w-auto"
+          />
         </div>
 
         <nav className="flex gap-10">
