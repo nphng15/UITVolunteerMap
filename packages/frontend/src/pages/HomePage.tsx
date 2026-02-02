@@ -2,9 +2,10 @@ import { useState } from "react";
 import PublicHeader from "@/components/layouts/PublicHeader";
 import Footer from "@/components/layouts/Footer";
 
-import img1 from "@/assets/icons/Image Container.png";
-import img2 from "@/assets/icons/Image Container (1).png";
-import img3 from "@/assets/icons/Image Container (2).png";
+import img1 from "@/assets/icons/image-container.png";
+import img2 from "@/assets/icons/image-container-1.png";
+import img3 from "@/assets/icons/image-container-2.png";
+
 
 import mhx from "@/assets/icons/mhx.png";
 import xtn from "@/assets/icons/xtn.png";
