@@ -8,44 +8,40 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white mt-20">
       <div className="max-w-6xl mx-auto px-6 py-6">
+        <div className="flex items-start gap-10">
+          <img
+            src={uitLogo}
+            alt="UITVolunteer"
+            className="h-30 w-auto"
+          />
 
-        <div className="flex items-start justify-between gap-8">
-          <div className="flex items-start gap-4">
-            <img
-              src={uitLogo}
-              alt="UITVolunteer"
-              className="h-12 w-auto"
-            />
+          <div className="flex flex-col gap-3 flex-1">
 
-            <div className="flex flex-col gap-1">
-              <span className="font-semibold text-sm">
-                Trang chủ
-              </span>
-              <span className="font-semibold text-sm">
-                Liên hệ:
-              </span>
+            <div className="font-semibold text-sm">
+              Trang chủ
             </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-6 text-sm text-white/90">
-            <div className="flex items-center gap-2">
-              <img src={mailIcon} className="w-4 h-4" />
-              <span>hsvdhcntt@hoisinhvientphcm.com</span>
-            </div>
+            <div className="flex flex-wrap items-center gap-6 text-sm text-white/90">
+              <span className="font-semibold">Liên hệ:</span>
 
-            <div className="flex items-center gap-2">
-              <img src={fbIcon} className="w-4 h-4" />
-              <span>facebook.com/tuoitre.uit</span>
-            </div>
+              <div className="flex items-center gap-2">
+                <img src={mailIcon} className="w-4 h-4" />
+                <span>hsvdhcntt@hoisinhvientphcm.com</span>
+              </div>
 
-            <div className="flex items-center gap-2">
-              <img src={locationIcon} className="w-4 h-4" />
-              <span>Khu phố 34, Phường Linh Xuân, TP.HCM</span>
+              <div className="flex items-center gap-2">
+                <img src={fbIcon} className="w-4 h-4" />
+                <span>facebook.com/tuoitre.uit</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <img src={locationIcon} className="w-4 h-4" />
+                <span>Khu phố 34, Phường Linh Xuân, TP.HCM</span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/30 my-4" />
-
+        <div className="border-t border-white/30 my-5" />
         <div className="flex items-center justify-between">
           <div className="text-xs text-white/60">
             UITVolunteer © 2026. All rights reserved.
@@ -54,7 +50,7 @@ export default function Footer() {
           <img
             src={creditIcon}
             alt="Credits"
-            className="w-12 h-12"
+            className="w-14 h-14"
           />
         </div>
       </div>
