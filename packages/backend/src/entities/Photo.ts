@@ -23,6 +23,9 @@ export class Photo {
   @Column("text", { name: "UploadedAt", nullable: false })
   uploadedAt!: string;
 
+  @Column("integer", { name: "IsDeleted", nullable: false, default: 0 })
+  isDeleted!: number;
+
   @ManyToOne("Post", "photos", { nullable: true })
   @JoinColumn({ name: "PostID" })
   post?: Relation<Post>;

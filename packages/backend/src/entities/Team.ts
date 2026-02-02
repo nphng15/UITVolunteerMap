@@ -22,6 +22,19 @@ export class Team {
   @Column("text", { name: "Description", nullable: true })
   description?: string | null;
 
+  @Column("integer", { name: "LeaderId", nullable: true })
+  leaderId?: number | null;
+
+  @Column("text", { name: "ImageUrl", nullable: true })
+  imageUrl?: string | null;
+
+  @Column("integer", { name: "IsDeleted", nullable: false, default: 0 })
+  isDeleted!: number;
+
+  @ManyToOne("User", { nullable: true })
+  @JoinColumn({ name: "LeaderId" })
+  leader?: Relation<User>;
+
   @OneToMany("User", "team")
   users!: Relation<User[]>;
 

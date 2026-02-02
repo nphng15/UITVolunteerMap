@@ -32,6 +32,9 @@ export class User {
   @Column("text", { name: "PhoneNumber", nullable: true })
   phoneNumber?: string | null;
 
+  @Column("integer", { name: "IsDeleted", nullable: false, default: 0 })
+  isDeleted!: number;
+
   @ManyToOne("Team", "users")
   @JoinColumn({ name: "TeamId" })
   team!: Relation<Team>;

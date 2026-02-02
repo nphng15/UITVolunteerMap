@@ -11,6 +11,7 @@ import { leaderRouter } from './routes/leader.route.js';
 import { campaignRouter } from './routes/campaign.js';
 import { userRouter } from './routes/user.route.js';
 import { postRouter } from './routes/post.js';
+import teamRouter from './routes/team.route.js';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use('/api/leader', leaderRouter);
 app.use('/api/campaigns', campaignRouter);
 app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/teams', teamRouter);
 
 // Error handling
 app.use(errorHandler);
