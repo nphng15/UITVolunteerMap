@@ -72,10 +72,12 @@ export default function CampaignPage() {
             <img src={infoImage} className="rounded-3xl object-cover w-full h-full" />
           </div>
         </section>
-        <section id="teams" className="teams-section">
-          <h2 className="teams-heading">ĐỘI HÌNH</h2>
+        <section id="teams" className="max-w-7xl mx-auto mt-28 px-6 relative">
+          <h2 className="text-center font-black text-5xl mb-20 text-black">
+            ĐỘI HÌNH
+          </h2>
 
-          <div className="teams-line" />
+          <div className="team-line" />
 
           {teams.map((team) => {
             const ref = useRef<HTMLDivElement | null>(null);
@@ -84,10 +86,18 @@ export default function CampaignPage() {
               const el = ref.current;
               if (!el) return;
 
+              let lastY = 0;
+
               const observer = new IntersectionObserver(
                 ([entry]) => {
+                  const currentY = entry.boundingClientRect.y;
+                  const direction = currentY < lastY ? "down" : "up";
+                  lastY = currentY;
+
+                  el.classList.remove("up", "down");
+
                   if (entry.isIntersecting) {
-                    el.classList.add("active");
+                    el.classList.add("active", direction);
                   } else {
                     el.classList.remove("active");
                   }
@@ -106,13 +116,13 @@ export default function CampaignPage() {
               <div
                 key={team.slug}
                 ref={ref}
-                className="team-row"
+                className="team-wrapper h-screen flex items-start relative pt-24"
               >
-                <div className="team-left">
-                  <img src={banhChungPin} className="team-pin" />
+                <div className="team-pin-wrapper">
+                  <img src={banhChungPin} />
                 </div>
 
-                <div className="team-right">
+                <div className="team-slide">
                   <h3 className="team-title">{team.name}</h3>
 
                   <div className="team-info">
@@ -120,9 +130,8 @@ export default function CampaignPage() {
                     <span><strong>Đội phó:</strong> {team.vice}</span>
                   </div>
 
-                  <div className="team-body">
-                    <img src={team.image} className="team-image" />
-
+                  <div className="team-content">
+                    <img src={team.image} />
                     <Link to={`team/${team.slug}`} className="team-btn">
                       Xem thêm
                     </Link>
@@ -132,7 +141,6 @@ export default function CampaignPage() {
             );
           })}
         </section>
-
 
          <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
           <h2 className="text-center font-black tracking-widest mb-12 text-black">
