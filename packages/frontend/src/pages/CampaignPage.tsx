@@ -40,31 +40,32 @@ export default function CampaignPage() {
   const [activeIndex, setActiveIndex] = useState(0);
   const timelineRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const el = timelineRef.current;
-    if (!el) return;
+useEffect(() => {
+  const el = timelineRef.current;
+  if (!el) return;
 
-    let locked = false;
+  let locked = false;
 
-    const onWheel = (e: WheelEvent) => {
-      if (locked) return;
+  const onWheel = (e: WheelEvent) => {
+    if (locked) return;
 
-      if (e.deltaY > 0 && activeIndex < teams.length - 1) {
-        locked = true;
-        setActiveIndex((i) => i + 1);
-      }
+    if (e.deltaY > 10 && activeIndex < teams.length - 1) {
+      locked = true;
+      setActiveIndex(i => i + 1);
+    }
 
-      if (e.deltaY < 0 && activeIndex > 0) {
-        locked = true;
-        setActiveIndex((i) => i - 1);
-      }
+    if (e.deltaY < -10 && activeIndex > 0) {
+      locked = true;
+      setActiveIndex(i => i - 1);
+    }
 
-      setTimeout(() => (locked = false), 450);
-    };
+    setTimeout(() => (locked = false), 250);
+  };
 
-    el.addEventListener("wheel", onWheel);
-    return () => el.removeEventListener("wheel", onWheel);
-  }, [activeIndex]);
+  el.addEventListener("wheel", onWheel, { passive: true });
+  return () => el.removeEventListener("wheel", onWheel);
+}, [activeIndex]);
+
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDE7B5]">
@@ -85,16 +86,30 @@ export default function CampaignPage() {
             <img src={xtnLogo} className="h-14" />
           </div>
 
-          <div className="absolute left-4 top-0">
+          <div className="absolute left-4 top-0 z-20">
             <button
               onClick={() => setYearOpen(!yearOpen)}
-              className="flex items-center gap-2 bg-[#FFF2CC] text-black border-2 border-black px-3 py-1 rounded-md font-black text-sm"
+              className="flex items-center gap-2
+                        bg-[#FFF2CC]
+                        border-2 border-red-700
+                        px-3 py-2
+                        rounded-lg
+                        font-black
+                        text-black
+                        shadow"
             >
-              ☰ {year}
+              ☰
             </button>
 
             {yearOpen && (
-              <div className="mt-1 bg-[#FFF2CC] border-2 border-black rounded shadow">
+              <div
+                className="mt-2 flex flex-col
+                          bg-[#FFF2CC]
+                          border-2 border-red-700
+                          rounded-xl
+                          overflow-hidden
+                          shadow-lg"
+              >
                 {[2026, 2027, 2028].map((y) => (
                   <button
                     key={y}
@@ -102,7 +117,17 @@ export default function CampaignPage() {
                       setYear(y);
                       setYearOpen(false);
                     }}
-                    className="block px-4 py-1 text-sm font-bold text-black hover:bg-[#FFD966] w-full text-left"
+                    className={`px-6 py-3
+                      font-black
+                      text-lg
+                      text-black
+                      transition
+                      ${
+                        year === y
+                          ? "bg-[#FFD966]"
+                          : "hover:bg-[#FFE8A1]"
+                      }
+                    `}
                   >
                     {y}
                   </button>
@@ -110,15 +135,16 @@ export default function CampaignPage() {
               </div>
             )}
           </div>
+
         </section>
 
-        <section id="info" className="max-w-4xl mx-auto mt-10 px-4">
-          <h2 className="text-center font-black tracking-widest mb-6 text-black">
+       <section id="info" className="max-w-5xl mx-auto mt-14 px-4">
+          <h2 className="text-center font-black tracking-widest mb-10 text-black">
             THÔNG TIN CHUNG
           </h2>
 
-          <div className="grid md:grid-cols-2 gap-6 items-center">
-            <p className="text-sm font-bold leading-relaxed text-black">
+          <div className="grid md:grid-cols-2 gap-10 items-stretch">
+            <p className="text-base font-bold leading-relaxed text-black flex items-center">
               Chiến dịch Xuân Tình Nguyện – Trường Đại học Công nghệ Thông tin,
               ĐHQG-HCM là hoạt động tình nguyện ý nghĩa được tổ chức thường niên
               với sự tham gia của hàng trăm sinh viên thuộc nhiều đội hình khác
@@ -126,106 +152,110 @@ export default function CampaignPage() {
               hoàn cảnh, địa phương còn khó khăn.
             </p>
 
-            <img src={infoImage} className="rounded-lg border-4 border-white" />
+            <img
+              src={infoImage}
+              className="rounded-3xl object-cover w-full h-full"
+            />
           </div>
         </section>
-        <section id="teams" className="max-w-5xl mx-auto mt-20 px-4">
-          <h2 className="text-center font-black tracking-widest mb-12 text-black">
-            ĐỘI HÌNH
-          </h2>
 
-          <div className="relative flex">
-            <div className="w-1/4 bg-[#FFE5B4] rounded-xl mr-8" />
+        <section id="teams" className="max-w-6xl mx-auto mt-24 px-4">
+            <h2 className="text-center font-black tracking-widest mb-14 text-black">
+              ĐỘI HÌNH
+            </h2>
 
             <div
               ref={timelineRef}
-              className="relative flex-1 border-l-[4px] border-[#4FA3FF] pl-16 py-20"
+              className="relative border-l-[3px] border-green-600 pl-10"
             >
               {teams.map((team, index) => (
                 <div
                   key={team.slug}
-                  className="relative mb-32 transition-all duration-500"
+                  className="relative mb-32 transition-all duration-300"
                   style={{
                     opacity: index === activeIndex ? 1 : 0,
                     transform:
                       index === activeIndex
                         ? "translateY(0)"
-                        : "translateY(40px)",
+                        : "translateY(20px)",
                     pointerEvents:
                       index === activeIndex ? "auto" : "none",
                   }}
                 >
-
                   <img
                     src={banhChungPin}
-                    className="absolute -left-[56px] top-10 w-10 h-10"
+                    className="absolute -left-[38px] top-3 w-10 h-10"
                   />
 
-                  <div className="flex bg-[#FFF2CC] rounded-2xl overflow-hidden shadow-xl">
-                    <img src={team.image} className="w-52 object-cover" />
-
-                    <div className="flex-1 p-6 border-l-4 border-red-600">
-                      <h3 className="font-black text-xl text-red-700 mb-2">
+                  <div className="grid md:grid-cols-[1fr_220px] gap-8 items-center">
+                    <div>
+                      <h3 className="font-black text-3xl text-red-700 mb-3">
                         {team.name}
                       </h3>
 
-                      <p className="text-sm font-bold text-black">
+                      <p className="text-lg font-bold text-black mb-1">
                         Đội trưởng: {team.leader}
                       </p>
-                      <p className="text-sm font-bold text-black mb-4">
+                      <p className="text-lg font-bold text-black">
                         Đội phó: {team.vice}
                       </p>
-
-                      <Link
-                        to={`team/${team.slug}`}
-                        className="inline-block bg-red-700 text-white text-xs font-black px-5 py-2 rounded-full hover:bg-red-800"
-                      >
-                        Xem thêm
-                      </Link>
                     </div>
+
+                    <Link
+                      to={`team/${team.slug}`}
+                      className="bg-red-700 text-white text-xl font-black
+                                px-10 py-6 rounded-3xl text-center
+                                hover:bg-red-800"
+                    >
+                      Xem thêm
+                    </Link>
+                  </div>
+
+                  <img
+                    src={team.image}
+                    className="mt-8 rounded-[40px] w-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+
+
+    <section
+      id="activities"
+      className="max-w-5xl mx-auto mt-24 px-4 pb-24"
+    >
+      <h2 className="text-center font-black tracking-widest mb-12 text-black">
+        HOẠT ĐỘNG
+      </h2>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            key={i}
+            className="bg-gradient-to-b from-[#FFE066] to-[#FFD43B]
+                      rounded-2xl p-4 shadow-lg"
+          >
+            <h3 className="font-black text-sm text-black mb-3">
+              TÊN HOẠT ĐỘNG
+                  </h3>
+
+                  <div className="bg-[#E6E6E6] rounded-xl aspect-[4/3] flex items-center justify-center mb-3">
+                    <div className="w-12 h-12 border-2 border-white rotate-45 opacity-60" />
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-600 text-sm">❤</span>
+                    <div className="flex-1 h-[2px] bg-black/70" />
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* HOẠT ĐỘNG */}
-<section
-  id="activities"
-  className="max-w-5xl mx-auto mt-24 px-4 pb-24"
->
-  <h2 className="text-center font-black tracking-widest mb-12 text-black">
-    HOẠT ĐỘNG
-  </h2>
+          </main>
 
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-    {Array.from({ length: 6 }).map((_, i) => (
-      <div
-        key={i}
-        className="bg-gradient-to-b from-[#FFE066] to-[#FFD43B]
-                   rounded-2xl p-4 shadow-lg"
-      >
-        <h3 className="font-black text-sm text-black mb-3">
-          TÊN HOẠT ĐỘNG
-              </h3>
-
-              <div className="bg-[#E6E6E6] rounded-xl aspect-[4/3] flex items-center justify-center mb-3">
-                <div className="w-12 h-12 border-2 border-white rotate-45 opacity-60" />
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-red-600 text-sm">❤</span>
-                <div className="flex-1 h-[2px] bg-black/70" />
-              </div>
-            </div>
-          ))}
+          <Footer />
         </div>
-      </section>
-
-      </main>
-
-      <Footer />
-    </div>
-  );
-}
+      );
+    }
