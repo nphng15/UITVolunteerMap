@@ -12,7 +12,7 @@ router.use(authenticateToken, requireRole([RoleEnum.ADMIN]));
 
 // Get All
     router.get('/',
-        async (req, res) => {
+        async (_req, res) => {
         const accounts = await accountService.getAllAccounts();
         res.json(accounts);
     });
