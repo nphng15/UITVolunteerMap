@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import type { Role } from "./Role.js";
 import type { User } from "./User.js";
+import { Team } from "./Team.js";
 
 @Entity("Account")
 export class Account {
@@ -39,4 +40,7 @@ export class Account {
 
   @OneToOne("User", "account")
   user?: Relation<User>;
+
+  @OneToOne("Team", "account")
+  team?: Relation<Team>;
 }

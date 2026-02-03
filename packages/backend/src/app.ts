@@ -12,6 +12,7 @@ import { campaignRouter } from './routes/campaign.js';
 import { userRouter } from './routes/user.route.js';
 import { postRouter } from './routes/post.js';
 import { accountRouter } from './routes/account.route.js';
+import { verifyTokenRouter } from './routes/verify-token.js';
 dotenv.config();
 
 const app = express();
@@ -31,6 +32,7 @@ app.use('/api/campaigns', campaignRouter);
 app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/accounts', accountRouter);
+app.use('/api', verifyTokenRouter);
 // Error handling
 app.use(errorHandler);
 
