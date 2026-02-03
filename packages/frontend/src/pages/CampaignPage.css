@@ -35,19 +35,6 @@
   margin-bottom: 24px;
 }
 
-.team-pin {
-  width: 56px;
-  height: 56px;
-  position: relative;
-  left: -72px;
-}
-
-.team-title {
-  font-size: 48px;
-  color: #b91c1c;
-  font-weight: 600;
-}
-
 .team-meta {
   display: flex;
   gap: 48px;
@@ -79,4 +66,22 @@
 
 .team-btn:hover {
   transform: scale(1.05);
+}
+
+.team-pin {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+
+.team-pin img {
+  width: 72px;  
+  height: 72px;
+}
+
+.team-title {
+  color: #b40000;
+  font-weight: 800;
 }
