@@ -19,17 +19,33 @@ export class PostService {
     }
 
     async create(data: CreatePostInput) {
-        const newPost = this.postRepo.create(data);
-        newPost.isDeleted = 0;
-        newPost.createdAt = new Date().toISOString();
-        newPost.updatedAt = new Date().toISOString();
+        const newPost = this.postRepo.create({
+            title: data.title,
+            content: data.content,
+            campaign: { campaignId: data.campaignId },
+            author: { userId: data.authorId },
+            isDeleted: 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        });
         return await this.postRepo.save(newPost);
     }
 
     async update(id: number, data: UpdatePostInput) {
         const post = await this.getOne(id);
         if (!post || post.isDeleted === 1) throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
-        this.postRepo.merge(post, data);
+        
+        if (data.title) post.title = data.title;
+        
+        if (data.content) post.content = data.content;
+        
+        if (data.campaignId) {
+            post.campaign = { campaignId: data.campaignId } as Post['campaign'];
+        }
+        if (data.authorId) {
+            post.author = { userId: data.authorId } as Post['author'];
+        }
+        
         post.updatedAt = new Date().toISOString();
         return await this.postRepo.save(post);
     }
