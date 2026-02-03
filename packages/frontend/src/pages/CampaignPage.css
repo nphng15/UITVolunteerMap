@@ -1,20 +1,24 @@
-.team-block {
+.team-wrapper {
+  min-height: 100vh;
+  position: relative;
+}
+
+.team-slide {
   opacity: 0;
   transform: translateY(80px);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.team-block.active {
+.team-slide.active {
   opacity: 1;
   transform: translateY(0);
-}
-.team-block {
-  opacity: 0;
-  transform: translateY(80px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.team-block.active {
+/* hover fade */
+.team-wrapper:hover .team-slide {
   opacity: 1;
-  transform: translateY(0);
+}
+
+.team-wrapper:not(:hover) .team-slide.active {
+  opacity: 0.85;
 }
