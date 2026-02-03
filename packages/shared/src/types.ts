@@ -81,7 +81,6 @@ export interface Post {
   postId: number;
   title: string;
   content: string;
-  status: string;
   isDeleted: number;
   createdAt: string;
   updatedAt: string;

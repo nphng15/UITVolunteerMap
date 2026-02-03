@@ -22,9 +22,6 @@ export class Post {
   @Column("text", { name: "Content", nullable: false })
   content!: string;
 
-  @Column("text", { name: "Status", nullable: false, default: "draft" })
-  status!: string;
-
   @Column("integer", { name: "IsDeleted", nullable: false, default: 0 })
   isDeleted!: number;
 

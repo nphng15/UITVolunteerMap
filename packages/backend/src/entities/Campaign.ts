@@ -7,6 +7,7 @@ import {
 } from "typeorm";
 import type { Team } from "./Team.js";
 import type { Post } from "./Post.js";
+import { Attachment } from "./Attachment.js";
 
 @Entity("Campaign")
 export class Campaign {
@@ -30,4 +31,7 @@ export class Campaign {
 
   @OneToMany("Post", "campaign")
   posts!: Relation<Post[]>;
+
+  @OneToMany("Attachment", "campaign")
+  attachments!: Relation<Attachment[]>;
 }
