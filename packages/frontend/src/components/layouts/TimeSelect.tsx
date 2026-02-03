@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const TimeSelect = () => {
   const [selectedYear, setSelectedYear] = useState('2026');
@@ -10,7 +10,7 @@ const TimeSelect = () => {
       <div className="flex h-12 w-36 items-stretch bg-[#FFF9E5] border-[3px] border-[#660000] rounded-2xl overflow-hidden shadow-md">
         
         {/* Biểu tượng Menu bên trái */}
-        <div className="bg-gradient-to-b from-[#FFF0AD] to-[#FFD54F] border-r-[3px] border-[#660000] p-3 flex flex-col justify-center gap-1.5 shadow-inner">
+        <div className="bg-linear-to-b from-[#FFF0AD] to-[#FFD54F] border-r-[3px] border-[#660000] p-3 flex flex-col justify-center gap-1.5 shadow-inner">
           <div className="w-6 h-1 bg-black rounded-full"></div>
           <div className="w-6 h-1 bg-black rounded-full"></div>
           <div className="w-6 h-1 bg-black rounded-full"></div>

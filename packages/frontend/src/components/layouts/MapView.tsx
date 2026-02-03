@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import L, { LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-declare module 'leaflet' {
+declare module "leaflet" {
   interface Layer {
     __labelMarker?: L.Marker;
   }
@@ -11,9 +11,16 @@ declare module 'leaflet' {
   }
 }
 
+export interface MarkerData {
+  title?: string;
+  x?: number;
+  y?: number;
+  [key: string]: unknown;
+}
+
 interface MapViewProps {
-  onMarkerClick: (data: any) => void; // 'any' có thể thay bằng interface dữ liệu của bạn
-  onMarkerHover: (data: any | null) => void;
+  onMarkerClick: (data: MarkerData) => void;
+  onMarkerHover: (data: MarkerData | null) => void;
 }
 
 const highlightLabel = (marker: L.Marker) => {
@@ -49,7 +56,7 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
       touchZoom: true,
       boxZoom: true,
       keyboard: true,
-      
+
       dragging: true,
       zoomControl: true,
       attributionControl: false,
@@ -113,7 +120,7 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
     // ===============================
     const createArrowIcon = () =>
       L.icon({
-        iconUrl: '/map-element/map-pin-flower.svg', // đường dẫn SVG của bạn
+        iconUrl: "/map-element/map-pin-flower.svg", // đường dẫn SVG của bạn
         iconSize: [30, 30],
         iconAnchor: [15, 15],
       });
@@ -125,7 +132,7 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
       .then((res) => res.json())
       .then((data) => {
         L.geoJSON(data, {
-          pointToLayer: (feature, latlng) =>
+          pointToLayer: (_feature, latlng) =>
             L.marker(latlng, {
               icon: createArrowIcon(),
             }),
@@ -191,7 +198,7 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
             if (feature.properties?.ten_xa === undefined) {
               tinhLayer.addLayer(featureLayer);
 
-              const bounds = polygonLayer.getBounds();  
+              const bounds = polygonLayer.getBounds();
               const center = bounds.getCenter();
               labelMarker = L.marker(center, {
                 interactive: false, // không chặn event
@@ -306,9 +313,7 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
     };
   }, [onMarkerClick, onMarkerHover]);
 
-  return (
-    <div id="map" style={{ width: "80vw", height: "80vh" }} />
-  );
+  return <div id="map" style={{ width: "80vw", height: "80vh" }} />;
 };
 
 export default MapView;
