@@ -1,4 +1,4 @@
-import { number, z } from 'zod';
+import { z } from 'zod';
 import { RoleEnum } from  '@uit-volunteer-map/shared';
 
 export const createAccountSchema = z.object({
