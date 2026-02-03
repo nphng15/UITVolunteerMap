@@ -35,45 +35,12 @@ const teams = [
 export default function CampaignPage() {
   const { campaignId } = useParams<{ campaignId: string }>();
 
-  const [yearOpen, setYearOpen] = useState(false);
-  const [year, setYear] = useState(2026);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-  const slidesRef = useRef<HTMLDivElement[]>([]);
-  const lockRef = useRef(false);
-
-  useEffect(() => {
-    const onWheel = (e: WheelEvent) => {
-      if (lockRef.current) return;
-      if (Math.abs(e.deltaY) < 10) return;
-
-      lockRef.current = true;
-
-      let next = activeIndex;
-      if (e.deltaY > 0 && activeIndex < teams.length - 1) next++;
-      if (e.deltaY < 0 && activeIndex > 0) next--;
-
-      setActiveIndex(next);
-
-      slidesRef.current[next]?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-
-      setTimeout(() => {
-        lockRef.current = false;
-      }, 400);
-    };
-
-    window.addEventListener("wheel", onWheel, { passive: true });
-    return () => window.removeEventListener("wheel", onWheel);
-  }, [activeIndex]);
-
   return (
     <div className="min-h-screen flex flex-col bg-[#FDE7B5]">
       <GuestHeader />
 
       <main className="flex-1 pt-20">
+
         <section className="max-w-4xl mx-auto px-4">
           <div className="bg-white p-3 rounded-md">
             <div className="border-4 border-black aspect-video overflow-hidden">
@@ -87,137 +54,112 @@ export default function CampaignPage() {
             <img src={bndLogo} className="h-12" />
             <img src={xtnLogo} className="h-14" />
           </div>
-
-          <div className="absolute left-4 top-0 flex gap-2">
-            <button
-              onClick={() => setYearOpen(!yearOpen)}
-              className="bg-[#FFE066] border-2 border-red-700 px-3 py-2 rounded-lg font-black"
-            >
-              ☰
-            </button>
-
-            <div className="bg-[#FFF2CC] border-2 border-red-700 rounded-lg overflow-hidden">
-              <div className="px-6 py-2 font-black">{year}</div>
-              {yearOpen &&
-                [2027, 2028].map((y) => (
-                  <button
-                    key={y}
-                    onClick={() => {
-                      setYear(y);
-                      setYearOpen(false);
-                    }}
-                    className="block px-6 py-2 font-black hover:bg-[#FFD966]"
-                  >
-                    {y}
-                  </button>
-                ))}
-            </div>
-          </div>
         </section>
 
-        <section id="info" className="max-w-5xl mx-auto mt-14 px-4">
-          <h2 className="text-center font-black mb-10">THÔNG TIN CHUNG</h2>
-          <div className="grid md:grid-cols-2 gap-10">
-            <p className="font-bold flex items-center">
+        <section id="info" className="max-w-5xl mx-auto mt-16 px-4">
+          <h2 className="text-center font-black text-black mb-10 text-4xl">
+            THÔNG TIN CHUNG
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-10 items-stretch">
+            <p className="text-black text-xl leading-relaxed font-semibold flex items-center h-full">
               Chiến dịch Xuân Tình Nguyện – Trường Đại học Công nghệ Thông tin,
               ĐHQG-HCM là hoạt động tình nguyện ý nghĩa được tổ chức thường niên
-              với sự tham gia của hàng trăm sinh viên thuộc nhiều đội hình khác 
+              với sự tham gia của hàng trăm sinh viên thuộc nhiều đội hình khác
               nhau, với sứ mệnh mang không khí và hơi ấm ngày Tết đến với những
               hoàn cảnh, địa phương còn khó khăn.
-             </p>
-            <img src={infoImage} className="rounded-3xl w-full h-full object-cover" />
+            </p>
+
+            <img
+              src={infoImage}
+              className="rounded-3xl object-cover w-full h-full"
+            />
           </div>
         </section>
 
-       <section id="teams" className="max-w-7xl mx-auto mt-32 px-6 relative">
-      <h2 className="text-center font-black text-5xl mb-40 text-black">
-        ĐỘI HÌNH
-      </h2>
+        <section id="teams" className="max-w-7xl mx-auto mt-28 px-6 relative">
+          <h2 className="text-center font-black text-5xl mb-20 text-black">
+            ĐỘI HÌNH
+          </h2>
 
-      <div className="absolute left-6 top-0 bottom-0 w-[4px] bg-green-600" />
+          <div className="absolute left-6 top-24 bottom-0 w-[4px] bg-green-600" />
 
-      <div className="space-y-0">
-        {teams.map((team) => {
-          const ref = useRef<HTMLDivElement | null>(null);
+          {teams.map((team) => {
+            const ref = useRef<HTMLDivElement | null>(null);
 
-          useEffect(() => {
-            const el = ref.current;
-            if (!el) return;
+            useEffect(() => {
+              const el = ref.current;
+              if (!el) return;
 
-            const slide = el.querySelector(".team-slide");
-            if (!slide) return;
+              const slide = el.querySelector(".team-slide");
+              if (!slide) return;
 
-            const observer = new IntersectionObserver(
-              ([entry]) => {
-                if (entry.isIntersecting) {
-                  slide.classList.add("active");
-                } else {
-                  slide.classList.remove("active");
+              const observer = new IntersectionObserver(
+                ([entry]) => {
+                  if (entry.isIntersecting) {
+                    slide.classList.add("active");
+                  } else {
+                    slide.classList.remove("active");
+                  }
+                },
+                {
+                  threshold: 0.15,
+                  rootMargin: "-40% 0px -40% 0px",
                 }
-              },
-              {
-                threshold: 0.12,
-                rootMargin: "-40% 0px -40% 0px",
-              }
-            );
+              );
 
-            observer.observe(el);
-            return () => observer.disconnect();
-          }, []);
+              observer.observe(el);
+              return () => observer.disconnect();
+            }, []);
 
-          return (
-            <div
-              key={team.slug}
-              ref={ref}
-              className="team-wrapper h-screen flex items-center relative"
-            >
-              <div className="team-pin">
-                <img src={banhChungPin} />
-              </div>
+            return (
+              <div
+                key={team.slug}
+                ref={ref}
+                className="team-wrapper h-screen flex items-center relative"
+              >
+                <div className="team-pin">
+                  <img src={banhChungPin} />
+                </div>
 
-              <div className="team-slide pl-28 w-full">
-                <div className="flex items-center gap-4 mb-4">
-                  <h3 className="team-title text-5xl">
+                <div className="team-slide pl-28 w-full">
+                  <h3 className="team-title text-5xl mb-4">
                     {team.name}
                   </h3>
-                </div>
 
-                <div className="flex gap-12 text-2xl team-info mb-10">
-                  <span>
-                    <strong>Đội trưởng:</strong> {team.leader}
-                  </span>
-                  <span>
-                    <strong>Đội phó:</strong> {team.vice}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-12 gap-12 items-center">
-                  <div className="col-span-7">
-                    <img
-                      src={team.image}
-                      className="w-full rounded-[36px] object-cover"
-                    />
+                  <div className="team-info flex gap-12 text-2xl mb-10">
+                    <span>
+                      <strong>Đội trưởng:</strong> {team.leader}
+                    </span>
+                    <span>
+                      <strong>Đội phó:</strong> {team.vice}
+                    </span>
                   </div>
 
-                  <div className="col-span-5 flex justify-start">
-                    <Link
-                      to={`team/${team.slug}`}
-                      className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
-                    >
-                      Xem thêm
-                    </Link>
+                  <div className="grid grid-cols-12 gap-12 items-center">
+                    <div className="col-span-7">
+                      <img
+                        src={team.image}
+                        className="w-full rounded-[36px] object-cover"
+                      />
+                    </div>
+
+                    <div className="col-span-5 flex justify-start">
+                      <Link
+                        to={`team/${team.slug}`}
+                        className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
+                      >
+                        Xem thêm
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-    </section>
+            );
+          })}
+        </section>
 
-
-
-       <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
+               <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
           <h2 className="text-center font-black tracking-widest mb-12 text-black">
             HOẠT ĐỘNG
           </h2>
