@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import GuestHeader from "@/components/layouts/GuestHeader";
 import Footer from "@/components/layouts/Footer";
 import MapView from "@/components/layouts/MapView";
@@ -40,7 +40,6 @@ export default function CampaignPage() {
       <GuestHeader />
 
       <main className="flex-1 pt-20">
-
         <section className="max-w-4xl mx-auto px-4">
           <div className="bg-white p-3 rounded-md">
             <div className="border-4 border-black aspect-video overflow-hidden">
@@ -49,7 +48,7 @@ export default function CampaignPage() {
           </div>
         </section>
 
-        <section className="max-w-4xl mx-auto mt-8 px-4 relative">
+        <section className="max-w-4xl mx-auto mt-8 px-4">
           <div className="flex justify-center gap-4">
             <img src={bndLogo} className="h-12" />
             <img src={xtnLogo} className="h-14" />
@@ -62,7 +61,7 @@ export default function CampaignPage() {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-10 items-stretch">
-            <p className="text-black text-xl leading-relaxed font-semibold flex items-center h-full">
+            <p className="text-black text-2xl font-bold leading-relaxed flex items-center">
               Chiến dịch Xuân Tình Nguyện – Trường Đại học Công nghệ Thông tin,
               ĐHQG-HCM là hoạt động tình nguyện ý nghĩa được tổ chức thường niên
               với sự tham gia của hàng trăm sinh viên thuộc nhiều đội hình khác
@@ -70,13 +69,9 @@ export default function CampaignPage() {
               hoàn cảnh, địa phương còn khó khăn.
             </p>
 
-            <img
-              src={infoImage}
-              className="rounded-3xl object-cover w-full h-full"
-            />
+            <img src={infoImage} className="rounded-3xl object-cover w-full h-full" />
           </div>
         </section>
-
         <section id="teams" className="max-w-7xl mx-auto mt-28 px-6 relative">
           <h2 className="text-center font-black text-5xl mb-20 text-black">
             ĐỘI HÌNH
@@ -91,17 +86,25 @@ export default function CampaignPage() {
               const el = ref.current;
               if (!el) return;
 
+              let lastY = 0;
+
               const observer = new IntersectionObserver(
                 ([entry]) => {
+                  const currentY = entry.boundingClientRect.y;
+                  const direction = currentY < lastY ? "down" : "up";
+                  lastY = currentY;
+
+                  el.classList.remove("up", "down");
+
                   if (entry.isIntersecting) {
-                    el.classList.add("active");
+                    el.classList.add("active", direction);
                   } else {
                     el.classList.remove("active");
                   }
                 },
                 {
-                  threshold: 0.2,
-                  rootMargin: "-35% 0px -35% 0px",
+                  threshold: 0.35,
+                  rootMargin: "-30% 0px -30% 0px",
                 }
               );
 
@@ -115,7 +118,7 @@ export default function CampaignPage() {
                 ref={ref}
                 className="team-wrapper h-screen flex items-start relative pt-24"
               >
-                <div className="team-pin">
+                <div className="team-pin-wrapper">
                   <img src={banhChungPin} />
                 </div>
 
@@ -129,11 +132,7 @@ export default function CampaignPage() {
 
                   <div className="team-content">
                     <img src={team.image} />
-
-                    <Link
-                      to={`team/${team.slug}`}
-                      className="team-btn"
-                    >
+                    <Link to={`team/${team.slug}`} className="team-btn">
                       Xem thêm
                     </Link>
                   </div>
@@ -143,7 +142,7 @@ export default function CampaignPage() {
           })}
         </section>
 
-               <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
+         <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
           <h2 className="text-center font-black tracking-widest mb-12 text-black">
             HOẠT ĐỘNG
           </h2>
