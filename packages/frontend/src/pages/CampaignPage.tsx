@@ -110,83 +110,116 @@ export default function CampaignPage() {
 
           <div className="absolute left-6 top-0 bottom-0 w-[4px] bg-green-600" />
 
-          <div className="space-y-64">
-            {teams.map((team) => {
-              const ref = useRef<HTMLDivElement>(null);
+          <div className="space-y-0">
+              {teams.map((team, index) => {
+                const ref = useRef<HTMLDivElement>(null);
 
-              useEffect(() => {
-                const el = ref.current;
-                if (!el) return;
+                useEffect(() => {
+                  const el = ref.current;
+                  if (!el) return;
 
-                const slide = el.querySelector(".team-slide");
-                if (!slide) return;
+                  const slide = el.querySelector(".team-slide");
+                  if (!slide) return;
 
-                const observer = new IntersectionObserver(
-                  ([entry]) => {
-                    if (entry.isIntersecting) {
-                      slide.classList.add("active");
-                    } else {
-                      slide.classList.remove("active");
+                  const observer = new IntersectionObserver(
+                    ([entry]) => {
+                      if (entry.isIntersecting) {
+                        slide.classList.add("active");
+                      } else {
+                        slide.classList.remove("active");
+                      }
+                    },
+                    {
+                      threshold: 0.15,
+                      rootMargin: "-40% 0px -40% 0px",
                     }
-                  },
-                  { threshold: 0.4 }
-                );
+                  );
 
-                observer.observe(el);
-                return () => observer.disconnect();
-              }, []);
+                  observer.observe(el);
+                  return () => observer.disconnect();
+                }, []);
 
-              return (
-                <div
-                  key={team.slug}
-                  ref={ref}
-                  className="team-wrapper relative min-h-screen"
-                >
-                  <img
-                    src={banhChungPin}
-                    className="absolute left-6 top-0 -translate-x-1/2 w-24 h-24 z-10"
-                  />
+                return (
+                  <div
+                    key={team.slug}
+                    ref={ref}
+                    className="team-wrapper relative h-screen flex items-center"
+                  >
+                    {index === 0 && (
+                      <img
+                        src={banhChungPin}
+                        className="absolute left-6 top-0 -translate-x-1/2 w-24 h-24 z-20"
+                      />
+                    )}
+                    {index !== 0 && (
+                      <img
+                        src={banhChungPin}
+                        className="absolute left-6 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 z-20"
+                      />
+                    )}
 
-                  <div className="team-slide pl-24">
-                    <h3 className="font-black text-5xl text-red-700 mb-6">
-                      {team.name}
-                    </h3>
-
-                    <p className="text-2xl font-bold text-black mb-2">
-                      Đội trưởng: {team.leader}
-                    </p>
-                    <p className="text-2xl font-bold text-black mb-12">
-                      Đội phó: {team.vice}
-                    </p>
-
-                    <div className="grid grid-cols-12 gap-12 items-center">
-                      <div className="col-span-7">
-                        <img
-                          src={team.image}
-                          className="w-full rounded-[36px] object-cover"
-                        />
+                    <div className="team-slide pl-28 w-full">
+                      <h3 className="text-5xl text-red-700 mb-4 font-semibold">
+                        {team.name}
+                      </h3>
+                      <div className="flex gap-12 text-2xl text-black mb-10">
+                        <span>
+                          <strong>Đội trưởng:</strong> {team.leader}
+                        </span>
+                        <span>
+                          <strong>Đội phó:</strong> {team.vice}
+                        </span>
                       </div>
 
-                      <div className="col-span-5 flex justify-start">
-                        <Link
-                          to={`team/${team.slug}`}
-                          className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
-                        >
-                          Xem thêm
-                        </Link>
+                      <div className="grid grid-cols-12 gap-12 items-center">
+                        <div className="col-span-7">
+                          <img
+                            src={team.image}
+                            className="w-full rounded-[36px] object-cover"
+                          />
+                        </div>
+
+                        <div className="col-span-5 flex justify-start">
+                          <Link
+                            to={`team/${team.slug}`}
+                            className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
+                          >
+                            Xem thêm
+                          </Link>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
+                );
+              })}
+            </div>
+            </section>
+       <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
           <h2 className="text-center font-black tracking-widest mb-12 text-black">
             HOẠT ĐỘNG
           </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="bg-gradient-to-b from-[#FFE066] to-[#FFD43B] rounded-2xl p-4 shadow-lg"
+              >
+                <h3 className="font-black text-sm text-black mb-3">
+                  TÊN HOẠT ĐỘNG
+                </h3>
+
+                <div className="bg-[#E6E6E6] rounded-xl aspect-[4/3] flex items-center justify-center mb-3">
+                  <div className="w-12 h-12 border-2 border-white rotate-45 opacity-60" />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-red-600 text-sm">❤</span>
+                  <div className="flex-1 h-[2px] bg-black/70" />
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
       </main>
 
