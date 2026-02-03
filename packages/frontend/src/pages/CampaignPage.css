@@ -1,0 +1,10 @@
+.team-slide {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.team-wrapper:hover .team-slide {
+  opacity: 1;
+  transform: translateY(0);
+}
