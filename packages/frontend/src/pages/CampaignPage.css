@@ -24,17 +24,17 @@
 }
 
 .team-pin-wrapper {
-  width: 64px;
+  width: 96px;
   margin-right: 28px;
   display: flex;
   justify-content: center;
 }
 
 .team-pin-wrapper img {
-  width: 64px;
+  width: 96px;
 }
 
-/* SLIDE */
+
 .team-title {
   font-size: 3rem;
   font-weight: 800;
