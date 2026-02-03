@@ -4,22 +4,20 @@ import { useState } from "react";
 import FormationEditOverall from "@/components/ui/popups/FormationEditOverall";
 import FormationEditRole from "@/components/ui/popups/FormationEditRole";
 import PostCreatePopup from "@/components/ui/popups/post/PostCreatePopup";
-import PostCreateChooseEditPopup from "@/components/ui/popups/post/PostCreateChooseEditPopup";
-import PostCreatePublishEditPopup from "@/components/ui/popups/post/PostCreatePublishEditPopup";
-
-
+import PostDetailPopup from "@/components/ui/popups/post/PostDetailPopup";
 
 export default function MyTeamPage() {
-    const { teamId } = useParams<{ teamId: string }>();
-    const location = useLocation();
+  const { teamId } = useParams<{ teamId: string }>();
+  const location = useLocation();
 
-    const [showOverall, setShowOverall] = useState(false);
-    const [showRole, setShowRole] = useState(false);
+  const [showOverall, setShowOverall] = useState(false);
+  const [showRole, setShowRole] = useState(false);
 
-    const [postStep, setPostStep] = useState<0 | 1 | 2 | null>(null);
+  const [postStep, setPostStep] = useState<"upload" | "publish" | null>(null);
+  const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
 
-    const commanders = Array.from({ length: 3 });
-    const activities = Array.from({ length: 8 });
+  const commanders = Array.from({ length: 3 });
+  const activities = Array.from({ length: 8 });
 
   return (
     <>
@@ -28,31 +26,30 @@ export default function MyTeamPage() {
         <FormationEditOverall onClose={() => setShowOverall(false)} />
       )}
 
-      {showRole && (
-        <FormationEditRole onClose={() => setShowRole(false)} />
+      {showRole && <FormationEditRole onClose={() => setShowRole(false)} />}
+
+      {/* ===== POST CREATE POPUPS ===== */}
+      {postStep === "upload" && (
+        <PostCreatePopup
+          maxFiles={4}
+          onComplete={(imageUrls) => {
+            setUploadedImageUrls(imageUrls);
+            setPostStep("publish");
+          }}
+          onClose={() => setPostStep(null)}
+        />
       )}
 
-    {/* ===== POST CREATE POPUPS ===== */}
-    {postStep === 0 && (
-    <PostCreatePopup
-        onNext={() => setPostStep(1)}
-        onClose={() => setPostStep(null)}
-    />
-    )}
-
-    {postStep === 1 && (
-    <PostCreateChooseEditPopup
-        onBack={() => setPostStep(0)}
-        onNext={() => setPostStep(2)}
-    />
-    )}
-
-    {postStep === 2 && (
-    <PostCreatePublishEditPopup
-        onBack={() => setPostStep(1)}
-        onSubmit={() => setPostStep(null)}
-    />
-    )}
+      {postStep === "publish" && (
+        <PostDetailPopup
+          imageUrls={uploadedImageUrls}
+          onBack={() => setPostStep("upload")}
+          onSubmit={() => {
+            setPostStep(null);
+            setUploadedImageUrls([]);
+          }}
+        />
+      )}
 
       {/* ===== PAGE ===== */}
       <div className="pt-8 pb-4">
@@ -140,9 +137,7 @@ export default function MyTeamPage() {
                   <div className="w-8 h-8 rounded-full bg-white/60" />
                 </div>
                 <div className="text-xs font-black">Chức vụ</div>
-                <div className="text-xs font-bold text-gray-700">
-                  Họ và tên
-                </div>
+                <div className="text-xs font-bold text-gray-700">Họ và tên</div>
               </div>
             ))}
           </div>
@@ -154,7 +149,7 @@ export default function MyTeamPage() {
             <h2 className="font-black">Hoạt động</h2>
 
             <button
-              onClick={() => setPostStep(0)}
+              onClick={() => setPostStep("upload")}
               className="text-xs font-bold underline"
             >
               + Tạo bài đăng
