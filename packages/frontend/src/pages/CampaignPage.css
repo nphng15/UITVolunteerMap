@@ -1,7 +1,8 @@
+
 .team-slide {
   opacity: 0;
-  transform: translateY(80px);
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  transform: translateY(120px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
 }
 
 .team-slide.active {
@@ -17,32 +18,42 @@
 
 .team-wrapper:not(:hover) .team-slide:not(.active) {
   opacity: 0;
-  transform: translateY(80px);
+  transform: translateY(120px);
 }
 
 
 .team-title {
-  color: #000;
-  font-weight: 500;
+  color: #b30000;
+  font-weight: 700;
 }
 
 .team-info {
   color: #000;
 }
 
-.banhchung-pin {
+
+.team-pin {
   position: absolute;
   left: 6px;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 56px;
-  height: 56px;
   z-index: 20;
-  transition: transform 0.45s ease;
+  transition: transform 0.9s ease, opacity 0.9s ease;
+}
+
+.team-pin img {
+  width: 52px;
+  height: 52px;
 }
 
 
-.team-slide.active ~ .banhchung-pin,
-.team-wrapper:hover .banhchung-pin {
-  transform: translate(-50%, -50%) scale(1.05);
+.team-slide.active ~ .team-pin,
+.team-wrapper:hover .team-pin {
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+.team-wrapper:not(:hover) .team-slide:not(.active) ~ .team-pin {
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 120px));
 }
