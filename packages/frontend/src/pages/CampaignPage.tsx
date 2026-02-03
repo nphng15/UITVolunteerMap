@@ -129,90 +129,92 @@ export default function CampaignPage() {
           </div>
         </section>
 
-        <section id="teams" className="max-w-7xl mx-auto mt-32 px-6 relative">
-  <h2 className="text-center font-black text-5xl mb-40 text-black">
-    ĐỘI HÌNH
-  </h2>
+       <section id="teams" className="max-w-7xl mx-auto mt-32 px-6 relative">
+          <h2 className="text-center font-black text-5xl mb-40 text-black">
+            ĐỘI HÌNH
+          </h2>
 
-  <div className="absolute left-6 top-0 bottom-0 w-[4px] bg-green-600" />
+          <div className="absolute left-6 top-0 bottom-0 w-[4px] bg-green-600" />
 
-  <div className="space-y-0">
-    {teams.map((team) => {
-      const ref = useRef<HTMLDivElement | null>(null);
+          <div className="space-y-0">
+            {teams.map((team) => {
+              const ref = useRef<HTMLDivElement | null>(null);
 
-      useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
+              useEffect(() => {
+                const el = ref.current;
+                if (!el) return;
 
-        const slide = el.querySelector(".team-slide");
-        if (!slide) return;
+                const slide = el.querySelector(".team-slide");
+                if (!slide) return;
 
-        const observer = new IntersectionObserver(
-          ([entry]) => {
-            if (entry.isIntersecting) {
-              slide.classList.add("active");
-            } else {
-              slide.classList.remove("active");
-            }
-          },
-          {
-            threshold: 0.15,
-            rootMargin: "-35% 0px -35% 0px",
-          }
-        );
+                const observer = new IntersectionObserver(
+                  ([entry]) => {
+                    if (entry.isIntersecting) {
+                      slide.classList.add("active");
+                    } else {
+                      slide.classList.remove("active");
+                    }
+                  },
+                  {
+                    threshold: 0.12,
+                    rootMargin: "-40% 0px -40% 0px",
+                  }
+                );
 
-        observer.observe(el);
-        return () => observer.disconnect();
-      }, []);
+                observer.observe(el);
+                return () => observer.disconnect();
+              }, []);
 
-      return (
-        <div
-          key={team.slug}
-          ref={ref}
-          className="team-wrapper h-screen flex items-center relative"
-        >
-          <img
-            src={banhChungPin}
-            className="banhchung-pin"
-          />
-
-          <div className="team-slide pl-28 w-full">
-            <h3 className="text-5xl mb-4 team-title">
-              {team.name}
-            </h3>
-
-            <div className="flex gap-12 text-2xl mb-10 team-info">
-              <span>
-                <strong>Đội trưởng:</strong> {team.leader}
-              </span>
-              <span>
-                <strong>Đội phó:</strong> {team.vice}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-12 gap-12 items-center">
-              <div className="col-span-7">
-                <img
-                  src={team.image}
-                  className="w-full rounded-[36px] object-cover"
-                />
-              </div>
-
-              <div className="col-span-5 flex justify-start">
-                <Link
-                  to={`team/${team.slug}`}
-                  className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
+              return (
+                <div
+                  key={team.slug}
+                  ref={ref}
+                  className="team-wrapper h-screen flex items-center relative"
                 >
-                  Xem thêm
-                </Link>
-              </div>
-            </div>
+                  <div className="team-pin">
+                    <img src={banhChungPin} />
+                  </div>
+
+                  <div className="team-slide pl-28 w-full">
+                    <div className="flex items-center gap-4 mb-4">
+                      <h3 className="team-title text-5xl">
+                        {team.name}
+                      </h3>
+                    </div>
+
+                    <div className="flex gap-12 text-2xl team-info mb-10">
+                      <span>
+                        <strong>Đội trưởng:</strong> {team.leader}
+                      </span>
+                      <span>
+                        <strong>Đội phó:</strong> {team.vice}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-12 gap-12 items-center">
+                      <div className="col-span-7">
+                        <img
+                          src={team.image}
+                          className="w-full rounded-[36px] object-cover"
+                        />
+                      </div>
+
+                      <div className="col-span-5 flex justify-start">
+                        <Link
+                          to={`team/${team.slug}`}
+                          className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
+                        >
+                          Xem thêm
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
-      );
-    })}
-  </div>
-</section>
+        </section>
+
 
 
        <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
