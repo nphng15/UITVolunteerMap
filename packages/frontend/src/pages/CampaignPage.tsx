@@ -155,68 +155,84 @@ useEffect(() => {
           </div>
         </section>
 
-        <section id="teams" className="max-w-6xl mx-auto mt-24 px-4">
-            <h2 className="text-center font-black tracking-widest mb-14 text-black">
+          <section
+            id="teams"
+            className="max-w-7xl mx-auto mt-32 px-6"
+          >
+            <h2 className="text-center font-black tracking-widest mb-24 text-black text-4xl">
               ĐỘI HÌNH
             </h2>
 
             <div
-              ref={timelineRef}
-              className="relative border-l-[3px] border-green-600 pl-8
-                        h-[720px] overflow-hidden"
+              className="
+                relative
+                h-screen
+                overflow-y-scroll
+                scroll-smooth
+                snap-y snap-mandatory
+                border-l-[4px] border-green-600
+                pl-12
+              "
             >
-              {teams.map((team, index) => {
-                const offset = (index - activeIndex) * 260;
+              {teams.map((team) => (
+                <div
+                  key={team.slug}
+                  className="
+                    snap-start
+                    min-h-screen
+                    flex
+                    flex-col
+                    justify-center
+                    pb-24
+                  "
+                >
+                  <img
+                    src={banhChungPin}
+                    className="absolute -left-[36px] top-24 w-10 h-10"
+                  />
 
-                return (
-                  <div
-                    key={team.slug}
-                    className="absolute left-0 right-0 transition-all duration-300"
-                    style={{
-                      transform: `translateY(calc(50% + ${offset}px))`,
-                      opacity: Math.abs(index - activeIndex) > 1 ? 0 : 1,
-                    }}
-                  >
-                    <img
-                      src={banhChungPin}
-                      className="absolute -left-[34px] top-6 w-9 h-9"
-                    />
+                  <div className="mb-10">
+                    <h3 className="font-black text-5xl text-red-700 mb-4">
+                      {team.name}
+                    </h3>
 
-                    <div className="flex items-center gap-8 bg-[#FDE7B5]">
+                    <p className="text-2xl font-bold text-black">
+                      Đội trưởng: {team.leader}
+                    </p>
+                    <p className="text-2xl font-bold text-black">
+                      Đội phó: {team.vice}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-12 gap-10 items-center">
+                    <div className="col-span-8">
                       <img
                         src={team.image}
-                        className="w-[420px] rounded-[32px] object-cover"
+                        className="rounded-[48px] w-full object-cover"
                       />
+                    </div>
 
-                      <div className="flex-1">
-                        <h3 className="font-black text-3xl text-red-700 mb-3">
-                          {team.name}
-                        </h3>
-
-                        <p className="text-lg font-bold text-black mb-1">
-                          Đội trưởng: {team.leader}
-                        </p>
-                        <p className="text-lg font-bold text-black mb-6">
-                          Đội phó: {team.vice}
-                        </p>
-
-                        <Link
-                          to={`team/${team.slug}`}
-                          className="inline-block bg-red-700 text-white
-                                    text-xl font-black
-                                    px-10 py-5 rounded-3xl"
-                        >
-                          Xem thêm
-                        </Link>
-                      </div>
+                    <div className="col-span-4 flex justify-center">
+                      <Link
+                        to={`team/${team.slug}`}
+                        className="
+                          bg-red-700
+                          text-white
+                          text-3xl
+                          font-black
+                          px-14
+                          py-8
+                          rounded-[40px]
+                          hover:bg-red-800
+                        "
+                      >
+                        Xem thêm
+                      </Link>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </section>
-
-
 
     <section
       id="activities"
