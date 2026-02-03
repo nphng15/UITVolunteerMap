@@ -1,25 +1,48 @@
-.team-wrapper {
-  pointer-events: auto;
-}
-
-.team-slide,
-.team-pin {
+.team-slide {
   opacity: 0;
-  transform: translateY(120px);
-  transition:
-    opacity 0.25s ease-out,
-    transform 0.25s ease-out;
+  transform: translateY(80px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
 }
 
-.team-wrapper.active .team-slide,
-.team-wrapper.active .team-pin,
-.team-wrapper:hover .team-slide,
-.team-wrapper:hover .team-pin {
+.team-slide.active {
   opacity: 1;
   transform: translateY(0);
 }
 
-.team-wrapper:not(.active):not(:hover) .team-slide,
-.team-wrapper:not(.active):not(:hover) .team-pin {
+
+.team-wrapper:hover .team-slide {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.team-wrapper:not(:hover) .team-slide:not(.active) {
   opacity: 0;
+  transform: translateY(80px);
+}
+
+
+.team-title {
+  color: #000;
+  font-weight: 500;
+}
+
+.team-info {
+  color: #000;
+}
+
+.banhchung-pin {
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  z-index: 20;
+  transition: transform 0.45s ease;
+}
+
+
+.team-slide.active ~ .banhchung-pin,
+.team-wrapper:hover .banhchung-pin {
+  transform: translate(-50%, -50%) scale(1.05);
 }
