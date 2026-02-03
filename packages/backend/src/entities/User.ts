@@ -32,6 +32,9 @@ export class User {
   @Column("text", { name: "PhoneNumber", nullable: true })
   phoneNumber?: string | null;
 
+  @Column("text", { name : "avatarUrl", nullable: true })
+  avatarUrl?: string | null;
+
   @ManyToOne("Team", "users")
   @JoinColumn({ name: "TeamId" })
   team!: Relation<Team>;
