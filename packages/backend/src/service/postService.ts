@@ -9,19 +9,17 @@ export class PostService {
 
     async getAll() {
         const posts = await this.postRepo.find();
-        return posts.filter(post => post.isDeleted === 0 && post.status === 'ACTIVE');
+        return posts.filter(post => post.isDeleted === 0);
     }
 
     async getOne(id: number) {
         const post = await this.postRepo.findOneBy({ postId: id });
         if (!post || post.isDeleted === 1) throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
-        if (post.status !== 'ACTIVE') throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
         return post;
     }
 
     async create(data: CreatePostInput) {
         const newPost = this.postRepo.create(data);
-        newPost.status = 'draft';
         newPost.isDeleted = 0;
         newPost.createdAt = new Date().toISOString();
         newPost.updatedAt = new Date().toISOString();
@@ -40,13 +38,6 @@ export class PostService {
         const post = await this.getOne(id);
         if (!post || post.isDeleted === 1) throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
         post.isDeleted = 1;
-        return await this.postRepo.save(post);
-    }
-
-    async approve(id: number) {
-        const post = await this.getOne(id);
-        if (!post || post.isDeleted === 1) throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
-        post.status = 'ACTIVE';
         return await this.postRepo.save(post);
     }
 }
