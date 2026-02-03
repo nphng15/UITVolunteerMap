@@ -7,6 +7,7 @@ import { router } from "@/routes";
 import "leaflet/dist/leaflet.css";
 import "./index.css";
 import "./styles/leaflet-labels.css";
+import "./styles/statistic.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
