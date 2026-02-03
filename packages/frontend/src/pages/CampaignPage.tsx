@@ -82,7 +82,7 @@ export default function CampaignPage() {
             ĐỘI HÌNH
           </h2>
 
-          <div className="absolute left-6 top-24 bottom-0 w-[4px] bg-green-600" />
+          <div className="team-line" />
 
           {teams.map((team) => {
             const ref = useRef<HTMLDivElement | null>(null);
@@ -91,20 +91,17 @@ export default function CampaignPage() {
               const el = ref.current;
               if (!el) return;
 
-              const slide = el.querySelector(".team-slide");
-              if (!slide) return;
-
               const observer = new IntersectionObserver(
                 ([entry]) => {
                   if (entry.isIntersecting) {
-                    slide.classList.add("active");
+                    el.classList.add("active");
                   } else {
-                    slide.classList.remove("active");
+                    el.classList.remove("active");
                   }
                 },
                 {
-                  threshold: 0.15,
-                  rootMargin: "-40% 0px -40% 0px",
+                  threshold: 0.2,
+                  rootMargin: "-35% 0px -35% 0px",
                 }
               );
 
@@ -116,42 +113,29 @@ export default function CampaignPage() {
               <div
                 key={team.slug}
                 ref={ref}
-                className="team-wrapper h-screen flex items-center relative"
+                className="team-wrapper h-screen flex items-start relative pt-24"
               >
                 <div className="team-pin">
                   <img src={banhChungPin} />
                 </div>
 
-                <div className="team-slide pl-28 w-full">
-                  <h3 className="team-title text-5xl mb-4">
-                    {team.name}
-                  </h3>
+                <div className="team-slide">
+                  <h3 className="team-title">{team.name}</h3>
 
-                  <div className="team-info flex gap-12 text-2xl mb-10">
-                    <span>
-                      <strong>Đội trưởng:</strong> {team.leader}
-                    </span>
-                    <span>
-                      <strong>Đội phó:</strong> {team.vice}
-                    </span>
+                  <div className="team-info">
+                    <span><strong>Đội trưởng:</strong> {team.leader}</span>
+                    <span><strong>Đội phó:</strong> {team.vice}</span>
                   </div>
 
-                  <div className="grid grid-cols-12 gap-12 items-center">
-                    <div className="col-span-7">
-                      <img
-                        src={team.image}
-                        className="w-full rounded-[36px] object-cover"
-                      />
-                    </div>
+                  <div className="team-content">
+                    <img src={team.image} />
 
-                    <div className="col-span-5 flex justify-start">
-                      <Link
-                        to={`team/${team.slug}`}
-                        className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
-                      >
-                        Xem thêm
-                      </Link>
-                    </div>
+                    <Link
+                      to={`team/${team.slug}`}
+                      className="team-btn"
+                    >
+                      Xem thêm
+                    </Link>
                   </div>
                 </div>
               </div>
