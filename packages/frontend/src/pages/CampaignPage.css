@@ -15,21 +15,86 @@
   z-index: 2;
 }
 
+
+.year-menu-wrapper {
+  position: absolute;
+  top: 120px;
+  left: 40px;
+  z-index: 50;
+}
+
+.year-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff2cc;
+  border: 3px solid #b91c1c;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 900;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.menu-icon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  background: #ffe066;
+  border: 2px solid #b91c1c;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.year-label {
+  min-width: 52px;
+  text-align: center;
+}
+
+.year-dropdown {
+  margin-top: 6px;
+  background: #fff2cc;
+  border: 3px solid #b91c1c;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+
+.year-item {
+  display: block;
+  width: 100%;
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: 900;
+  cursor: pointer;
+  text-align: left;
+}
+
+.year-item:hover {
+  background: #ffe066;
+}
+
+
 .team-wrapper {
   display: flex;
   align-items: flex-start;
   margin-bottom: 80px;
-  opacity: 0;
-  transform: translateY(150px); 
-  transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none; 
-}
 
+  transform: translateY(180px); 
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+
+  pointer-events: none;
+}
 #teams:hover .team-wrapper.is-in-view {
-  opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0);     
   pointer-events: auto;
 }
+
 
 .team-pin-wrapper {
   width: 140px;
@@ -86,7 +151,6 @@
   border-radius: 35px;
   overflow: hidden;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
-  border: 4px solid white;
 }
 
 .image-container img {
