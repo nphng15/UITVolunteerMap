@@ -34,8 +34,40 @@ const teams = [
 
 export default function CampaignPage() {
   const { campaignId } = useParams<{ campaignId: string }>();
+
   const [yearOpen, setYearOpen] = useState(false);
   const [year, setYear] = useState(2026);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+  const slidesRef = useRef<HTMLDivElement[]>([]);
+  const lockRef = useRef(false);
+
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      if (lockRef.current) return;
+      if (Math.abs(e.deltaY) < 10) return;
+
+      lockRef.current = true;
+
+      let next = activeIndex;
+      if (e.deltaY > 0 && activeIndex < teams.length - 1) next++;
+      if (e.deltaY < 0 && activeIndex > 0) next--;
+
+      setActiveIndex(next);
+
+      slidesRef.current[next]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      setTimeout(() => {
+        lockRef.current = false;
+      }, 400);
+    };
+
+    window.addEventListener("wheel", onWheel, { passive: true });
+    return () => window.removeEventListener("wheel", onWheel);
+  }, [activeIndex]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDE7B5]">
@@ -51,12 +83,12 @@ export default function CampaignPage() {
         </section>
 
         <section className="max-w-4xl mx-auto mt-8 px-4 relative">
-          <div className="flex justify-center items-center gap-4">
+          <div className="flex justify-center gap-4">
             <img src={bndLogo} className="h-12" />
             <img src={xtnLogo} className="h-14" />
           </div>
 
-          <div className="absolute left-4 top-0 z-30 flex items-start gap-2">
+          <div className="absolute left-4 top-0 flex gap-2">
             <button
               onClick={() => setYearOpen(!yearOpen)}
               className="bg-[#FFE066] border-2 border-red-700 px-3 py-2 rounded-lg font-black"
@@ -64,136 +96,83 @@ export default function CampaignPage() {
               ☰
             </button>
 
-            <div className="flex flex-col border-2 border-red-700 rounded-lg overflow-hidden bg-[#FFF2CC]">
-              <div className="px-6 py-2 font-black text-lg text-black">
-                {year}
-              </div>
-
-              {yearOpen && [2027, 2028].map((y) => (
-                <button
-                  key={y}
-                  onClick={() => {
-                    setYear(y);
-                    setYearOpen(false);
-                  }}
-                  className="px-6 py-2 font-black text-lg text-black hover:bg-[#FFD966]"
-                >
-                  {y}
-                </button>
-              ))}
+            <div className="bg-[#FFF2CC] border-2 border-red-700 rounded-lg overflow-hidden">
+              <div className="px-6 py-2 font-black">{year}</div>
+              {yearOpen &&
+                [2027, 2028].map((y) => (
+                  <button
+                    key={y}
+                    onClick={() => {
+                      setYear(y);
+                      setYearOpen(false);
+                    }}
+                    className="block px-6 py-2 font-black hover:bg-[#FFD966]"
+                  >
+                    {y}
+                  </button>
+                ))}
             </div>
           </div>
         </section>
 
         <section id="info" className="max-w-5xl mx-auto mt-14 px-4">
-          <h2 className="text-center font-black tracking-widest mb-10 text-black">
-            THÔNG TIN CHUNG
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-10 items-stretch">
-            <p className="text-base font-bold leading-relaxed text-black flex items-center">
+          <h2 className="text-center font-black mb-10">THÔNG TIN CHUNG</h2>
+          <div className="grid md:grid-cols-2 gap-10">
+            <p className="font-bold flex items-center">
               Chiến dịch Xuân Tình Nguyện – Trường Đại học Công nghệ Thông tin,
-              ĐHQG-HCM là hoạt động tình nguyện ý nghĩa được tổ chức thường niên
-              với sự tham gia của hàng trăm sinh viên thuộc nhiều đội hình khác
-              nhau, với sứ mệnh mang không khí và hơi ấm ngày Tết đến với những
-              hoàn cảnh, địa phương còn khó khăn.
+              ĐHQG-HCM là hoạt động tình nguyện ý nghĩa được tổ chức thường niên.
             </p>
-
-            <img src={infoImage} className="rounded-3xl object-cover w-full h-full" />
+            <img src={infoImage} className="rounded-3xl w-full h-full object-cover" />
           </div>
         </section>
 
         <section id="teams" className="max-w-7xl mx-auto mt-32 px-6 relative">
-          <h2 className="text-center font-black text-5xl mb-40 text-black">
-            ĐỘI HÌNH
-          </h2>
+          <h2 className="text-center font-black text-5xl mb-32">ĐỘI HÌNH</h2>
 
           <div className="absolute left-6 top-0 bottom-0 w-[4px] bg-green-600" />
 
-          <div className="space-y-0">
-              {teams.map((team, index) => {
-                const ref = useRef<HTMLDivElement>(null);
+          <img
+            src={banhChungPin}
+            className="timeline-pin"
+            style={{ transform: `translateY(${activeIndex * 100}vh)` }}
+          />
 
-                useEffect(() => {
-                  const el = ref.current;
-                  if (!el) return;
+          {teams.map((team, index) => (
+            <div
+              key={team.slug}
+              ref={(el) => {
+                if (el) slidesRef.current[index] = el;
+              }}
+              className={`team-wrapper ${activeIndex === index ? "active" : ""}`}
+            >
+              <div className="team-slide pl-28">
+                <h3 className="text-5xl text-red-700 mb-4 font-medium">
+                  {team.name}
+                </h3>
 
-                  const slide = el.querySelector(".team-slide");
-                  if (!slide) return;
+                <div className="flex gap-12 text-2xl mb-10">
+                  <span><strong>Đội trưởng:</strong> {team.leader}</span>
+                  <span><strong>Đội phó:</strong> {team.vice}</span>
+                </div>
 
-                  const observer = new IntersectionObserver(
-                    ([entry]) => {
-                      if (entry.isIntersecting) {
-                        slide.classList.add("active");
-                      } else {
-                        slide.classList.remove("active");
-                      }
-                    },
-                    {
-                      threshold: 0.15,
-                      rootMargin: "-40% 0px -40% 0px",
-                    }
-                  );
-
-                  observer.observe(el);
-                  return () => observer.disconnect();
-                }, []);
-
-                return (
-                  <div
-                    key={team.slug}
-                    ref={ref}
-                    className="team-wrapper relative h-screen flex items-center"
-                  >
-                    {index === 0 && (
-                      <img
-                        src={banhChungPin}
-                        className="absolute left-6 top-0 -translate-x-1/2 w-24 h-24 z-20"
-                      />
-                    )}
-                    {index !== 0 && (
-                      <img
-                        src={banhChungPin}
-                        className="absolute left-6 top-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 z-20"
-                      />
-                    )}
-
-                    <div className="team-slide pl-28 w-full">
-                      <h3 className="text-5xl text-red-700 mb-4 font-semibold">
-                        {team.name}
-                      </h3>
-                      <div className="flex gap-12 text-2xl text-black mb-10">
-                        <span>
-                          <strong>Đội trưởng:</strong> {team.leader}
-                        </span>
-                        <span>
-                          <strong>Đội phó:</strong> {team.vice}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-12 gap-12 items-center">
-                        <div className="col-span-7">
-                          <img
-                            src={team.image}
-                            className="w-full rounded-[36px] object-cover"
-                          />
-                        </div>
-
-                        <div className="col-span-5 flex justify-start">
-                          <Link
-                            to={`team/${team.slug}`}
-                            className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
-                          >
-                            Xem thêm
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
+                <div className="grid grid-cols-12 gap-12 items-center">
+                  <div className="col-span-7">
+                    <img src={team.image} className="rounded-[36px]" />
                   </div>
-                );
-              })}
+                  <div className="col-span-5">
+                    <Link
+                      to={`team/${team.slug}`}
+                      className="bg-red-700 text-white text-3xl font-black px-14 py-8 rounded-[40px]"
+                    >
+                      Xem thêm
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
-            </section>
+          ))}
+        </section>
+
        <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
           <h2 className="text-center font-black tracking-widest mb-12 text-black">
             HOẠT ĐỘNG
@@ -227,3 +206,4 @@ export default function CampaignPage() {
     </div>
   );
 }
+
