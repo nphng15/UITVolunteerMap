@@ -1,87 +1,32 @@
-.timeline-line {
-  position: absolute;
-  left: 48px;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: #16a34a;
-}
 
-.team-wrapper {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 120px;
+.team-slide {
   opacity: 0;
-  transform: translateY(120px);
-  transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(80px);
+  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-.team-wrapper.active {
+.team-slide.active {
   opacity: 1;
   transform: translateY(0);
 }
 
-.team-wrapper:hover {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.team-header {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 24px;
-}
-
-.team-meta {
-  display: flex;
-  gap: 48px;
-  font-size: 24px;
-  color: #000;
-  margin-bottom: 32px;
-}
-
-.team-body {
-  display: flex;
-  align-items: center;
-  gap: 64px;
-}
-
-.team-image {
-  width: 60%;
-  border-radius: 32px;
-}
-
-.team-btn {
-  background: #b91c1c;
-  color: white;
-  font-size: 28px;
+.team-title {
+  color: #b91c1c;
   font-weight: 800;
-  padding: 28px 56px;
-  border-radius: 40px;
-  transition: transform 0.3s ease;
 }
 
-.team-btn:hover {
-  transform: scale(1.05);
+.team-info {
+  color: #000;
 }
 
 .team-pin {
   position: absolute;
-  left: 24px;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 20;
+  left: 6px;
+  top: 56px;
+  z-index: 10;
 }
 
 .team-pin img {
-  width: 72px;  
-  height: 72px;
-}
-
-.team-title {
-  color: #b40000;
-  font-weight: 800;
+  width: 72px;
+  height: auto;
 }
