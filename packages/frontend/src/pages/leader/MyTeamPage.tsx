@@ -7,6 +7,8 @@ import PostCreatePopup from "@/components/ui/popups/post/PostCreatePopup";
 import PostCreateChooseEditPopup from "@/components/ui/popups/post/PostCreateChooseEditPopup";
 import PostCreatePublishEditPopup from "@/components/ui/popups/post/PostCreatePublishEditPopup";
 
+import Footer from "@/components/layouts/Footer";
+
 
 export default function MyTeamPage() {
     const { teamId } = useParams<{ teamId: string }>();
@@ -54,14 +56,14 @@ export default function MyTeamPage() {
     )}
 
       {/* ===== PAGE ===== */}
-      <div className="bg-[#D9D9D9] py-8">
+      <div className="pt-8 pb-4">
+
         {/* ===== HEADER ===== */}
         <section className="max-w-4xl mx-auto px-4 relative">
           <h1 className="text-center text-3xl font-black mb-8">
             Tên đội hình {teamId}
           </h1>
 
-          {/* Edit team info */}
           <button
             onClick={() => setShowOverall(true)}
             className="absolute right-4 top-0 flex items-center gap-1 text-xs font-bold hover:underline"
@@ -73,15 +75,15 @@ export default function MyTeamPage() {
 
         {/* ===== IMAGES ===== */}
         <section className="max-w-4xl mx-auto px-4 mb-10">
-          <div className="bg-[#E6E6E6] rounded-xl p-6 flex items-center justify-center relative">
+          <div className="bg-white/80 backdrop-blur-md rounded-xl p-6 flex items-center justify-center relative">
             <div className="flex gap-6">
-              <div className="w-24 h-24 bg-[#D9D9D9] flex items-center justify-center">
+              <div className="w-24 h-24 bg-white/60 flex items-center justify-center">
                 <div className="w-10 h-10 border-2 border-white rotate-45" />
               </div>
-              <div className="w-32 h-32 bg-[#D9D9D9] flex items-center justify-center">
+              <div className="w-32 h-32 bg-white/60 flex items-center justify-center">
                 <div className="w-14 h-14 border-2 border-white rotate-45" />
               </div>
-              <div className="w-24 h-24 bg-[#D9D9D9] flex items-center justify-center">
+              <div className="w-24 h-24 bg-white/60 flex items-center justify-center">
                 <div className="w-10 h-10 border-2 border-white rotate-45" />
               </div>
             </div>
@@ -90,13 +92,9 @@ export default function MyTeamPage() {
               onClick={() => setShowOverall(true)}
               className="absolute right-4 bottom-4 flex items-center gap-1 text-xs font-bold underline hover:opacity-80 transition"
             >
-            <img src={editIcon} className="w-4 h-4" />
-                Chỉnh sửa
+              <img src={editIcon} className="w-4 h-4" />
+              Chỉnh sửa
             </button>
-          </div>
-
-          <div className="text-center mt-3 text-xs font-black text-gray-500">
-            • • •
           </div>
         </section>
 
@@ -113,7 +111,7 @@ export default function MyTeamPage() {
 
           <button
             onClick={() => setShowRole(true)}
-            className="absolute flex gap-1 right-4 top-0 text-xs underline" 
+            className="absolute flex gap-1 right-4 top-0 text-xs underline"
           >
             <img src={editIcon} className="w-4 h-4" />
             Edit chỉ huy
@@ -124,7 +122,7 @@ export default function MyTeamPage() {
               <div key={i} className="text-center">
                 <div
                   onClick={() => setShowRole(true)}
-                  className="cursor-pointer w-24 h-24 mx-auto rounded-full bg-[#E6E6E6] flex items-center justify-center mb-4"
+                  className="cursor-pointer w-24 h-24 mx-auto rounded-full bg-white/70 backdrop-blur-sm flex items-center justify-center mb-4"
                 >
                   <div className="w-8 h-8 rounded-full bg-white/60" />
                 </div>
@@ -138,15 +136,15 @@ export default function MyTeamPage() {
         </section>
 
         {/* ===== POSTS ===== */}
-        <section className="max-w-4xl mx-auto px-4">
+        <section className="max-w-4xl mx-auto px-4 mb-4">
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-black">Hoạt động</h2>
 
             <button
-            onClick={() => setPostStep(0)}
-            className="text-xs font-bold underline"
+              onClick={() => setPostStep(0)}
+              className="text-xs font-bold underline"
             >
-            + Tạo bài đăng
+              + Tạo bài đăng
             </button>
           </div>
 
@@ -156,7 +154,7 @@ export default function MyTeamPage() {
                 <Link
                   to={`post/${i + 1}`}
                   state={{ backgroundLocation: location }}
-                  className="bg-[#E6E6E6] aspect-square flex items-center justify-center rounded-md hover:scale-105 transition"
+                  className="bg-white/80 backdrop-blur-sm aspect-square flex items-center justify-center rounded-md hover:scale-105 transition"
                 >
                   <div className="w-12 h-12 border-2 border-white rotate-45" />
                 </Link>
@@ -174,5 +172,6 @@ export default function MyTeamPage() {
         </section>
       </div>
     </>
+    
   );
 }
