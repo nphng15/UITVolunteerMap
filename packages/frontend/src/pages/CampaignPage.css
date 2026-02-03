@@ -1,8 +1,9 @@
 .team-wrapper {
-  position: relative;
+  pointer-events: auto;
 }
 
-.team-slide {
+.team-slide,
+.team-pin {
   opacity: 0;
   transform: translateY(120px);
   transition:
@@ -10,17 +11,15 @@
     transform 0.25s ease-out;
 }
 
-.team-slide.active {
+.team-wrapper.active .team-slide,
+.team-wrapper.active .team-pin,
+.team-wrapper:hover .team-slide,
+.team-wrapper:hover .team-pin {
   opacity: 1;
   transform: translateY(0);
 }
 
-
-.team-wrapper:hover .team-slide {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.team-wrapper:not(:hover) .team-slide {
+.team-wrapper:not(.active):not(:hover) .team-slide,
+.team-wrapper:not(.active):not(:hover) .team-pin {
   opacity: 0;
 }
