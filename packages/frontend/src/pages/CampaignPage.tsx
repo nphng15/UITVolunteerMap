@@ -7,7 +7,7 @@ import MapView from "@/components/layouts/MapView";
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
 import infoImage from "@/assets/icons/image-container.png";
-import banhChungPin from "@/assets/icons/bnd-ko-logo-1.png";
+import banhChungPin from "@/assets/icons/Formation-pin-slider.png";
 
 import truyenthongImg from "@/assets/icons/truyenthong.jpg";
 import sukienImg from "@/assets/icons/sukien.jpg";
@@ -49,22 +49,23 @@ useEffect(() => {
   const onWheel = (e: WheelEvent) => {
     if (locked) return;
 
-    if (e.deltaY > 10 && activeIndex < teams.length - 1) {
+    if (e.deltaY > 5 && activeIndex < teams.length - 1) {
       locked = true;
       setActiveIndex(i => i + 1);
     }
 
-    if (e.deltaY < -10 && activeIndex > 0) {
+    if (e.deltaY < -5 && activeIndex > 0) {
       locked = true;
       setActiveIndex(i => i - 1);
     }
 
-    setTimeout(() => (locked = false), 250);
+    setTimeout(() => (locked = false), 200);
   };
 
   el.addEventListener("wheel", onWheel, { passive: true });
   return () => el.removeEventListener("wheel", onWheel);
 }, [activeIndex]);
+
 
 
   return (
@@ -86,55 +87,50 @@ useEffect(() => {
             <img src={xtnLogo} className="h-14" />
           </div>
 
-          <div className="absolute left-4 top-0 z-20">
-            <button
-              onClick={() => setYearOpen(!yearOpen)}
-              className="flex items-center gap-2
-                        bg-[#FFF2CC]
-                        border-2 border-red-700
-                        px-3 py-2
-                        rounded-lg
-                        font-black
-                        text-black
-                        shadow"
-            >
-              ☰
-            </button>
-
-            {yearOpen && (
-              <div
-                className="mt-2 flex flex-col
+          <div className="absolute left-4 top-0 z-30 flex items-start gap-2">
+              <button
+                onClick={() => setYearOpen(!yearOpen)}
+                className="flex items-center gap-2
                           bg-[#FFF2CC]
                           border-2 border-red-700
-                          rounded-xl
-                          overflow-hidden
-                          shadow-lg"
+                          px-3 py-2
+                          rounded-lg
+                          font-black
+                          text-black"
               >
-                {[2026, 2027, 2028].map((y) => (
-                  <button
-                    key={y}
-                    onClick={() => {
-                      setYear(y);
-                      setYearOpen(false);
-                    }}
-                    className={`px-6 py-3
-                      font-black
-                      text-lg
-                      text-black
-                      transition
-                      ${
-                        year === y
-                          ? "bg-[#FFD966]"
-                          : "hover:bg-[#FFE8A1]"
-                      }
-                    `}
-                  >
-                    {y}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+                ☰ {year}
+              </button>
+
+              {yearOpen && (
+                <div
+                  className="flex flex-col
+                            bg-[#FFF2CC]
+                            border-2 border-red-700
+                            rounded-xl
+                            overflow-hidden
+                            shadow-lg"
+                >
+                  {[2026, 2027, 2028].map((y) => (
+                    <button
+                      key={y}
+                      onClick={() => {
+                        setYear(y);
+                        setYearOpen(false);
+                      }}
+                      className={`px-6 py-2 font-black text-lg text-black
+                        ${
+                          year === y
+                            ? "bg-[#FFD966]"
+                            : "hover:bg-[#FFE8A1]"
+                        }`}
+                    >
+                      {y}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
 
         </section>
 
@@ -166,59 +162,60 @@ useEffect(() => {
 
             <div
               ref={timelineRef}
-              className="relative border-l-[3px] border-green-600 pl-10"
+              className="relative border-l-[3px] border-green-600 pl-8
+                        h-[720px] overflow-hidden"
             >
-              {teams.map((team, index) => (
-                <div
-                  key={team.slug}
-                  className="relative mb-32 transition-all duration-300"
-                  style={{
-                    opacity: index === activeIndex ? 1 : 0,
-                    transform:
-                      index === activeIndex
-                        ? "translateY(0)"
-                        : "translateY(20px)",
-                    pointerEvents:
-                      index === activeIndex ? "auto" : "none",
-                  }}
-                >
-                  <img
-                    src={banhChungPin}
-                    className="absolute -left-[38px] top-3 w-10 h-10"
-                  />
+              {teams.map((team, index) => {
+                const offset = (index - activeIndex) * 260;
 
-                  <div className="grid md:grid-cols-[1fr_220px] gap-8 items-center">
-                    <div>
-                      <h3 className="font-black text-3xl text-red-700 mb-3">
-                        {team.name}
-                      </h3>
+                return (
+                  <div
+                    key={team.slug}
+                    className="absolute left-0 right-0 transition-all duration-300"
+                    style={{
+                      transform: `translateY(calc(50% + ${offset}px))`,
+                      opacity: Math.abs(index - activeIndex) > 1 ? 0 : 1,
+                    }}
+                  >
+                    <img
+                      src={banhChungPin}
+                      className="absolute -left-[34px] top-6 w-9 h-9"
+                    />
 
-                      <p className="text-lg font-bold text-black mb-1">
-                        Đội trưởng: {team.leader}
-                      </p>
-                      <p className="text-lg font-bold text-black">
-                        Đội phó: {team.vice}
-                      </p>
+                    <div className="flex items-center gap-8 bg-[#FDE7B5]">
+                      <img
+                        src={team.image}
+                        className="w-[420px] rounded-[32px] object-cover"
+                      />
+
+                      <div className="flex-1">
+                        <h3 className="font-black text-3xl text-red-700 mb-3">
+                          {team.name}
+                        </h3>
+
+                        <p className="text-lg font-bold text-black mb-1">
+                          Đội trưởng: {team.leader}
+                        </p>
+                        <p className="text-lg font-bold text-black mb-6">
+                          Đội phó: {team.vice}
+                        </p>
+
+                        <Link
+                          to={`team/${team.slug}`}
+                          className="inline-block bg-red-700 text-white
+                                    text-xl font-black
+                                    px-10 py-5 rounded-3xl"
+                        >
+                          Xem thêm
+                        </Link>
+                      </div>
                     </div>
-
-                    <Link
-                      to={`team/${team.slug}`}
-                      className="bg-red-700 text-white text-xl font-black
-                                px-10 py-6 rounded-3xl text-center
-                                hover:bg-red-800"
-                    >
-                      Xem thêm
-                    </Link>
                   </div>
-
-                  <img
-                    src={team.image}
-                    className="mt-8 rounded-[40px] w-full object-cover"
-                  />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
+
 
 
     <section
