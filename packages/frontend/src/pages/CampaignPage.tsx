@@ -118,7 +118,7 @@ export default function CampaignPage() {
         <section id="info" className="max-w-5xl mx-auto mt-14 px-4">
           <h2 className="text-center font-black mb-10">THÔNG TIN CHUNG</h2>
           <div className="grid md:grid-cols-2 gap-10">
-            <p className="font-bold flex items-center">
+            <p className="text-black text-2xl leading-relaxed font-semibold flex items-center h-full">
               Chiến dịch Xuân Tình Nguyện – Trường Đại học Công nghệ Thông tin,
               ĐHQG-HCM là hoạt động tình nguyện ý nghĩa được tổ chức thường niên
               với sự tham gia của hàng trăm sinh viên thuộc nhiều đội hình khác 
@@ -129,8 +129,8 @@ export default function CampaignPage() {
           </div>
         </section>
 
-       <section id="teams" className="max-w-7xl mx-auto mt-32 px-6 relative">
-          <h2 className="text-center font-black text-5xl mb-40 text-black">
+       <section id="teams" className="max-w-7xl mx-auto mt-20 px-6 relative">
+          <h2 className="text-center font-black text-5xl mb-20 text-black">
             ĐỘI HÌNH
           </h2>
 
