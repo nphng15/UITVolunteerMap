@@ -98,34 +98,6 @@ export default function CampaignPage() {
           </div>
         </section>
 
-        <div className="year-menu-wrapper">
-  <button
-    className="year-toggle"
-    onClick={() => setYearOpen(!yearOpen)}
-  >
-    <span className="menu-icon">☰</span>
-    <span className="year-label">{year}</span>
-  </button>
-
-  {yearOpen && (
-    <div className="year-dropdown">
-      {[2026, 2027, 2028].map((y) => (
-        <button
-          key={y}
-          className="year-item"
-          onClick={() => {
-            setYear(y);
-            setYearOpen(false);
-          }}
-        >
-          {y}
-        </button>
-      ))}
-    </div>
-  )}
-</div>
-
-
         <section className="max-w-4xl mx-auto mt-8 px-4">
           <div className="flex justify-center gap-8">
             <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />

@@ -16,26 +16,6 @@
 }
 
 
-.year-menu-wrapper {
-  position: absolute;
-  top: 120px;
-  left: 40px;
-  z-index: 50;
-}
-
-.year-toggle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff2cc;
-  border: 3px solid #b91c1c;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-weight: 900;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-}
 
 .menu-icon {
   display: inline-flex;
