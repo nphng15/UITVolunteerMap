@@ -22,6 +22,9 @@ export class Team {
   @Column("text", { name: "Description", nullable: true })
   description?: string | null;
 
+  @Column("text", { name: "ImageUrl", nullable: true})
+  imageUrl?: string | null;
+
   @OneToMany("User", "team")
   users!: Relation<User[]>;
 
