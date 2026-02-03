@@ -7,7 +7,6 @@ import PostCreatePopup from "@/components/ui/popups/post/PostCreatePopup";
 import PostCreateChooseEditPopup from "@/components/ui/popups/post/PostCreateChooseEditPopup";
 import PostCreatePublishEditPopup from "@/components/ui/popups/post/PostCreatePublishEditPopup";
 
-import Footer from "@/components/layouts/Footer";
 
 
 export default function MyTeamPage() {

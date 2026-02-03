@@ -1,5 +1,4 @@
 import logo from "@/assets/Logo_XTN.svg"; // đổi lại đúng đường dẫn logo của bạn
-import userIcon from "@/assets/icons/user.svg";
 
 export default function MyTeamPageHeader() {
   return (
