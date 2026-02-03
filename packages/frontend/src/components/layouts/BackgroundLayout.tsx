@@ -13,27 +13,24 @@ interface Props {
 export default function BackgroundLayout({ children }: Props) {
   return (
     <div className="relative bg-[#FCDEAE] flex flex-col min-h-screen">
-
       {/* Top decorations */}
       <img
         src={bgTop}
         alt="background top"
-        className="absolute top-0 left-0 w-full z-10 pointer-events-none"
-      />
-
-      <img
-        src={bgCloud}
-        alt="cloud and star"
         className="absolute top-0 left-0 w-full z-20 pointer-events-none"
       />
 
-      {/* Nội dung chính */}
-      <div className="relative z-30 flex-1">
-        {children}
+      <div className="relative flex-1">
+        <img
+          src={bgCloud}
+          alt="cloud and star"
+          className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none z-5"
+        />
+        <div className="relative z-10">{children}</div>
       </div>
 
       {/* Hình bottom */}
-      <div className="-mb-[1px] z-10 leading-none">
+      <div className="-mb-px z-20 leading-none">
         <img
           src={bgBottom}
           alt="background bottom"
@@ -43,7 +40,6 @@ export default function BackgroundLayout({ children }: Props) {
 
       {/* Footer phải nằm sau bottom */}
       <Footer />
-
     </div>
   );
 }
