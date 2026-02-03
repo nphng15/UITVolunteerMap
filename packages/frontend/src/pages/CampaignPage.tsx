@@ -3,6 +3,8 @@ import { useState } from "react";
 import GuestHeader from "@/components/layouts/GuestHeader";
 import Footer from "@/components/layouts/Footer";
 import MapView from "@/components/layouts/MapView";
+import "./CampaignPage.css";
+
 
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
@@ -103,48 +105,62 @@ export default function CampaignPage() {
         </section>
 
         <section id="teams" className="max-w-7xl mx-auto mt-32 px-6 relative">
-          <h2 className="text-center font-black text-4xl mb-32 text-black">
-            ĐỘI HÌNH
-          </h2>
+            <h2 className="text-center font-black text-5xl mb-40 text-black">
+              ĐỘI HÌNH
+            </h2>
 
-          <div className="absolute left-6 top-0 bottom-0 w-[3px] bg-green-600" />
+            <div className="absolute left-6 top-0 bottom-0 w-[4px] bg-green-600" />
 
-          <div className="space-y-48">
-            {teams.map((team) => (
-              <div key={team.slug} className="relative min-h-[85vh] group">
-                <img
-                  src={banhChungPin}
-                  className="absolute left-6 top-10 -translate-x-1/2 w-10 h-10"
-                />
+            <div className="space-y-64">
+              {teams.map((team) => (
+                <div
+                  key={team.slug}
+                  className="team-wrapper relative min-h-[90vh]"
+                >
+                  <img
+                    src={banhChungPin}
+                    className="absolute left-6 top-0 -translate-x-1/2 w-14 h-14"
+                  />
 
-                <div className="grid grid-cols-12 gap-12 items-center pl-20 opacity-0 translate-y-10 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                  <div className="col-span-7">
-                    <img src={team.image} className="w-full rounded-[40px] object-cover" />
-                  </div>
-
-                  <div className="col-span-5">
-                    <h3 className="font-black text-4xl text-red-700 mb-4">
+                  <div className="team-slide pl-24">
+                    <h3 className="font-black text-5xl text-red-700 mb-6">
                       {team.name}
                     </h3>
-                    <p className="text-xl font-bold text-black mb-2">
+
+                    <p className="text-2xl font-bold text-black mb-2">
                       Đội trưởng: {team.leader}
                     </p>
-                    <p className="text-xl font-bold text-black mb-8">
+                    <p className="text-2xl font-bold text-black mb-12">
                       Đội phó: {team.vice}
                     </p>
 
-                    <Link
-                      to={`team/${team.slug}`}
-                      className="inline-block bg-red-700 text-white text-2xl font-black px-12 py-6 rounded-[36px]"
-                    >
-                      Xem thêm
-                    </Link>
+                    <div className="grid grid-cols-12 gap-12 items-center">
+                      <div className="col-span-7">
+                        <img
+                          src={team.image}
+                          className="w-full rounded-[36px] object-cover"
+                        />
+                      </div>
+
+                      <div className="col-span-5 flex justify-start">
+                        <Link
+                          to={`team/${team.slug}`}
+                          className="bg-red-700 text-white
+                                    text-3xl font-black
+                                    px-14 py-8
+                                    rounded-[40px]
+                                    hover:bg-red-800 transition"
+                        >
+                          Xem thêm
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+
 
         <section id="activities" className="max-w-5xl mx-auto mt-24 px-4 pb-24">
           <h2 className="text-center font-black tracking-widest mb-12 text-black">
