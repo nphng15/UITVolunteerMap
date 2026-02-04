@@ -1,194 +1,18 @@
-import { Link } from "react-router";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import GuestHeader from "@/components/layouts/GuestHeader";
 import Footer from "@/components/layouts/Footer";
 import MapView, { MarkerData } from "@/components/layouts/MapView";
 import Statistic from "@/components/layouts/Statistic";
 import GuestPostOverPlay from "@/components/ui/popups/post/GuestPostOverPlay";
 import { mockPost } from "@/mocks/post.mock";
+import { mockTeams } from "@/mocks/team.mock";
 import TimeSelect from "@/components/layouts/TimeSelect";
 import EventCard from "@/components/ui/popups/post/EventCard";
+import TeamItem from "@/components/ui/TeamItem";
 
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
 import infoImage from "@/assets/icons/image-container.png";
-import banhChungPin from "@/assets/icons/Formation-pin-slider.png";
-
-import truyenthongImg from "@/assets/icons/truyenthong.jpg";
-import sukienImg from "@/assets/icons/sukien.jpg";
-import nhipxuanImg from "@/assets/icons/nhipxuan.jpg";
-import vidanemImg from "@/assets/icons/vidanem.jpg";
-import xuancongngheImg from "@/assets/icons/xuancongnghe.jpg";
-import vannghexungkichImg from "@/assets/icons/vannghexungkich.jpg";
-import vixuanImg from "@/assets/icons/vixuan.jpg";
-import maytinhcuImg from "@/assets/icons/maytinhcu.jpg";
-import guxuanImg from "@/assets/icons/guxuan.jpg";
-
-const teams = [
-  {
-    slug: "truyenthong",
-    name: "Đội hình Truyền Thông",
-    leader: "Phan Thị Kim Ngân",
-    vice: "Hà Yến Linh",
-    image: truyenthongImg,
-  },
-  {
-    slug: "sukien",
-    name: "Đội hình Sự Kiện",
-    leader: "Phan Mạnh Tân",
-    vice: "Nguyễn Vũ Phúc, Hoàng Xuân Minh Trí",
-    image: sukienImg,
-  },
-  {
-    slug: "nhipxuan",
-    name: "Đội hình Nhịp Xuân",
-    leader: "Đỗ Lê Tuấn Kiệt",
-    vice: "Lê Huyền Trân",
-    image: nhipxuanImg,
-  },
-  {
-    slug: "vidanem",
-    name: "Đội hình Vì Đàn Em",
-    leader: "Lê Nguyễn Hoàng Anh",
-    vice: "Nguyễn Nhất Anh",
-    image: vidanemImg,
-  },
-  {
-    slug: "xuancongnghe",
-    name: "Đội hình Xuân Công Nghệ",
-    leader: "Nguyễn Hữu Minh Chiến",
-    vice: "Đàm Duy Vũ",
-    image: xuancongngheImg,
-  },
-  {
-    slug: "vannghexungkich",
-    name: "Đội hình Văn Nghệ Xung Kích",
-    leader: "Trần Thị Phương Viên",
-    vice: "Đỗ Trí Viên",
-    image: vannghexungkichImg,
-  },
-  {
-    slug: "vixuan",
-    name: "Đội hình Vị Xuân",
-    leader: "Lê Diễm Quỳnh Như",
-    vice: "Trương Tấn Phát",
-    image: vixuanImg,
-  },
-  {
-    slug: "maytinhcu",
-    name: "Đội hình Máy Tính Cũ - Tri Thức Mới",
-    leader: "Lê Diễm Quỳnh Như",
-    vice: "Trương Tấn Phát",
-    image: maytinhcuImg,
-  },
-  {
-    slug: "guxuan",
-    name: "Đội hình Gu Xuân",
-    leader: "Nguyễn Quốc Hải",
-    vice: "Hoàng Khôi Nguyên",
-    image: guxuanImg,
-  },
-];
-
-interface TeamItemProps {
-  team: (typeof teams)[0];
-}
-
-const TeamItem = ({ team }: TeamItemProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [opacity, setOpacity] = useState(0);
-  const [translateY, setTranslateY] = useState(50);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!ref.current) return;
-
-      const rect = ref.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      // Fade in from bottom, fade out at top
-      let newOpacity = 1;
-      if (rect.top > windowHeight * 0.7) {
-        // Entering from bottom
-        newOpacity = Math.max(
-          0,
-          1 - (rect.top - windowHeight * 0.7) / (windowHeight * 0.3),
-        );
-      } else if (rect.bottom < windowHeight * 0.3) {
-        // Exiting at top
-        newOpacity = Math.max(0, rect.bottom / (windowHeight * 0.3));
-      }
-
-      // Translate effect (slide up as it appears)
-      const newTranslateY =
-        rect.top > windowHeight * 0.7
-          ? Math.min(50, (rect.top - windowHeight * 0.7) / 5)
-          : 0;
-
-      setOpacity(newOpacity);
-      setTranslateY(newTranslateY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initial check
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      className="flex items-start mb-24 transition-all duration-300 ease-out"
-      style={{
-        opacity,
-        transform: `translateY(${translateY}px)`,
-      }}
-    >
-      {/* Pin */}
-      <div className="w-35 mr-10 shrink-0 flex justify-center relative z-10">
-        <img
-          src={banhChungPin}
-          alt="pin"
-          className="w-27.5 h-auto drop-shadow-lg transition-transform duration-500 hover:scale-110 hover:rotate-[5deg]"
-        />
-      </div>
-
-      {/* Content */}
-      <div className="grow pt-2">
-        <h3 className="text-[3.5rem] font-black text-red-700 mb-2 leading-none">
-          {team.name}
-        </h3>
-        <div className="flex gap-10 text-2xl font-bold text-black mb-6">
-          <span>
-            <strong>Đội trưởng:</strong> {team.leader}
-          </span>
-          <span>
-            <strong>Đội phó:</strong> {team.vice}
-          </span>
-        </div>
-        <div className="flex gap-10 items-center">
-          {/* Image */}
-          <div className="flex-7 rounded-[35px] overflow-hidden shadow-2xl group">
-            <img
-              src={team.image}
-              alt={team.name}
-              className="w-full block transition-transform duration-500 group-hover:scale-[1.08]"
-            />
-          </div>
-          {/* Button */}
-          <div className="flex-3">
-            <Link
-              to={`team/${team.slug}`}
-              className="inline-block bg-red-700 text-white text-2xl font-extrabold py-5 px-16 rounded-full shadow-[0_15px_35px_rgba(185,28,28,0.4)] transition-all duration-300 hover:bg-rose-600 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(185,28,28,0.5)] whitespace-nowrap"
-            >
-              Xem thêm
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
@@ -269,11 +93,8 @@ export default function CampaignPage() {
 
           {/* Teams list */}
           <div className="relative z-2">
-            {teams.map((team, index) => (
-              <TeamItem
-                key={`${team.slug}-${index}`}
-                team={team}
-              />
+            {mockTeams.map((team, index) => (
+              <TeamItem key={`${team.slug}-${index}`} team={team} />
             ))}
           </div>
         </section>
