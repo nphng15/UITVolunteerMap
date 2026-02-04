@@ -18,30 +18,22 @@
 .team-wrapper {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 160px;
+  margin-bottom: 100px;
 
-  transform: translateY(120px);
+  transform: translateY(140px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 
-  transition:
-    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.4s ease;
+  transition: transform 0.6s ease, opacity 0.4s ease;
 }
 
-.team-wrapper.is-in-view {
+.teams-active:hover .team-wrapper {
   transform: translateY(0);
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
-
-.team-wrapper:not(.is-in-view) {
-  transform: translateY(160px);
-  visibility: hidden;
-}
-
 
 .team-pin-wrapper {
   width: 140px; 
@@ -135,7 +127,9 @@
   transform: translateY(-8px);
   box-shadow: 0 20px 45px rgba(185, 28, 28, 0.5);
 }
-
-#teams:hover .team-wrapper.is-in-view .team-title { transition-delay: 0.01s; }
-#teams:hover .team-wrapper.is-in-view .team-info { transition-delay: 0.01s; }
-#teams:hover .team-wrapper.is-in-view .team-content { transition-delay: 0.01s; }
+.teams-active:hover .team-wrapper {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}

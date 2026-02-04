@@ -41,7 +41,7 @@ const TeamItem = ({ team }: { team: typeof teams[0] }) => {
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { threshold: 0.3, rootMargin: "0px 0px -30% 0px" }
+      { threshold: 0.05, rootMargin: "0px 0px -10% 0px" }
     );
 
     if (domRef.current) observer.observe(domRef.current);
