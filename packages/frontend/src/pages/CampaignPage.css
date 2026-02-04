@@ -2,8 +2,8 @@
 .team-line {
   position: absolute;
   left: 100px; 
-  top: 280px;
-  bottom: 100px;
+  top: 270px;
+  bottom: 40px;
   width: 8px;
   background: #16a34a;
   z-index: 1;
@@ -18,18 +18,29 @@
 .team-wrapper {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 80px; 
-  opacity: 0;
-  transform: translateY(150px); 
-  transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none; 
+  margin-bottom: 80px;
+
+  transform: translateY(160px);
+  visibility: hidden;
+
+  transition:
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.9s;
+
+  pointer-events: none;
 }
 
 #teams:hover .team-wrapper.is-in-view {
-  opacity: 1;
   transform: translateY(0);
+  visibility: visible;
+  transition-delay: 0s;
   pointer-events: auto;
 }
+.team-wrapper:not(.is-in-view) {
+  transform: translateY(160px);
+  visibility: hidden;
+}
+
 
 .team-pin-wrapper {
   width: 140px; 
