@@ -25,6 +25,9 @@ export class Photo {
   @Column("integer", { name: "isFirstImage", nullable: true })
   isFirstImage?: number;
 
+  @Column("integer", { name: "isDeleted", nullable: false, default: 0 })
+  isDeleted!: number;
+
   @ManyToOne("Post", "photos", { nullable: true })
   @JoinColumn({ name: "PostID" })
   post?: Relation<Post>;
