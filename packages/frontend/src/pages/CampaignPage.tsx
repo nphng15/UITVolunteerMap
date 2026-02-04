@@ -33,26 +33,8 @@ const teams = [
 ];
 
 const TeamItem = ({ team }: { team: typeof teams[0] }) => {
-  const [isInView, setIsInView] = useState(false);
-  const domRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInView(entry.isIntersecting);
-      },
-      { threshold: 0.05, rootMargin: "0px 0px -10% 0px" }
-    );
-
-    if (domRef.current) observer.observe(domRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <div
-      ref={domRef}
-      className={`team-wrapper ${isInView ? "is-in-view" : ""}`}
-    >
+    <div className="team-wrapper">
       <div className="team-pin-wrapper">
         <img src={banhChungPin} alt="pin" className="pin-icon" />
       </div>
@@ -80,6 +62,21 @@ const TeamItem = ({ team }: { team: typeof teams[0] }) => {
 
 export default function CampaignPage() {
   const { campaignId } = useParams<{ campaignId: string }>();
+
+  const [teamsActive, setTeamsActive] = useState(false);
+  const teamsRef = useRef<HTMLDivElement>(null);
+
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      setTeamsActive(entry.isIntersecting);
+    },
+    { threshold: 0.05 } 
+  );
+
+  if (teamsRef.current) observer.observe(teamsRef.current);
+  return () => observer.disconnect();
+}, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDE7B5]">
