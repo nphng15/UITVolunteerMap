@@ -7,7 +7,6 @@ import {
   type Relation,
 } from "typeorm";
 import type { Post } from "./Post.js";
-import type { Team } from "./Team.js";
 
 @Entity("Photo")
 export class Photo {
@@ -26,11 +25,11 @@ export class Photo {
   @Column("integer", { name: "IsDeleted", nullable: false, default: 0 })
   isDeleted!: number;
 
+  @Column("integer", { name: "isFirstImage", nullable: true })
+  isFirstImage?: number;
+
   @ManyToOne("Post", "photos", { nullable: true })
   @JoinColumn({ name: "PostID" })
   post?: Relation<Post>;
 
-  @ManyToOne("Team", "photos", { nullable: true })
-  @JoinColumn({ name: "TeamId" })
-  team?: Relation<Team>;
 }

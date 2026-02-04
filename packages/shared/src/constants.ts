@@ -38,8 +38,7 @@ export const USER_ERRORS = {
 export const POST_MESSAGES = {
   CREATED: 'Post created successfully',
   UPDATED: 'Post updated successfully',
-  DELETED: 'Post deleted successfully',
-  APPROVED: 'Post approved successfully'
+  DELETED: 'Post deleted successfully'
 } as const;
 
 export const POST_ERRORS = {

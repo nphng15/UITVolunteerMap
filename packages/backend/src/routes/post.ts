@@ -141,31 +141,4 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
-router.use(authenticateToken, requireRole([RoleEnum.ADMIN]));
-
-router.post('/:id/approve', async (req, res) => {
-    try {
-        const result = await postService.approve(Number(req.params.id));
-        const response: ApiResponse<Post> = {
-            success: true,
-            data: result,
-            message: POST_MESSAGES.APPROVED
-        }
-        return res.status(HTTP_STATUS.OK).json(response);
-    } catch(err: unknown){
-        if(err instanceof HttpError){
-            const response: ApiResponse<null> = {
-                success: false,
-                error: err.message
-            }
-            return res.status(err.statusCode).json(response);
-        }
-        const response: ApiResponse<null> = {
-            success: false,
-            error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR
-        }
-        return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(response);
-    }
-})
-
 export { router as postRouter };
