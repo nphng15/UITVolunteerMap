@@ -1,5 +1,4 @@
 import { useState } from "react";
-import GuestHeader from "@/components/layouts/GuestHeader";
 import Footer from "@/components/layouts/Footer";
 import MapView, { MarkerData } from "@/components/layouts/MapView";
 import Statistic from "@/components/layouts/Statistic";
