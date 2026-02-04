@@ -22,7 +22,7 @@ export class PostService {
         const newPost = this.postRepo.create({
             title: data.title,
             content: data.content,
-            campaign: { campaignId: data.campaignId },
+            team: { teamId: data.teamId },
             author: { userId: data.authorId },
             isDeleted: 0,
             createdAt: new Date().toISOString(),
@@ -39,8 +39,8 @@ export class PostService {
         
         if (data.content) post.content = data.content;
         
-        if (data.campaignId) {
-            post.campaign = { campaignId: data.campaignId } as Post['campaign'];
+        if (data.teamId) {
+            post.team = { teamId: data.teamId } as Post['team'];
         }
         if (data.authorId) {
             post.author = { userId: data.authorId } as Post['author'];

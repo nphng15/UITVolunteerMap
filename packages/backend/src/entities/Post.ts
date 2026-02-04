@@ -7,9 +7,9 @@ import {
   PrimaryGeneratedColumn,
   type Relation,
 } from "typeorm";
-import type { Campaign } from "./Campaign.js";
 import type { User } from "./User.js";
 import type { Photo } from "./Photo.js";
+import type { Team } from "./Team.js";
 
 @Entity("Post")
 export class Post {
@@ -31,9 +31,9 @@ export class Post {
   @Column("text", { name: "UpdatedAt", nullable: false })
   updatedAt!: string;
 
-  @ManyToOne("Campaign", "posts")
-  @JoinColumn({ name: "CampaignId" })
-  campaign!: Relation<Campaign>;
+  @ManyToOne("Team", "posts")
+  @JoinColumn({ name: "TeamId" })
+  team!: Relation<Team>;
 
   @ManyToOne("User", "posts")
   @JoinColumn({ name: "AuthorId" })

@@ -1,23 +1,21 @@
 import { AppDataSource } from "../db/data-source.js";
 import { Team } from "../entities/Team.js";
 import { User } from "../entities/User.js";
-import { Photo } from "../entities/Photo.js";
 import { Campaign } from "../entities/Campaign.js";
-import { CreateTeamInput, UpdateTeamInput } from "../schemas/team.js";
+import { CreateTeamInput } from "../schemas/team.js";
 import { HttpError } from "../errors/HttpError.js";
 import { HTTP_STATUS, TEAM_ERRORS, RoleEnum } from "@uit-volunteer-map/shared";
 
 export class TeamService {
   private teamRepo = AppDataSource.getRepository(Team);
   private userRepo = AppDataSource.getRepository(User);
-  private photoRepo = AppDataSource.getRepository(Photo);
   private campaignRepo = AppDataSource.getRepository(Campaign);
 
   // 1. GET ALL TEAMS (with different views for different roles)
   async getAll(userRole?: string) {
     const teams = await this.teamRepo.find({
       where: { isDeleted: 0 },
-      relations: ["leader", "users", "photos"],
+      relations: ["leader", "users"],
     });
 
     // Guest: only see team name and leader
@@ -52,7 +50,7 @@ export class TeamService {
   private async getTeamEntity(id: number) {
     const team = await this.teamRepo.findOne({
       where: { teamId: id, isDeleted: 0 },
-      relations: ["leader", "users", "photos"],
+      relations: ["leader", "users"],
     });
 
     if (!team) {
@@ -66,29 +64,35 @@ export class TeamService {
   async getOne(id: number) {
     const team = await this.getTeamEntity(id);
 
+    // Query all leaders (users with LEADER role in this team)
+    const leaders = await this.userRepo.find({
+      where: {
+        team: { teamId: id },
+        isDeleted: 0,
+        account: { role: { roleName: RoleEnum.LEADER } },
+      },
+      relations: ["account", "account.role"],
+    });
+
+    // Filter out leaders from members list
+    const leaderIds = leaders.map((l) => l.userId);
+    const members = team.users.filter(
+      (user) => !leaderIds.includes(user.userId),
+    );
+
     // Return safe data (for public access)
     return {
       teamId: team.teamId,
       teamName: team.teamName,
       description: team.description,
       imageUrl: team.imageUrl,
-      leader: team.leader
-        ? {
-            userId: team.leader.userId,
-            fullName: team.leader.fullName,
-            email: team.leader.email,
-          }
-        : null,
-      members: team.users.map((user) => ({
+      leaders: leaders.map((leader) => ({
+        userId: leader.userId,
+        fullName: leader.fullName,
+      })),
+      members: members.map((user) => ({
         userId: user.userId,
         fullName: user.fullName,
-        email: user.email,
-      })),
-      photos: team.photos.map((photo) => ({
-        photoId: photo.photoId,
-        title: photo.title,
-        imageUrl: photo.imageUrl,
-        uploadedAt: photo.uploadedAt,
       })),
     };
   }
@@ -108,7 +112,10 @@ export class TeamService {
       where: { campaignId: data.campaignId },
     });
     if (!campaign) {
-      throw new HttpError(TEAM_ERRORS.CAMPAIGN_NOT_FOUND, HTTP_STATUS.BAD_REQUEST);
+      throw new HttpError(
+        TEAM_ERRORS.CAMPAIGN_NOT_FOUND,
+        HTTP_STATUS.BAD_REQUEST,
+      );
     }
 
     // Verify leader exists and has LEADER role
@@ -132,7 +139,7 @@ export class TeamService {
     const newTeam = this.teamRepo.create({
       teamName: data.teamName,
       description: data.description,
-      leaderId: data.leaderId,
+      leader: { userId: data.leaderId } as any,
       imageUrl: data.imageUrl,
       campaign: { campaignId: data.campaignId } as any,
       isDeleted: 0,
@@ -141,47 +148,7 @@ export class TeamService {
     return await this.teamRepo.save(newTeam);
   }
 
-  // 4. UPDATE TEAM (Admin only)
-  async update(id: number, data: UpdateTeamInput) {
-    const team = await this.getTeamEntity(id);
-
-    // If updating leader, verify the new leader
-    if (data.leaderId) {
-      const leader = await this.userRepo.findOne({
-        where: { userId: data.leaderId, isDeleted: 0 },
-        relations: ["account", "account.role"],
-      });
-
-      if (!leader) {
-        throw new HttpError(
-          TEAM_ERRORS.LEADER_NOT_FOUND,
-          HTTP_STATUS.NOT_FOUND,
-        );
-      }
-
-      if (leader.account?.role?.roleName !== RoleEnum.LEADER) {
-        throw new HttpError(
-          TEAM_ERRORS.LEADER_INVALID_ROLE,
-          HTTP_STATUS.BAD_REQUEST,
-        );
-      }
-    }
-
-    // Check team name uniqueness if updating name
-    if (data.teamName && data.teamName !== team.teamName) {
-      const existing = await this.teamRepo.findOne({
-        where: { teamName: data.teamName, isDeleted: 0 },
-      });
-      if (existing) {
-        throw new HttpError(TEAM_ERRORS.ALREADY_EXISTS, HTTP_STATUS.CONFLICT);
-      }
-    }
-
-    this.teamRepo.merge(team, data);
-    return await this.teamRepo.save(team);
-  }
-
-  // 5. DELETE TEAM (Soft delete - Admin only)
+  // 4. DELETE TEAM (Soft delete - Admin only)
   async delete(id: number) {
     const team = await this.getTeamEntity(id);
 
@@ -196,15 +163,6 @@ export class TeamService {
     for (const user of users) {
       user.isDeleted = 1;
       await this.userRepo.save(user);
-    }
-
-    // Soft delete related photos
-    const photos = await this.photoRepo.find({
-      where: { team: { teamId: id }, isDeleted: 0 },
-    });
-    for (const photo of photos) {
-      photo.isDeleted = 1;
-      await this.photoRepo.save(photo);
     }
 
     return true;
