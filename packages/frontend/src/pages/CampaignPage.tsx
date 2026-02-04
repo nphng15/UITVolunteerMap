@@ -32,16 +32,27 @@ const teams = [
   { slug: "guxuan", name: "Đội hình Gu Xuân", leader: "Nguyễn Quốc Hải", vice: "Hoàng Khôi Nguyên", image: guxuanImg },
 ];
 
+const TeamItem = ({ team }: { team: typeof teams[0] }) => {
+  const [isInView, setIsInView] = useState(false);
+  const domRef = useRef<HTMLDivElement>(null);
 
-const TeamItem = ({
-  team,
-  state,
-}: {
-  team: typeof teams[0];
-  state: "above" | "active" | "below";
-}) => {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -10% 0px" }
+    );
+
+    if (domRef.current) observer.observe(domRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className={`team-wrapper ${state}`}>
+    <div
+      ref={domRef}
+      className={`team-wrapper ${isInView ? "is-in-view" : ""}`}
+    >
       <div className="team-pin-wrapper">
         <img src={banhChungPin} alt="pin" className="pin-icon" />
       </div>
@@ -67,27 +78,8 @@ const TeamItem = ({
   );
 };
 
-
 export default function CampaignPage() {
   const { campaignId } = useParams<{ campaignId: string }>();
-   const [activeIndex, setActiveIndex] = useState(0);
-  const lastScrollY = useRef(0);
-
-   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      const dir = y > lastScrollY.current ? 1 : -1;
-      lastScrollY.current = y;
-
-      setActiveIndex((prev) =>
-        Math.min(Math.max(prev + dir, 0), teams.length - 1)
-      );
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDE7B5]">
@@ -133,22 +125,11 @@ export default function CampaignPage() {
 
           <div className="team-line" />
 
-      <div className="teams-list">
-        {teams.map((team, index) => {
-          let state: "above" | "active" | "below" = "below";
-
-          if (index === activeIndex) state = "active";
-          else if (index < activeIndex) state = "above";
-
-          return (
-            <TeamItem
-              key={team.slug}
-              team={team}
-              state={state}
-            />
-          );
-        })}
-      </div>
+          <div className="teams-list">
+            {teams.map((team) => (
+              <TeamItem key={team.slug} team={team} />
+            ))}
+          </div>
         </section>
 
         <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">

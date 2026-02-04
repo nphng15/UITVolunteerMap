@@ -20,27 +20,25 @@
   align-items: flex-start;
   margin-bottom: 80px;
 
-  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
+  transform: translateY(160px);
+  visibility: hidden;
+
+  transition:
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.9s;
 
   pointer-events: none;
 }
 
-#teams:hover .team-wrapper.active {
-  transform: translate3d(0, 0, 0);
+#teams:hover .team-wrapper.is-in-view {
+  transform: translateY(0);
+  visibility: visible;
+  transition-delay: 0s;
   pointer-events: auto;
 }
-
-#teams:hover .team-wrapper.above {
-  transform: translate3d(0, -140px, 0);
-}
-
-#teams:hover .team-wrapper.below {
-  transform: translate3d(0, 140px, 0);
-}
-
-#teams:not(:hover) .team-wrapper {
-  transform: translate3d(0, 140px, 0);
+.team-wrapper:not(.is-in-view) {
+  transform: translateY(160px);
+  visibility: hidden;
 }
 
 
@@ -136,3 +134,7 @@
   transform: translateY(-8px);
   box-shadow: 0 20px 45px rgba(185, 28, 28, 0.5);
 }
+
+#teams:hover .team-wrapper.is-in-view .team-title { transition-delay: 0.1s; }
+#teams:hover .team-wrapper.is-in-view .team-info { transition-delay: 0.2s; }
+#teams:hover .team-wrapper.is-in-view .team-content { transition-delay: 0.3s; }
