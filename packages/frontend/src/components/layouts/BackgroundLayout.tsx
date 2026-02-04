@@ -1,9 +1,7 @@
 import React from "react";
-
 import bgTop from "@/assets/background/background_top-01.svg";
 import bgBottom from "@/assets/background/background_bottom-01.svg";
 import bgCloud from "@/assets/background/background_star_cloud-01.svg";
-
 import Footer from "@/components/layouts/Footer";
 
 interface Props {

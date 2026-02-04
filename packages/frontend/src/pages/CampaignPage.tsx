@@ -23,8 +23,7 @@ export default function CampaignPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDE7B5]">
-      <GuestHeader />
+    <div>
       {hoverData && <EventCard visible={true} data={null} />}
       {selectedEvent && (
         <GuestPostOverPlay post={mockPost} onClose={handleClose} />

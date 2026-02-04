@@ -15,6 +15,7 @@ import TeamModalWrapper from "@/components/layouts/TeamModalWrapper";
 import CampaignManagementPage from "@/pages/admin/CampaignManagementPage";
 import TeamManagementPage from "@/pages/admin/TeamManagementPage";
 import AccountManagementPage from "@/pages/admin/AccountManagementPage";
+import CampaignLayout from "@/components/layouts/CampaignLayout";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       {
         path: "campaign/:campaignId",
+        element: <CampaignLayout />,
         children: [
           { index: true, element: <CampaignPage /> },
           {

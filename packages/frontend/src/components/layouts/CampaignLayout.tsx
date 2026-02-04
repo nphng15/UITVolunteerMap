@@ -1,11 +1,11 @@
 import { Outlet } from "react-router";
 import BackgroundLayout from "./BackgroundLayout";
-import TeamHeader from "@/components/layouts/MyTeamPageHeader";
+import GuestHeader from "./GuestHeader";
 
-export default function LeaderLayout() {
+export default function CampaignLayout() {
   return (
     <>
-     <TeamHeader />
+      <GuestHeader />
       <BackgroundLayout>
         <Outlet />
       </BackgroundLayout>
