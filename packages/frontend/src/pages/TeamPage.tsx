@@ -1,4 +1,6 @@
 import { useParams, Link, useLocation } from "react-router";
+import BackgroundLayout from "@/components/layouts/BackgroundLayout";
+
 
 export default function TeamPage() {
   const { teamId } = useParams<{ teamId: string }>();
@@ -8,7 +10,8 @@ export default function TeamPage() {
   const activities = Array.from({ length: 8 });
 
   return (
-    <div className="bg-[#D9D9D9] py-8">
+  <BackgroundLayout>
+    <div className="py-8">
       <section className="max-w-4xl mx-auto px-4">
         <h1 className="text-center text-3xl font-black mb-8">
           Tên đội hình {teamId}
@@ -37,13 +40,9 @@ export default function TeamPage() {
 
       <section className="max-w-3xl mx-auto px-4 text-center mb-12">
         <p className="text-sm font-bold leading-relaxed text-black">
-          Rhoncus morbi et augue nec, in id ullamcorper at. Condimentum sit nunc
-          in eros scelerisque sed. Commodo in viverra nunc, ullamcorper ut.
-          Aliquet scelerisque nullam sagittis, pulvinar. Fermentum scelerisque
-          sit consectetur maecenas. Molestie eleifend ultrices purus lectus.
+          Rhoncus morbi et augue nec, in id ullamcorper at...
         </p>
       </section>
-
 
       <section className="max-w-4xl mx-auto px-4 mb-14">
         <h2 className="text-center font-black mb-6">Ban chỉ huy</h2>
@@ -80,5 +79,7 @@ export default function TeamPage() {
         </div>
       </section>
     </div>
-  );
+  </BackgroundLayout>
+);
 }
+
