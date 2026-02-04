@@ -18,7 +18,7 @@
 .team-wrapper {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 80px;
+  margin-bottom: 100px;
 
   transform: translateY(160px);
   visibility: hidden;
