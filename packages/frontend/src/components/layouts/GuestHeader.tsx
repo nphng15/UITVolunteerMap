@@ -45,35 +45,37 @@ export default function GuestHeader() {
     }, 400);
   };
 
-     const navItem = (id: SectionId, label: string) => (
+  const navItem = (id: SectionId, label: string) => {
+    const isActive = active === id;
+
+    return (
       <a
+        key={id}
         href={`#${id}`}
         onClick={() => handleClick(id)}
-        className="
+        className={`
           relative inline-block
-          text-sm font-black text-black
+          text-sm font-black
           transition-all duration-200
-          hover:text-red-600
-          hover:scale-105
           group
-        "
+          ${isActive ? "text-red-600" : "text-black hover:text-red-600"}
+        `}
       >
         {label}
 
         <span
-          className="
+          className={`
             absolute -bottom-2 left-0
-            h-[3px]
-            w-0
+            h-[3px] w-full
             bg-red-600
-            transition-all duration-200
-            group-hover:w-full
-          "
+            origin-left
+            transition-transform duration-200
+            ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}
+          `}
         />
       </a>
     );
-
-
+  };
 
   return (
     <header
@@ -90,8 +92,7 @@ export default function GuestHeader() {
           <img src={xtnLogo} className="h-9" />
         </div>
 
-
-        <nav className="flex gap-16 group">
+        <nav className="flex gap-16">
           {navItem("info", "Thông tin")}
           {navItem("teams", "Đội hình")}
           {navItem("activities", "Hoạt động")}
@@ -99,9 +100,11 @@ export default function GuestHeader() {
 
         <Link
           to="/login"
-          className="text-sm font-black px-4 py-1 rounded
-                     border-2 border-black
-                     hover:bg-black hover:text-white transition"
+          className="
+            text-sm font-black px-4 py-1 rounded
+            border-2 border-black
+            hover:bg-black hover:text-white transition
+          "
         >
           Đăng nhập
         </Link>

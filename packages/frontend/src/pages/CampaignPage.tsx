@@ -28,6 +28,7 @@ const teams = [
   { slug: "xuancongnghe", name: "Đội hình Xuân Công Nghệ", leader: "Nguyễn Hữu Minh Chiến", vice: "Đàm Duy Vũ", image: xuancongngheImg },
   { slug: "vannghexungkich", name: "Đội hình Văn Nghệ Xung Kích", leader: "Trần Thị Phương Viên", vice: "Đỗ Trí Viên", image: vannghexungkichImg },
   { slug: "vixuan", name: "Đội hình Vị Xuân", leader: "Lê Diễm Quỳnh Như", vice: "Trương Tấn Phát", image: vixuanImg },
+  { slug: "vixuan", name: "Đội hình Máy Tính Cũ - Tri Thức Mới", leader: "Lê Diễm Quỳnh Như", vice: "Trương Tấn Phát", image: maytinhcuImg },
   { slug: "guxuan", name: "Đội hình Gu Xuân", leader: "Nguyễn Quốc Hải", vice: "Hoàng Khôi Nguyên", image: guxuanImg },
 ];
 
