@@ -18,24 +18,25 @@
 .team-wrapper {
   display: flex;
   align-items: flex-start;
-  margin-bottom: 100px;
+  margin-bottom: 160px;
 
-  transform: translateY(160px);
+  transform: translateY(120px);
+  opacity: 0;
   visibility: hidden;
+  pointer-events: none;
 
   transition:
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 0.9s;
-
-  pointer-events: none;
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
 }
 
-#teams:hover .team-wrapper.is-in-view {
+.team-wrapper.is-in-view {
   transform: translateY(0);
+  opacity: 1;
   visibility: visible;
-  transition-delay: 0s;
   pointer-events: auto;
 }
+
 .team-wrapper:not(.is-in-view) {
   transform: translateY(160px);
   visibility: hidden;
