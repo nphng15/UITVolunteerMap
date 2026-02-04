@@ -15,34 +15,60 @@ export class TeamService {
   async getAll(userRole?: string) {
     const teams = await this.teamRepo.find({
       where: { isDeleted: 0 },
-      relations: ["leader", "users"],
+      relations: ["leader", "users", "users.account", "users.account.role"],
     });
 
-    // Guest: only see team name and leader
+    // Guest: only see team name, image and leaders
     if (userRole === "guest" || !userRole) {
-      return teams.map((team) => ({
-        teamId: team.teamId,
-        teamName: team.teamName,
-        leader: team.leader
-          ? {
-              userId: team.leader.userId,
-              fullName: team.leader.fullName,
-              email: team.leader.email,
-            }
-          : null,
-      }));
+      return teams.map((team) => {
+        // Get leaders from users with LEADER role
+        const leaders = team.users.filter(
+          (u) =>
+            u.isDeleted === 0 && u.account?.role?.roleName === RoleEnum.LEADER,
+        );
+
+        return {
+          teamId: team.teamId,
+          teamName: team.teamName,
+          imageUrl: team.imageUrl,
+          leaders: leaders.map((l) => ({
+            userId: l.userId,
+            fullName: l.fullName,
+            role: l.account?.role?.roleName,
+          })),
+        };
+      });
     }
 
-    // Admin/Leader: see full details (without sensitive account data)
+    // Authenticated users: see full details
     return teams.map((team) => {
-      const teamData = { ...team };
-      if (teamData.leader) {
-        delete (teamData.leader as any).account;
-      }
-      if (teamData.users) {
-        teamData.users.forEach((user) => delete (user as any).account);
-      }
-      return teamData;
+      // Get leaders from users with LEADER role
+      const leaders = team.users.filter(
+        (u) =>
+          u.isDeleted === 0 && u.account?.role?.roleName === RoleEnum.LEADER,
+      );
+
+      // Get members (non-leaders)
+      const leaderIds = leaders.map((l) => l.userId);
+      const members = team.users.filter(
+        (u) => u.isDeleted === 0 && !leaderIds.includes(u.userId),
+      );
+
+      return {
+        teamId: team.teamId,
+        teamName: team.teamName,
+        description: team.description,
+        imageUrl: team.imageUrl,
+        leaders: leaders.map((l) => ({
+          userId: l.userId,
+          fullName: l.fullName,
+          role: l.account?.role?.roleName,
+        })),
+        members: members.map((m) => ({
+          userId: m.userId,
+          fullName: m.fullName,
+        })),
+      };
     });
   }
 
@@ -50,7 +76,7 @@ export class TeamService {
   private async getTeamEntity(id: number) {
     const team = await this.teamRepo.findOne({
       where: { teamId: id, isDeleted: 0 },
-      relations: ["leader", "users"],
+      relations: ["leader", "users", "users.account", "users.account.role"],
     });
 
     if (!team) {
@@ -64,21 +90,15 @@ export class TeamService {
   async getOne(id: number) {
     const team = await this.getTeamEntity(id);
 
-    // Query all leaders (users with LEADER role in this team)
-    const leaders = await this.userRepo.find({
-      where: {
-        team: { teamId: id },
-        isDeleted: 0,
-        account: { role: { roleName: RoleEnum.LEADER } },
-      },
-      relations: ["account", "account.role"],
-    });
-
-    // Filter out leaders from members list
-    const leaderIds = leaders.map((l) => l.userId);
-    const members = team.users.filter(
-      (user) => !leaderIds.includes(user.userId),
-    );
+    // Query leaders with LEADER role using QueryBuilder
+    const leaders = await this.userRepo
+      .createQueryBuilder("u")
+      .leftJoinAndSelect("u.account", "a")
+      .leftJoinAndSelect("a.role", "r")
+      .where("u.teamId = :teamId", { teamId: id })
+      .andWhere("u.isDeleted = 0")
+      .andWhere("r.roleName = :roleName", { roleName: RoleEnum.LEADER })
+      .getMany();
 
     // Return safe data (for public access)
     return {
@@ -89,10 +109,8 @@ export class TeamService {
       leaders: leaders.map((leader) => ({
         userId: leader.userId,
         fullName: leader.fullName,
-      })),
-      members: members.map((user) => ({
-        userId: user.userId,
-        fullName: user.fullName,
+        role: leader.account?.role?.roleName,
+        avatarUrl: leader.avatarUrl,
       })),
     };
   }

@@ -70,7 +70,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.use(authenticateToken, requireRole([RoleEnum.LEADER]));
+router.use(authenticateToken, requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]));
 
 router.post("/", validate(createPostSchema), async (req, res) => {
   try {
