@@ -5,7 +5,6 @@ import Footer from "@/components/layouts/Footer";
 import MapView from "@/components/layouts/MapView";
 import "./CampaignPage.css";
 
-// Assets - Đảm bảo đường dẫn này đúng với project của bạn
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
 import infoImage from "@/assets/icons/image-container.png";
@@ -39,7 +38,6 @@ const TeamItem = ({ team }: { team: typeof teams[0] }) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Cập nhật trạng thái khi item vào tầm mắt để sẵn sàng cho hover
         setIsInView(entry.isIntersecting);
       },
       { threshold: 0.1, rootMargin: "0px 0px -10% 0px" }
@@ -87,7 +85,7 @@ export default function CampaignPage() {
       <GuestHeader />
 
       <main className="flex-1 pt-20">
-        {/* Bản đồ */}
+
         <section className="max-w-4xl mx-auto px-4">
           <div className="bg-white p-3 rounded-md shadow-sm">
             <div className="border-4 border-black aspect-video overflow-hidden">
@@ -96,7 +94,6 @@ export default function CampaignPage() {
           </div>
         </section>
 
-        {/* Logo */}
         <section className="max-w-4xl mx-auto mt-8 px-4">
           <div className="flex justify-center gap-8">
             <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
@@ -104,7 +101,6 @@ export default function CampaignPage() {
           </div>
         </section>
 
-        {/* Thông tin chung */}
         <section id="info" className="max-w-6xl mx-auto mt-16 px-6">
           <h2 className="text-center font-black text-black mb-12 text-5xl">
             THÔNG TIN CHUNG
@@ -121,13 +117,11 @@ export default function CampaignPage() {
           </div>
         </section>
 
-        {/* Danh sách Đội hình */}
         <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
           <h2 className="text-center font-black text-6xl mb-24 text-black">
             ĐỘI HÌNH
           </h2>
 
-          {/* Đường Line xanh chạy dọc ghim các đội hình */}
           <div className="team-line" />
 
           <div className="teams-list">
@@ -137,7 +131,6 @@ export default function CampaignPage() {
           </div>
         </section>
 
-        {/* Hoạt động */}
         <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">
           <h2 className="text-center font-black text-5xl mb-16 text-black tracking-widest">
             HOẠT ĐỘNG
