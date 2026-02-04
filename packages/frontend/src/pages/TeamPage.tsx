@@ -1,7 +1,6 @@
 import { useParams, Link, useLocation } from "react-router";
 import BackgroundLayout from "@/components/layouts/BackgroundLayout";
 import avatarFrame from "@/assets/background/avar_frame.svg";
-import avatarEllipse from "@/assets/background/avatar_ellipse.png";
 
 
 
