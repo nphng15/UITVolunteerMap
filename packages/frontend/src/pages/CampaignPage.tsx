@@ -115,7 +115,14 @@ useEffect(() => {
           </div>
         </section>
 
-        <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
+        <section
+              id="teams"
+              ref={teamsRef}
+              className={`max-w-7xl mx-auto mt-32 px-10 relative ${
+                teamsActive ? "teams-active" : ""
+              }`}
+>
+
           <h2 className="text-center font-black text-6xl mb-24 text-black">
             ĐỘI HÌNH
           </h2>
