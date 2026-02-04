@@ -1,69 +1,52 @@
-import { useParams, Link } from "react-router";
-import GuestHeader from "@/components/layouts/GuestHeader";
+import { useState } from "react";
 import Footer from "@/components/layouts/Footer";
 import MapView, { MarkerData } from "@/components/layouts/MapView";
 import Statistic from "@/components/layouts/Statistic";
 import GuestPostOverPlay from "@/components/ui/popups/post/GuestPostOverPlay";
 import { mockPost } from "@/mocks/post.mock";
+import { mockTeams } from "@/mocks/team.mock";
 import TimeSelect from "@/components/layouts/TimeSelect";
-import { useState } from "react";
 import EventCard from "@/components/ui/popups/post/EventCard";
+import TeamItem from "@/components/ui/TeamItem";
+
+import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
+import xtnLogo from "@/assets/icons/xtn.png";
+import infoImage from "@/assets/icons/image-container.png";
 
 export default function CampaignPage() {
-  const { campaignId } = useParams<{ campaignId: string }>();
-
-  const teams = Array.from({ length: 7 });
-  const activities = Array.from({ length: 9 });
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
+  const [hoverData, setHoverData] = useState<MarkerData | null>(null);
 
   const handleClose = () => {
     setSelectedEvent(null);
   };
 
-  const [hoverData, setHoverData] = useState<MarkerData | null>(null);
-
   return (
-    <div className="min-h-screen flex flex-col bg-[#BDBDBD]">
-      <GuestHeader />
-      {hoverData && <EventCard visible={true} data={null} />}{" "}
-      {/*Thay null bằng Hover Data nha */}
-      {/*hoverData && <EventCard data={hoverData} />*/}
+    <div>
+      {hoverData && <EventCard visible={true} data={null} />}
       {selectedEvent && (
         <GuestPostOverPlay post={mockPost} onClose={handleClose} />
       )}
-      <main className="flex-1 py-6 mt-14 relative z-0 isolate">
+      <main className="flex-1 pt-20">
         <section className="max-w-4xl mx-auto px-4">
           <div className="p-3 rounded-md flex">
             <div
               className="relative flex items-center justify-center"
               style={{ width: 450, height: 400 }}
             >
-              {/* LỚP 1: MAP - Tự động căn giữa nhờ flex của cha */}
               <div
                 className="overflow-hidden"
-                style={{
-                  width: 350,
-                  height: 350,
-                  zIndex: 1,
-                }}
+                style={{ width: 350, height: 350, zIndex: 1 }}
               >
                 <MapView
                   onMarkerClick={(data) => setSelectedEvent(data)}
                   onMarkerHover={(data) => setHoverData(data)}
-                />{" "}
-                {/* Todo Truyền hàm xử lý sự kiện click marker */}
+                />
               </div>
-
-              {/* LỚP 2: FRAME - Đè lên toàn bộ container */}
               <img
                 src="/map-element/map-frame-01.svg"
-                className="absolute top-0 left-0 pointer-events-none"
-                style={{
-                  width: 500,
-                  //height: 500,
-                  zIndex: 10,
-                  pointerEvents: "none",
-                }}
+                className="absolute top-0 left-0 pointer-events-none w-125 z-10"
+                alt=""
               />
             </div>
             <Statistic />
@@ -71,63 +54,68 @@ export default function CampaignPage() {
           <TimeSelect />
         </section>
 
-        <section id="info" className="max-w-4xl mx-auto mt-10 px-4">
-          <h2 className="text-center font-black tracking-widest mb-6">
-            THÔNG TIN CHUNG CHIẾN DỊCH {campaignId}
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            <p className="text-sm font-bold leading-relaxed text-black">
-              Mô tả chi tiết về chiến dịch.
-            </p>
-
-            <div className="bg-[#D9D9D9] aspect-square flex items-center justify-center">
-              <div className="w-16 h-16 border-2 border-white rotate-45" />
-            </div>
+        <section className="max-w-4xl mx-auto mt-8 px-4">
+          <div className="flex justify-center gap-8">
+            <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
+            <img src={xtnLogo} className="h-20 object-contain" alt="XTN Logo" />
           </div>
         </section>
-        <section id="teams" className="max-w-4xl mx-auto mt-12 px-4">
-          <h2 className="text-center font-black tracking-widest mb-6">
+
+        <section id="info" className="max-w-6xl mx-auto mt-16 px-6">
+          <h2 className="text-center font-black text-black mb-12 text-5xl">
+            THÔNG TIN CHUNG
+          </h2>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <p className="text-black text-2xl font-bold leading-relaxed">
+              Chiến dịch Xuân Tình Nguyện – Trường Đại học Công nghệ Thông tin,
+              ĐHQG-HCM là hoạt động tình nguyện ý nghĩa được tổ chức thường niên
+              với sự tham gia của hàng trăm sinh viên thuộc nhiều đội hình khác
+              nhau, với sứ mệnh mang không khí và hơi ấm ngày Tết đến với những
+              hoàn cảnh, địa phương còn khó khăn.
+            </p>
+            <img
+              src={infoImage}
+              className="rounded-3xl shadow-xl w-full"
+              alt="Volunteer"
+            />
+          </div>
+        </section>
+
+        <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
+          <h2 className="text-center font-black text-6xl mb-24 text-black">
             ĐỘI HÌNH
           </h2>
 
-          <div className="space-y-5">
-            {teams.map((_, i) => (
-              <Link
-                key={i}
-                to={`team/${i + 1}`}
-                className="flex bg-[#E6E6E6] rounded-xl overflow-hidden hover:translate-x-1 transition"
-              >
-                <div className="w-32 bg-[#D9D9D9] flex items-center justify-center">
-                  <div className="w-12 h-12 border-2 border-white rotate-45" />
-                </div>
+          {/* Vertical line */}
+          <div className="absolute left-25 top-67.5 bottom-10 w-2 bg-green-600 z-1 rounded-lg" />
 
-                <div className="flex-1 bg-[#FFF2CC] border-l-4 border-red-600 p-4">
-                  <h3 className="font-black text-sm mb-1">TÊN ĐỘI HÌNH</h3>
-                  <p className="text-xs font-bold text-black mb-2">
-                    Mô tả về đội hình.
-                  </p>
-                  <div className="text-[10px] font-black">
-                    Chỉ huy: Tên 1 ; Tên 2 ; Tên 3
-                  </div>
-                </div>
-              </Link>
+          {/* Teams list */}
+          <div className="relative z-2">
+            {mockTeams.map((team, index) => (
+              <TeamItem key={`${team.slug}-${index}`} team={team} />
             ))}
           </div>
         </section>
 
-        <section id="activities" className="max-w-4xl mx-auto mt-14 px-4">
-          <h2 className="text-center font-black tracking-widest mb-6">
+        <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">
+          <h2 className="text-center font-black text-5xl mb-16 text-black tracking-widest">
             HOẠT ĐỘNG
           </h2>
-
-          <div className="grid grid-cols-3 gap-6">
-            {activities.map((_, i) => (
-              <div key={i} className="bg-[#FFD966] p-2 rounded-md">
-                <div className="text-[10px] font-black mb-1">TÊN HOẠT ĐỘNG</div>
-
-                <div className="bg-[#E6E6E6] aspect-square flex items-center justify-center">
-                  <div className="w-10 h-10 border-2 border-white rotate-45" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div
+                key={i}
+                className="bg-linear-to-b from-[#FFE066] to-[#FFD43B] rounded-3xl p-6 shadow-xl"
+              >
+                <h3 className="font-black text-xl text-black mb-4 uppercase">
+                  Tên hoạt động
+                </h3>
+                <div className="bg-[#E6E6E6] rounded-2xl aspect-4/3 flex items-center justify-center mb-4">
+                  <div className="w-16 h-16 border-4 border-white rotate-45 opacity-40" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-red-600 text-2xl">❤</span>
+                  <div className="flex-1 h-0.75 bg-black/60 rounded-full" />
                 </div>
               </div>
             ))}

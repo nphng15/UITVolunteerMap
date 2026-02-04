@@ -8,7 +8,7 @@ export default function TeamPage() {
   const activities = Array.from({ length: 8 });
 
   return (
-    <div className="bg-[#D9D9D9] py-8">
+    <div>
       <section className="max-w-4xl mx-auto px-4">
         <h1 className="text-center text-3xl font-black mb-8">
           Tên đội hình {teamId}

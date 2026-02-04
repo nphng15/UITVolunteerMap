@@ -1,26 +1,57 @@
+import uitLogo from "@/assets/icons/uitvolunteer.svg";
+import mailIcon from "@/assets/icons/footer_mail-icon.svg";
+import fbIcon from "@/assets/icons/footer_Facebook-icon.svg";
+import locationIcon from "@/assets/icons/footer_Location-icons.svg";
+import creditIcon from "@/assets/icons/Credits.svg";
+
 export default function Footer() {
   return (
-    <footer className="bg-black text-white relative z-50 isolate m-0 p-0">
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+    <footer className="bg-black text-white mt-20">
+      <div className="max-w-6xl mx-auto px-6 py-6">
+        <div className="flex items-start gap-10">
+          <img
+            src={uitLogo}
+            alt="UITVolunteer"
+            className="h-12 w-auto"
+          />
 
-          <div>
-            <div className="font-bold text-base mb-2">UITVolunteer</div>
-            <div className="text-white/60 text-xs">
-              UITVolunteer © 2026. All rights reserved.
+          <div className="flex flex-col gap-3 flex-1">
+
+            <div className="font-semibold text-sm">
+              Trang chủ
+            </div>
+            <div className="flex flex-wrap items-center gap-6 text-sm text-white/90">
+              <span className="font-semibold">Liên hệ:</span>
+
+              <div className="flex items-center gap-2">
+                <img src={mailIcon} className="w-4 h-4" />
+                <span>hsvdhcntt@hoisinhvientphcm.com</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <img src={fbIcon} className="w-4 h-4" />
+                <span>facebook.com/tuoitre.uit</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <img src={locationIcon} className="w-4 h-4" />
+                <span>Khu phố 34, Phường Linh Xuân, TP.HCM</span>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div className="space-y-1 text-xs text-white/80">
-            <div className="font-semibold text-white">Trang chủ</div>
-            <div>Liên hệ: hsvdhcntt@hoisinhvientphcm.com</div>
-            <div>facebook.com/tuoitre.uit</div>
-            <div>Khu phố 34, Phường Linh Xuân, TP.HCM</div>
+        <div className="border-t border-white/30 my-5" />
+        <div className="flex items-center justify-between">
+          <div className="text-xs text-white/60">
+            UITVolunteer © 2026. All rights reserved.
           </div>
 
-          <div className="md:text-right text-xs text-white/60">
-            <div>UITVolunteer</div>
-          </div>
+          <img
+            src={creditIcon}
+            alt="Credits"
+            className="w-24 h-24"
+          />
         </div>
       </div>
     </footer>
