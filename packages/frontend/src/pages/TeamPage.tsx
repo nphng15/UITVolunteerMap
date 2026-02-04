@@ -1,5 +1,8 @@
 import { useParams, Link, useLocation } from "react-router";
 import BackgroundLayout from "@/components/layouts/BackgroundLayout";
+import avatarFrame from "@/assets/background/avar_frame.svg";
+import avatarEllipse from "@/assets/background/avatar_ellipse.png";
+
 
 
 export default function TeamPage() {
@@ -50,9 +53,26 @@ export default function TeamPage() {
         <div className="grid grid-cols-3 gap-8">
           {commanders.map((_, i) => (
             <div key={i} className="text-center">
-              <div className="w-24 h-24 mx-auto rounded-full bg-[#E6E6E6] flex items-center justify-center mb-4">
-                <div className="w-8 h-8 rounded-full bg-white/60" />
-              </div>
+<div className="relative w-28 h-40 mx-auto mb-4">
+  {/* Container avatar đã bị cắt theo hình oval */}
+  <div className="absolute inset-3 rounded-[9999px] overflow-hidden bg-[#DDE1E6]">
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="w-12 h-12 rounded-full bg-white/70" />
+    </div>
+  </div>
+
+  {/* Frame nằm trên cùng */}
+  <img
+    src={avatarFrame}
+    alt="avatar frame"
+    className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+  />
+</div>
+
+
+
+
+
               <div className="text-xs font-black">Chức vụ</div>
               <div className="text-xs font-bold text-gray-700">
                 Họ và tên
