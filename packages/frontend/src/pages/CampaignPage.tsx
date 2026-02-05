@@ -12,7 +12,6 @@ import TeamItem from "@/components/ui/TeamItem";
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
 import infoImage from "@/assets/icons/image-container.png";
-import "./leader/scroll-appear.css";
 
 export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
@@ -82,26 +81,37 @@ export default function CampaignPage() {
           </div>
         </section>
 
-        <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
-          <h2 className="text-center font-black text-6xl mb-24 text-black">
+       <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
+        {/* Sticky title */}
+        <div className="sticky top-20 z-20 bg-white">
+          <h2 className="text-center font-black text-6xl text-black py-6">
             ĐỘI HÌNH
           </h2>
+        </div>
 
-          {/* Vertical line */}
-          <div className="absolute left-25 top-67.5 bottom-10 w-2 bg-green-600 z-1 rounded-lg" />
+        {/* Vertical line */}
+        <div className="absolute left-25 top-40 bottom-0 w-2 bg-green-600 z-1 rounded-lg" />
 
-          {/* Teams list */}
-          <div className="relative z-2">
-              {mockTeams.map((team, index) => (
-                <div
-                  key={`${team.slug}-${index}`}
-                  className="timeline-item autoShow"
-                >
-                  <TeamItem team={team} />
-                </div>
-              ))}
+        {/* Teams list */}
+        <div className="relative z-2 mt-32">
+          {mockTeams.map((team, index) => (
+            <div
+              key={`${team.slug}-${index}`}
+              className="min-h-screen flex items-center justify-center"
+            >
+              <div
+                className={
+                  index % 2 === 0
+                    ? "scroll-appear timeline-item"
+                    : "scroll-appear scroll-appear-right timeline-item"
+                }
+              >
+                <TeamItem team={team} />
+              </div>
             </div>
-          </section>
+          ))}
+        </div>
+      </section>
 
         <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">
           <h2 className="text-center font-black text-5xl mb-16 text-black tracking-widest">
