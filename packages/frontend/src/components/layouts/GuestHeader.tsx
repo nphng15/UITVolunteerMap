@@ -81,6 +81,7 @@ export default function GuestHeader() {
     <header
       className="
         fixed top-0 left-0 right-0
+        sticky top
         z-[9999]
         bg-[#F5B311]
         border-b-2 border-black/20
