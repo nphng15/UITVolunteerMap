@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Footer from "@/components/layouts/Footer";
 import MapView, { MarkerData } from "@/components/layouts/MapView";
 import Statistic from "@/components/layouts/Statistic";
 import GuestPostOverPlay from "@/components/ui/popups/post/GuestPostOverPlay";
@@ -81,55 +80,81 @@ export default function CampaignPage() {
               hoàn cảnh, địa phương còn khó khăn.
             </p>
             <img
-              src={infoImage}
+              src="https://res.cloudinary.com/duallvqjh/image/upload/v1770284139/XTN_info_nce2w5.jpg"
               className="rounded-3xl shadow-xl w-full"
               alt="Volunteer"
             />
           </div>
         </section>
 
-        <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
-          <h2 className="text-center font-black text-6xl mb-24 text-black">
+       <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
+        <div className="mb-24">
+          <h2 className="text-center font-black text-5xl text-black">
             ĐỘI HÌNH
           </h2>
+        </div>
 
-          {/* Vertical line */}
-          <div className="absolute left-25 top-67.5 bottom-10 w-2 bg-green-600 z-1 rounded-lg" />
+        {/* Vertical line */}
+        <div className="absolute left-25 top-40 bottom-0 w-2 bg-green-600 z-1 rounded-lg" />
 
-          {/* Teams list */}
-          <div className="relative z-2">
-            {mockTeams.map((team, index) => (
-              <TeamItem key={`${team.slug}-${index}`} team={team} />
-            ))}
-          </div>
-        </section>
+        {/* Teams list */}
+        <div className="relative z-2 mt-32">
+          {mockTeams.map((team, index) => {
+            const isFirst = index === 0;
+
+            return (
+              <div
+                key={`${team.slug}-${index}`}
+                className={
+                  isFirst
+                    ? "flex justify-start"
+                    : "min-h-screen flex items-center justify-center"
+                }
+              >
+                <div
+                  className={
+                    index % 2 === 0
+                      ? "scroll-appear timeline-item"
+                      : "scroll-appear scroll-appear-right timeline-item"
+                  }
+                >
+                  <TeamItem team={team} />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
         <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">
           <h2 className="text-center font-black text-5xl mb-16 text-black tracking-widest">
             HOẠT ĐỘNG
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-            {Array.from({ length: 3 }).map((_, i) => (
+            {Array.from({ length: 9 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-linear-to-b from-[#FFE066] to-[#FFD43B] rounded-3xl p-6 shadow-xl"
+                className="rounded-3xl p-6 shadow-xl
+                            bg-gradient-to-b
+                            from-[#F7CC1D]
+                            via-[#FCF2DA]
+                            to-[#F7CC1D]"
               >
-                <h3 className="font-black text-xl text-black mb-4 uppercase">
+                <h3 className="font-black text-xl text-black mb-4">
                   Tên hoạt động
                 </h3>
-                <div className="bg-[#E6E6E6] rounded-2xl aspect-4/3 flex items-center justify-center mb-4">
+                <div className="bg-[#DDE1E6] rounded-2xl aspect-[4/3] mb-4 flex items-center justify-center">
                   <div className="w-16 h-16 border-4 border-white rotate-45 opacity-40" />
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-red-600 text-2xl">❤</span>
-                  <div className="flex-1 h-0.75 bg-black/60 rounded-full" />
+                  <span className="text-red-600 text-xl">❤</span>
+                  <div className="flex-1 h-1 bg-black/50 rounded-full" />
                 </div>
               </div>
             ))}
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }
