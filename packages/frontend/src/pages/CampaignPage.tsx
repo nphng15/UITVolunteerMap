@@ -12,7 +12,7 @@ import TeamItem from "@/components/ui/TeamItem";
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
 import infoImage from "@/assets/icons/image-container.png";
-import "./scroll-appear.css";
+import "./leader/scroll-appear.css";
 
 export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
