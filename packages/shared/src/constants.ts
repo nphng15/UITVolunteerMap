@@ -52,6 +52,7 @@ export const TEAM_ERRORS = {
   LEADER_NOT_FOUND: 'Leader not found',
   LEADER_INVALID_ROLE: 'User must have LEADER role',
   CAMPAIGN_NOT_FOUND: "Campaign not found",
+  FORBIDDEN_ACCESS: 'You are not allowed to update this team',
 } as const;
 
 export const TEAM_MESSAGES = {

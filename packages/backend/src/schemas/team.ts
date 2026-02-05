@@ -12,3 +12,12 @@ export const createTeamSchema = z.object({
 });
 
 export type CreateTeamInput = z.infer<typeof createTeamSchema>;
+
+export const updateTeamSchema = z.object({
+  teamName: z.string().min(1, "Team name cannot be empty").optional(),
+  description: z.string().optional().nullable(),
+  imageUrl: z.string().url("Invalid image URL").optional().nullable(),
+});
+
+export type UpdateTeamInput = z.infer<typeof updateTeamSchema>;
+
