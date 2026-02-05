@@ -37,7 +37,7 @@ export default function HomePage() {
 
       <main className="flex-1">
         <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
-        <div className="relative w-full h-[980px] group overflow-hidden">
+        <div className="relative w-full h-[85vh] max-h-[980px] group overflow-hidden">
           {/* Background image */}
           <div
             className="absolute inset-0"
@@ -45,7 +45,7 @@ export default function HomePage() {
               backgroundImage: `url(${images[1]})`,
               backgroundRepeat: "no-repeat",
               backgroundPosition: "-10.916px -0.322px",
-              backgroundSize: "101.087% 132%",
+              backgroundSize: "cover",
               backgroundColor: "#d3d3d3",
             }}
           />
