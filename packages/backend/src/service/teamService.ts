@@ -90,15 +90,18 @@ export class TeamService {
   async getOne(id: number) {
     const team = await this.getTeamEntity(id);
 
-    // Query leaders with LEADER role using QueryBuilder
-    const leaders = await this.userRepo
-      .createQueryBuilder("u")
-      .leftJoinAndSelect("u.account", "a")
-      .leftJoinAndSelect("a.role", "r")
-      .where("u.teamId = :teamId", { teamId: id })
-      .andWhere("u.isDeleted = 0")
-      .andWhere("r.roleName = :roleName", { roleName: RoleEnum.LEADER })
-      .getMany();
+    const leaders = await this.userRepo.find({
+      where: {
+        team: { teamId: id },
+        isDeleted: 0,
+        account: {
+          role: {
+            roleName: RoleEnum.LEADER,
+          },
+        },
+      },
+      relations: ["account", "account.role"],
+    });
 
     // Return safe data (for public access)
     return {
@@ -114,18 +117,9 @@ export class TeamService {
       })),
     };
   }
-
+  
   // 3. CREATE TEAM (Admin only)
   async create(data: CreateTeamInput) {
-    // Check if team name already exists
-    const existing = await this.teamRepo.findOne({
-      where: { teamName: data.teamName },
-    });
-    if (existing) {
-      throw new HttpError(TEAM_ERRORS.ALREADY_EXISTS, HTTP_STATUS.CONFLICT);
-    }
-
-    // Verify campaign exists
     const campaign = await this.campaignRepo.findOne({
       where: { campaignId: data.campaignId },
     });
@@ -136,7 +130,17 @@ export class TeamService {
       );
     }
 
-    // Verify leader exists and has LEADER role
+    const existing = await this.teamRepo.findOne({
+      where: {
+        teamName: data.teamName,
+        campaign: { campaignId: data.campaignId },
+      },
+    });
+
+    if (existing) {
+      throw new HttpError(TEAM_ERRORS.ALREADY_EXISTS, HTTP_STATUS.CONFLICT);
+    }
+
     const leader = await this.userRepo.findOne({
       where: { userId: data.leaderId, isDeleted: 0 },
       relations: ["account", "account.role"],
