@@ -1,5 +1,4 @@
 import React from "react";
-import bgTop from "@/assets/background/background_top-01.svg";
 import bgBottom from "@/assets/background/background_bottom-01.svg";
 import bgCloud from "@/assets/background/background_star_cloud-01.svg";
 import Footer from "@/components/layouts/Footer";
@@ -12,11 +11,11 @@ export default function BackgroundLayout({ children }: Props) {
   return (
     <div className="relative bg-[#FCDEAE] flex flex-col min-h-screen">
       {/* Top decorations */}
-      <img
+      {/*<img
         src={bgTop}
         alt="background top"
-        className="absolute top-0 left-0 w-full z-20 pointer-events-none"
-      />
+        className="absolute top-0 left-0 w-full z-15 pointer-events-none"
+      /> -> Move vào phần campaign page*/} 
 
       <div className="relative flex-1">
         <img

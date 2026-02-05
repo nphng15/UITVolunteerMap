@@ -7,7 +7,10 @@ import { mockTeams } from "@/mocks/team.mock";
 import TimeSelect from "@/components/layouts/TimeSelect";
 import EventCard from "@/components/ui/popups/post/EventCard";
 import TeamItem from "@/components/ui/TeamItem";
-import bndLogo from "@/assets/icons/bnd.png";
+
+import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
+import xtnLogo from "@/assets/icons/xtn.png";
+import bgTop from "@/assets/background/background_top-01.svg";
 
 export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
@@ -18,21 +21,32 @@ export default function CampaignPage() {
   };
 
   return (
-    <div>
+    <div className="z-25">
+      <img
+        src={bgTop}
+        alt="background top"
+        className="absolute top-0 left-0 w-full z-15 pointer-events-none"
+      />
+      <section id="logoTop" className="max-w-4xl mx-auto px-4">
+        <div className="flex justify-center">
+          <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
+          <img src={xtnLogo} className="h-16 object-contain" alt="XTN Logo" />
+        </div>
+      </section>
       {hoverData && <EventCard visible={true} data={null} />}
       {selectedEvent && (
         <GuestPostOverPlay post={mockPost} onClose={handleClose} />
       )}
-      <main className="flex-1 pt-20">
-        <section className="max-w-4xl mx-auto px-4">
+      <main className="flex-1">
+        <section id="mapSection" className="max-w-6xl mx-auto px-4">
           <div className="p-3 rounded-md flex">
             <div
               className="relative flex items-center justify-center"
-              style={{ width: 450, height: 400 }}
+              style={{ width: 650, height: 550 }}
             >
               <div
                 className="overflow-hidden"
-                style={{ width: 350, height: 350, zIndex: 1 }}
+                style={{ width: 580, height: 450, zIndex: 1 }}
               >
                 <MapView
                   onMarkerClick={(data) => setSelectedEvent(data)}
@@ -41,19 +55,13 @@ export default function CampaignPage() {
               </div>
               <img
                 src="/map-element/map-frame-01.svg"
-                className="absolute top-0 left-0 pointer-events-none w-125 z-10"
+                className="absolute top-0 left-0 pointer-events-none w-170 z-10"
                 alt=""
               />
             </div>
             <Statistic />
           </div>
           <TimeSelect />
-        </section>
-
-        <section className="max-w-4xl mx-auto mt-8 px-4">
-          <div className="flex justify-center gap-8">
-            <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
-          </div>
         </section>
 
         <section id="info" className="max-w-6xl mx-auto mt-16 px-6">
@@ -76,44 +84,38 @@ export default function CampaignPage() {
           </div>
         </section>
 
-       <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
-        <div className="mb-24">
-          <h2 className="text-center font-black text-5xl text-black">
-            ĐỘI HÌNH
-          </h2>
-        </div>
+        <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
+          <div className="mb-12">
+            <h2 className="text-center font-black text-5xl text-black">
+              ĐỘI HÌNH
+            </h2>
+          </div>
 
-        {/* Vertical line */}
-        <div className="absolute left-25 top-40 bottom-0 w-2 bg-green-600 z-1 rounded-lg" />
+          {/* Vertical line */}
+          <div className="absolute left-25 top-40 bottom-0 w-2 bg-green-600 z-1 rounded-lg" />
 
-        {/* Teams list */}
-        <div className="relative z-2 mt-32">
-          {mockTeams.map((team, index) => {
-            const isFirst = index === 0;
-
-            return (
-              <div
-                key={`${team.slug}-${index}`}
-                className={
-                  isFirst
-                    ? "flex justify-start"
-                    : "min-h-screen flex items-center justify-center"
-                }
-              >
+          {/* Teams list */}
+          <div className="relative z-2 mt-16 space-y-24">
+            {mockTeams.map((team, index) => {
+              return (
                 <div
-                  className={
-                    index % 2 === 0
-                      ? "scroll-appear timeline-item"
-                      : "scroll-appear scroll-appear-right timeline-item"
-                  }
+                  key={`${team.slug}-${index}`}
+                  className="flex items-center justify-center"
                 >
-                  <TeamItem team={team} />
+                  <div
+                    className={
+                      index % 2 === 0
+                        ? "scroll-appear timeline-item"
+                        : "scroll-appear scroll-appear-right timeline-item"
+                    }
+                  >
+                    <TeamItem team={team} />
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+              );
+            })}
+          </div>
+        </section>
 
         <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">
           <h2 className="text-center font-black text-5xl mb-16 text-black tracking-widest">

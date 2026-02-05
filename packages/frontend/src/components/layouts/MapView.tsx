@@ -118,12 +118,19 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
     // ===============================
     // 5. Arrow Marker
     // ===============================
-    const createArrowIcon = () =>
-      L.icon({
-        iconUrl: "/map-element/map-pin-flower.svg", // đường dẫn SVG của bạn
-        iconSize: [30, 30],
-        iconAnchor: [15, 15],
-      });
+    const normalIcon = L.icon({
+      iconUrl: "/map-element/map-pin-flower.svg",
+      iconSize: [30, 30],
+      iconAnchor: [15, 15],
+    });
+
+    const hoverIcon = L.icon({
+      iconUrl: "/map-element/map-pin-flower.svg",
+      iconSize: [42, 42],      // phóng to
+      iconAnchor: [21, 21],    // giữ đúng tâm
+    });
+    
+    const createArrowIcon = () => normalIcon
 
     // ===============================
     // 6. Load Annotations
@@ -144,6 +151,8 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
             });
 
             layer.on("mouseover", (e: LeafletMouseEvent) => {
+              const marker = e.target as L.Marker;
+              marker.setIcon(hoverIcon);
               onMarkerHover({
                 title: feature.properties.title,
                 x: e.originalEvent.clientX,
@@ -153,7 +162,9 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
             });
 
             // 3. Sự kiện RỜI CHUỘT (Mouse Out)
-            layer.on("mouseout", () => {
+            layer.on("mouseout", (e: LeafletMouseEvent) => {
+              const marker = e.target as L.Marker;
+              marker.setIcon(normalIcon);
               onMarkerHover(null); // Xóa dữ liệu hover để ẩn Component đi
             });
           },
@@ -313,7 +324,7 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
     };
   }, [onMarkerClick, onMarkerHover]);
 
-  return <div id="map" style={{ width: "80vw", height: "80vh" }} />;
+  return <div id="map" style={{ width: "80vw", height: "80vh" , zIndex: 22, isolation: "isolate"}} />;
 };
 
 export default MapView;
