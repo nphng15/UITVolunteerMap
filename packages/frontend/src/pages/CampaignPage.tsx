@@ -91,21 +91,17 @@ export default function CampaignPage() {
           <div className="absolute left-25 top-67.5 bottom-10 w-2 bg-green-600 z-1 rounded-lg" />
 
           {/* Teams list */}
-            <div className="relative z-2">
+          <div className="relative z-2">
               {mockTeams.map((team, index) => (
                 <div
                   key={`${team.slug}-${index}`}
-                  className={
-                    index % 2 === 0
-                      ? "scroll-appear"
-                      : "scroll-appear scroll-appear-right"
-                  }
+                  className="timeline-item autoShow"
                 >
                   <TeamItem team={team} />
                 </div>
               ))}
             </div>
-        </section>
+          </section>
 
         <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">
           <h2 className="text-center font-black text-5xl mb-16 text-black tracking-widest">
