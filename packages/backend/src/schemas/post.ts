@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 const postSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  content: z.string().min(1, "Content is required"),
-  teamId: z.number().min(1, "TeamId is required"),
-  authorId: z.number().min(1, "AuthorId(UserId) is required"),
+  title: z.string().min(1, 'Title is required'),
+  content: z.string().min(1, 'Content is required'),
+  teamId: z.number().min(1, 'TeamId is required'),
+  authorId: z.number().min(1, 'AuthorId(UserId) is required')
 });
 
 export const createPostSchema = postSchema;

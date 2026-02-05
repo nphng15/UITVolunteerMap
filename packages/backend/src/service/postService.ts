@@ -70,15 +70,14 @@ export class PostService {
     const post = await this.getOne(postId);
     if (!post || post.isDeleted === 1)
       throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
-
-    const newPhoto = this.photoRepo.create({
-      title: data.title ?? undefined,
-      imageUrl: data.imageUrl,
-      uploadedAt: new Date().toISOString(),
-      isFirstImage: data.isFirstImage ?? undefined,
-      isDeleted: 0,
-      post: { postId } as Photo["post"],
-    });
+      const newPhoto = this.photoRepo.create({
+        title: data.title ?? undefined,
+        imageUrl: data.imageUrl,
+        uploadedAt: new Date().toISOString(),
+        isFirstImage: data.isFirstImage ?? undefined,
+        isDeleted: 0,
+        post: { postId } as Photo["post"],
+      });
 
     return await this.photoRepo.save(newPhoto);
   }
