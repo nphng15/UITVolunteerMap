@@ -12,6 +12,8 @@ import TeamItem from "@/components/ui/TeamItem";
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
 import infoImage from "@/assets/icons/image-container.png";
+import bgTop from "@/assets/background/background_top-01.svg";
+
 
 export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
@@ -22,8 +24,13 @@ export default function CampaignPage() {
   };
 
   return (
-    <div>
-      <section className="max-w-4xl mx-auto mt-8 px-4">
+    <div className="z-25">
+      <img
+        src={bgTop}
+        alt="background top"
+        className="absolute top-0 left-0 w-full z-15 pointer-events-none"
+      />
+      <section className="max-w-4xl mx-auto px-4">
           <div className="flex justify-center gap-8">
             <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
             <img src={xtnLogo} className="h-20 object-contain" alt="XTN Logo" />
@@ -33,17 +40,17 @@ export default function CampaignPage() {
       {selectedEvent && (
         <GuestPostOverPlay post={mockPost} onClose={handleClose} />
       )}
-      <main className="flex-1 pt-20">
+      <main className="flex-1">
 
-        <section className="max-w-4xl mx-auto px-4">
+        <section className="max-w-6xl mx-auto px-4">
           <div className="p-3 rounded-md flex">
             <div
               className="relative flex items-center justify-center"
-              style={{ width: 450, height: 400 }}
+              style={{ width: 650, height: 550 }}
             >
               <div
                 className="overflow-hidden"
-                style={{ width: 350, height: 350, zIndex: 1 }}
+                style={{ width: 580, height: 450, zIndex: 1 }}
               >
                 <MapView
                   onMarkerClick={(data) => setSelectedEvent(data)}
@@ -52,7 +59,7 @@ export default function CampaignPage() {
               </div>
               <img
                 src="/map-element/map-frame-01.svg"
-                className="absolute top-0 left-0 pointer-events-none w-125 z-10"
+                className="absolute top-0 left-0 pointer-events-none w-170 z-10"
                 alt=""
               />
             </div>

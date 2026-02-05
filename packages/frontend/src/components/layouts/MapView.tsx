@@ -313,7 +313,7 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
     };
   }, [onMarkerClick, onMarkerHover]);
 
-  return <div id="map" style={{ width: "80vw", height: "80vh" }} />;
+  return <div id="map" style={{ width: "80vw", height: "80vh" , zIndex: 22, isolation: "isolate"}} />;
 };
 
 export default MapView;

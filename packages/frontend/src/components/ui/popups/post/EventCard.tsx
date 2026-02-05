@@ -79,10 +79,6 @@ const EventCard: React.FC<EventCardProps> = ({ visible, data }) => {
         <p className="text-gray-700 text-[12px] leading-relaxed mb-4 line-clamp-3 italic">
           "{displayData.description}"
         </p>
-
-        <button className="bg-[#ED7A2D] hover:bg-[#d66a24] text-white font-bold py-2 px-8 rounded-full text-[11px] shadow-lg transition-colors uppercase">
-          Xem chi tiết
-        </button>
       </div>
 
       {/* Trang trí góc (Optional - cho giống style skeuomorphic) */}
