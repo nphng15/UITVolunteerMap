@@ -12,6 +12,7 @@ import TeamItem from "@/components/ui/TeamItem";
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
 import infoImage from "@/assets/icons/image-container.png";
+import "@/styles/scroll-appear.css";
 
 export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
@@ -90,11 +91,20 @@ export default function CampaignPage() {
           <div className="absolute left-25 top-67.5 bottom-10 w-2 bg-green-600 z-1 rounded-lg" />
 
           {/* Teams list */}
-          <div className="relative z-2">
-            {mockTeams.map((team, index) => (
-              <TeamItem key={`${team.slug}-${index}`} team={team} />
-            ))}
-          </div>
+            <div className="relative z-2">
+              {mockTeams.map((team, index) => (
+                <div
+                  key={`${team.slug}-${index}`}
+                  className={
+                    index % 2 === 0
+                      ? "scroll-appear"
+                      : "scroll-appear scroll-appear-right"
+                  }
+                >
+                  <TeamItem team={team} />
+                </div>
+              ))}
+            </div>
         </section>
 
         <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">
