@@ -53,9 +53,10 @@ export default function GuestHeader() {
         key={id}
         href={`#${id}`}
         onClick={() => handleClick(id)}
+        style={{ fontFamily: 'DVN-Righteous, system-ui, sans-serif' }}
         className={`
           relative inline-block
-          text-sm font-black
+          text-lg font-black
           transition-all duration-200
           group
           ${isActive ? "text-red-600" : "text-black hover:text-red-600"}
@@ -92,7 +93,7 @@ export default function GuestHeader() {
           <img src={xtnLogo} className="h-9" />
         </div>
 
-        <nav className="flex gap-16">
+        <nav className="flex gap-16 text-lg">
           {navItem("info", "Thông tin")}
           {navItem("teams", "Đội hình")}
           {navItem("activities", "Hoạt động")}

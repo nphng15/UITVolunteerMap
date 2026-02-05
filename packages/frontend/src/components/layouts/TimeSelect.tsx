@@ -5,7 +5,7 @@ const TimeSelect = () => {
   const years = ['2024', '2025', '2026', '2027'];
 
   return (
-    <div className="absolute top-10 left-10 flex items-center font-sans">
+    <div className="absolute top-10 left-10 flex items-center z-20">
       {/* Container chính */}
       <div className="flex h-12 w-36 items-stretch bg-[#FFF9E5] border-[3px] border-[#660000] rounded-2xl overflow-hidden shadow-md">
         
@@ -22,7 +22,7 @@ const TimeSelect = () => {
             value={selectedYear}
             onChange={(e) => setSelectedYear(e.target.value)}
             className="appearance-none bg-transparent text-l font-bold text-black outline-none pr-5 cursor-pointer tracking-tight"
-            style={{ fontFamily: 'system-ui, sans-serif' }}
+            style={{ fontFamily: 'DVN-Righteous, system-ui, sans-serif' }}
           >
             {years.map((year) => (
               <option key={year} value={year}>

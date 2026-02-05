@@ -30,7 +30,7 @@ export default function CampaignPage() {
         alt="background top"
         className="absolute top-0 left-0 w-full z-15 pointer-events-none"
       />
-      <section className="max-w-4xl mx-auto px-4">
+      <section id="logoTop" className="max-w-4xl mx-auto px-4">
           <div className="flex justify-center gap-8">
             <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
             <img src={xtnLogo} className="h-20 object-contain" alt="XTN Logo" />
@@ -42,7 +42,7 @@ export default function CampaignPage() {
       )}
       <main className="flex-1">
 
-        <section className="max-w-6xl mx-auto px-4">
+        <section id="mapSection" className="max-w-6xl mx-auto px-4">
           <div className="p-3 rounded-md flex">
             <div
               className="relative flex items-center justify-center"
