@@ -78,12 +78,15 @@ const TeamItem = ({ team }: TeamItemProps) => {
         <h3 className="text-[3.5rem] font-black text-red-700 mb-2 leading-none">
           {team.name}
         </h3>
-        <div className="flex gap-10 text-2xl font-bold text-black mb-6">
+        <div className="flex gap-10 text-2xl text-black mb-6">
           <span>
-            <strong>Đội trưởng:</strong> {team.leader}
+            <span className="font-bold">Đội trưởng:</span>{" "}
+            <span className="font-normal">{team.leader}</span>
           </span>
+
           <span>
-            <strong>Đội phó:</strong> {team.vice}
+            <span className="font-bold">Đội phó:</span>{" "}
+            <span className="font-normal">{team.vice}</span>
           </span>
         </div>
         <div className="flex gap-10 items-center">

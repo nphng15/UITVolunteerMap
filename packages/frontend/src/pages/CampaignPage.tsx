@@ -125,20 +125,24 @@ export default function CampaignPage() {
             HOẠT ĐỘNG
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-            {Array.from({ length: 3 }).map((_, i) => (
+            {Array.from({ length: 0 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-linear-to-b from-[#FFE066] to-[#FFD43B] rounded-3xl p-6 shadow-xl"
+                className="rounded-3xl p-6 shadow-xl
+                            bg-gradient-to-b
+                            from-[#F7CC1D]
+                            via-[#FCF2DA]
+                            to-[#F7CC1D]"
               >
-                <h3 className="font-black text-xl text-black mb-4 uppercase">
+                <h3 className="font-black text-xl text-black mb-4">
                   Tên hoạt động
                 </h3>
-                <div className="bg-[#E6E6E6] rounded-2xl aspect-4/3 flex items-center justify-center mb-4">
+                <div className="bg-[#DDE1E6] rounded-2xl aspect-[4/3] mb-4 flex items-center justify-center">
                   <div className="w-16 h-16 border-4 border-white rotate-45 opacity-40" />
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-red-600 text-2xl">❤</span>
-                  <div className="flex-1 h-0.75 bg-black/60 rounded-full" />
+                  <span className="text-red-600 text-xl">❤</span>
+                  <div className="flex-1 h-1 bg-black/50 rounded-full" />
                 </div>
               </div>
             ))}
