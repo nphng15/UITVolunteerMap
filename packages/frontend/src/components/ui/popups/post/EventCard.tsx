@@ -50,7 +50,7 @@ const EventCard: React.FC<EventCardProps> = ({ visible, data }) => {
   return (
     <div 
       ref={cardRef}
-      className="fixed z-[9999] w-72 overflow-hidden rounded-[30px] shadow-2xl bg-[#FFF5DE] border-2 border-[#660000]/10 pointer-events-none transition-transform duration-75 ease-out"
+      className="fixed z-9999 w-72 overflow-hidden rounded-[30px] shadow-2xl bg-[#FFF5DE] border-2 border-[#660000]/10 pointer-events-none transition-transform duration-75 ease-out"
       style={{ 
         left: `${mousePos.x}px`, 
         top: `${mousePos.y}px`,
