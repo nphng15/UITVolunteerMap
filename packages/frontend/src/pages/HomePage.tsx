@@ -36,13 +36,15 @@ export default function HomePage() {
       <PublicHeader />
 
       <main className="flex-1">
-        <section className="max-w-6xl mx-auto px-4 pt-4">
+        <section className="w-full px-4 pt-4">
           <div className="relative rounded-2xl overflow-hidden group">
+            <div className="relative w-full aspect-[21/9]">
             <img
               src={images[1]}
               alt="Banner"
-              className="w-full h-80 object-cover"
+              className="w-full h-full object-cover object-top"
             />
+            </div>
 
             <button
               onClick={prevSlide}

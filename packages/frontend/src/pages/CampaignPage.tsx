@@ -82,9 +82,8 @@ export default function CampaignPage() {
         </section>
 
        <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
-        {/* Sticky title */}
-        <div className="sticky top-20 z-20 bg-white">
-          <h2 className="text-center font-black text-6xl text-black py-6">
+        <div className="sticky top-20 z-20 pointer-events-none">
+          <h2 className="text-center font-black text-6xl text-black">
             ĐỘI HÌNH
           </h2>
         </div>
@@ -94,22 +93,30 @@ export default function CampaignPage() {
 
         {/* Teams list */}
         <div className="relative z-2 mt-32">
-          {mockTeams.map((team, index) => (
-            <div
-              key={`${team.slug}-${index}`}
-              className="min-h-screen flex items-center justify-center"
-            >
+          {mockTeams.map((team, index) => {
+            const isFirst = index === 0;
+
+            return (
               <div
+                key={`${team.slug}-${index}`}
                 className={
-                  index % 2 === 0
-                    ? "scroll-appear timeline-item"
-                    : "scroll-appear scroll-appear-right timeline-item"
+                  isFirst
+                    ? "flex justify-start"
+                    : "min-h-screen flex items-center justify-center"
                 }
               >
-                <TeamItem team={team} />
+                <div
+                  className={
+                    index % 2 === 0
+                      ? "scroll-appear timeline-item"
+                      : "scroll-appear scroll-appear-right timeline-item"
+                  }
+                >
+                  <TeamItem team={team} />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
