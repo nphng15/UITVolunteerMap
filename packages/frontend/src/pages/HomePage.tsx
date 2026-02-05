@@ -36,13 +36,13 @@ export default function HomePage() {
       <PublicHeader />
 
       <main className="flex-1">
-        <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] pt-4">
+        <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
           <div className="relative w-full overflow-hidden group">
-            <div className="relative w-full aspect-[21/9]">
+            <div className="relative w-full aspect-[24/9]">
             <img
               src={images[1]}
               alt="Banner"
-              className="w-full h-full object-cover object-top"
+              className="w-full h-full object-cover object-center"
             />
             </div>
 
@@ -111,7 +111,7 @@ export default function HomePage() {
               <img src={mhx} className="w-40 h-40 object-contain" />
             </div>
 
-            <div className="flex flex-col items-center gap-6">
+            <div className="relative group flex flex-col items-center gap-6">
                 <Link to="/campaign/xtn">
                   <img
                     src={xtn}
