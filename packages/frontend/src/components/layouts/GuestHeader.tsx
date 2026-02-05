@@ -1,8 +1,7 @@
 import { Link } from "react-router";
 import { useEffect, useState, useRef } from "react";
 
-import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
-import xtnLogo from "@/assets/icons/xtn.png";
+import bndLogo from "@/assets/icons/bnd.png";
 
 const SECTIONS = ["info", "teams", "activities"] as const;
 type SectionId = (typeof SECTIONS)[number];
@@ -90,7 +89,6 @@ export default function GuestHeader() {
       <div className="max-w-6xl mx-auto h-16 px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img src={bndLogo} className="h-8" />
-          <img src={xtnLogo} className="h-9" />
         </div>
 
         <nav className="flex gap-16">

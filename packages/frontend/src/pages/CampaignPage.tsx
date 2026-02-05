@@ -7,10 +7,7 @@ import { mockTeams } from "@/mocks/team.mock";
 import TimeSelect from "@/components/layouts/TimeSelect";
 import EventCard from "@/components/ui/popups/post/EventCard";
 import TeamItem from "@/components/ui/TeamItem";
-
-import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
-import xtnLogo from "@/assets/icons/xtn.png";
-import infoImage from "@/assets/icons/image-container.png";
+import bndLogo from "@/assets/icons/bnd.png";
 
 export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
@@ -56,12 +53,11 @@ export default function CampaignPage() {
         <section className="max-w-4xl mx-auto mt-8 px-4">
           <div className="flex justify-center gap-8">
             <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
-            <img src={xtnLogo} className="h-20 object-contain" alt="XTN Logo" />
           </div>
         </section>
 
         <section id="info" className="max-w-6xl mx-auto mt-16 px-6">
-          <h2 className="text-center font-black text-black mb-12 text-6xl">
+          <h2 className="text-center font-black text-black mb-12 text-5xl">
             THÔNG TIN CHUNG
           </h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -73,7 +69,7 @@ export default function CampaignPage() {
               hoàn cảnh, địa phương còn khó khăn.
             </p>
             <img
-              src={infoImage}
+              src="https://res.cloudinary.com/duallvqjh/image/upload/v1770284139/XTN_info_nce2w5.jpg"
               className="rounded-3xl shadow-xl w-full"
               alt="Volunteer"
             />
@@ -82,7 +78,7 @@ export default function CampaignPage() {
 
        <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
         <div className="mb-24">
-          <h2 className="text-center font-black text-6xl text-black">
+          <h2 className="text-center font-black text-5xl text-black">
             ĐỘI HÌNH
           </h2>
         </div>
