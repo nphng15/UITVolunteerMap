@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { TeamService } from "../service/teamService.js";
 import { validate } from "../middleware/validate.js";
-import { createTeamSchema } from "../schemas/team.js";
+import { createTeamSchema, updateTeamSchema } from "../schemas/team.js";
 import { authenticateToken, requireRole } from "../middleware/auth.js";
 import { HttpError } from "../errors/HttpError.js";
 import {
@@ -71,6 +71,43 @@ router.post(
       res.status(HTTP_STATUS.CREATED).json({
         success: true,
         message: TEAM_MESSAGES.CREATED,
+        data,
+      });
+    } catch (err: unknown) {
+      if (err instanceof HttpError) {
+        return res
+          .status(err.statusCode)
+          .json({ success: false, error: err.message });
+      }
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
+    }
+  },
+);
+
+// Update team (Admin: any team, Leader: own team only)
+router.put(
+  "/:id",
+  authenticateToken,
+  requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]),
+  validate(updateTeamSchema),
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          error: TEAM_ERRORS.INVALID_ID,
+        });
+      }
+      
+      // Pass currentUser (req.user) for permission checking in service
+      const data = await teamService.update(id, req.body, req.user!);
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: TEAM_MESSAGES.UPDATED,
         data,
       });
     } catch (err: unknown) {
