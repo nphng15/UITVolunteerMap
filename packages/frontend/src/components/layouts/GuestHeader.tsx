@@ -88,8 +88,8 @@ export default function GuestHeader() {
       "
     >
       <div className="max-w-6xl mx-auto h-16 px-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <img src={bndLogo} className="h-8" />
+        <div className="flex items-center">
+          <img src={bndLogo} className="h-9" />
           <img src={xtnLogo} className="h-9" />
         </div>
 

@@ -31,9 +31,9 @@ export default function CampaignPage() {
         className="absolute top-0 left-0 w-full z-15 pointer-events-none"
       />
       <section id="logoTop" className="max-w-4xl mx-auto px-4">
-          <div className="flex justify-center gap-8">
+          <div className="flex justify-center">
             <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
-            <img src={xtnLogo} className="h-20 object-contain" alt="XTN Logo" />
+            <img src={xtnLogo} className="h-16 object-contain" alt="XTN Logo" />
           </div>
       </section>
       {hoverData && <EventCard visible={true} data={null} />}
