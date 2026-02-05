@@ -36,8 +36,8 @@ export default function HomePage() {
       <PublicHeader />
 
       <main className="flex-1">
-        <section className="w-full px-4 pt-4">
-          <div className="relative rounded-2xl overflow-hidden group">
+        <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] pt-4">
+          <div className="relative w-full overflow-hidden group">
             <div className="relative w-full aspect-[21/9]">
             <img
               src={images[1]}
@@ -102,20 +102,20 @@ export default function HomePage() {
             </p>
           </div>
 
-          <h2 className="text-center mt-24 mb-14 text-3xl font-extrabold tracking-widest">
+          <h2 className="text-center mt-24 mb-20 text-3xl font-extrabold tracking-widest">
             CHIẾN DỊCH
           </h2>
 
-          <div className="grid grid-cols-3 gap-16 justify-items-center">
-            <div className="w-28 h-28 flex items-center justify-center">
-              <img src={mhx} className="w-24 h-24 object-contain" />
+          <div className="max-w-4xl mx-auto grid grid-cols-2 gap-24 place-items-center">
+            <div className="flex flex-col items-center gap-6">
+              <img src={mhx} className="w-40 h-40 object-contain" />
             </div>
 
-            <div className="relative group w-28 h-28 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-6">
                 <Link to="/campaign/xtn">
                   <img
                     src={xtn}
-                    className="w-24 h-24 object-contain cursor-pointer"
+                    className="w-40 h-40 object-contain cursor-pointer"
                     alt="Xuân Tình Nguyện"
                   />
                 </Link>
@@ -144,13 +144,6 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="w-28 h-28 bg-white/30 rounded-md"
-              />
-            ))}
           </div>
         </section>
       </main>

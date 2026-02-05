@@ -82,7 +82,7 @@ export default function CampaignPage() {
         </section>
 
        <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
-        <div className="sticky top-20 z-20 pointer-events-none">
+        <div className="mb-24">
           <h2 className="text-center font-black text-6xl text-black">
             ĐỘI HÌNH
           </h2>
