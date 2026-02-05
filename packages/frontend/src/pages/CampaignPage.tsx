@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Footer from "@/components/layouts/Footer";
 import MapView, { MarkerData } from "@/components/layouts/MapView";
 import Statistic from "@/components/layouts/Statistic";
 import GuestPostOverPlay from "@/components/ui/popups/post/GuestPostOverPlay";
@@ -62,7 +61,7 @@ export default function CampaignPage() {
         </section>
 
         <section id="info" className="max-w-6xl mx-auto mt-16 px-6">
-          <h2 className="text-center font-black text-black mb-12 text-5xl">
+          <h2 className="text-center font-black text-black mb-12 text-6xl">
             THÔNG TIN CHUNG
           </h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -149,7 +148,6 @@ export default function CampaignPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }
