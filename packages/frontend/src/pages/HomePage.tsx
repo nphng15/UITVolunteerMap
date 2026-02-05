@@ -32,65 +32,71 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0B4A6F]">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#4B9ED8] to-[#285372]">
       <PublicHeader />
 
       <main className="flex-1">
         <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]">
-          <div className="relative w-full overflow-hidden group">
-            <div className="relative w-full aspect-[24/9]">
-            <img
-              src={images[1]}
-              alt="Banner"
-              className="w-full h-full object-cover object-center"
-            />
-            </div>
+        <div className="relative w-full h-[980px] group overflow-hidden">
+          {/* Background image */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `url(${images[1]})`,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "-10.916px -0.322px",
+              backgroundSize: "101.087% 132%",
+              backgroundColor: "#d3d3d3",
+            }}
+          />
 
-            <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2
-                         bg-black/40 text-white w-9 h-9 rounded-full
-                         opacity-0 group-hover:opacity-100 transition"
-            >
-              ‹
-            </button>
+          {/* Prev button */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-6 top-1/2 -translate-y-1/2
+                      bg-black/40 text-white w-10 h-10 rounded-full
+                      opacity-0 group-hover:opacity-100 transition"
+          >
+            ‹
+          </button>
 
-            <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2
-                         bg-black/40 text-white w-9 h-9 rounded-full
-                         opacity-0 group-hover:opacity-100 transition"
-            >
-              ›
-            </button>
+          {/* Next button */}
+          <button
+            onClick={nextSlide}
+            className="absolute right-6 top-1/2 -translate-y-1/2
+                      bg-black/40 text-white w-10 h-10 rounded-full
+                      opacity-0 group-hover:opacity-100 transition"
+          >
+            ›
+          </button>
 
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
-              {images.map((img, index) => {
-                const isCenter = index === 1;
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handleThumbClick(index)}
-                    className={`relative transition-transform duration-300 ${
-                      isCenter ? "scale-110" : "scale-95"
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt="thumb"
-                      className="w-32 h-14 object-cover rounded-sm"
-                    />
-                    {!isCenter && (
-                      <div className="absolute inset-0 bg-black/50 rounded-sm" />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+          {/* Thumbnails */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4">
+            {images.map((img, index) => {
+              const isCenter = index === 1;
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleThumbClick(index)}
+                  className={`relative transition-transform duration-300 ${
+                    isCenter ? "scale-110" : "scale-95"
+                  }`}
+                >
+                  <img
+                    src={img}
+                    className="w-36 h-16 object-cover rounded-md"
+                  />
+                  {!isCenter && (
+                    <div className="absolute inset-0 bg-black/50 rounded-md" />
+                  )}
+                </button>
+              );
+            })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="bg-gradient-to-b from-[#0B4A6F] to-[#0E5F8C] text-white py-20">
+        <section className="text-white py-24">
           <div className="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-10">
             <img src="/Homepage_Logo.svg" className="w-56" />
             <p className="font-semibold text-base leading-relaxed">
