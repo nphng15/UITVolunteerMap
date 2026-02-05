@@ -113,10 +113,6 @@ export default function HomePage() {
           </h2>
 
           <div className="max-w-4xl mx-auto grid grid-cols-2 gap-24 place-items-center">
-            <div className="flex flex-col items-center gap-6">
-              <img src={mhx} className="w-40 h-40 object-contain" />
-            </div>
-
             <div className="relative group flex flex-col items-center gap-6">
               <Link to="/campaign/xtn">
                 <img
@@ -146,6 +142,10 @@ export default function HomePage() {
                 ))}
               </div>
             </div>
+                
+            <div className="flex flex-col items-center gap-6" title="Chiến dịch chưa diễn ra">
+              <img src={mhx} className="w-40 h-40 object-contain grayscale" />
+            </div>            
           </div>
         </section>
       </main>

@@ -10,7 +10,6 @@ import TeamItem from "@/components/ui/TeamItem";
 
 import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
 import xtnLogo from "@/assets/icons/xtn.png";
-import infoImage from "@/assets/icons/image-container.png";
 import bgTop from "@/assets/background/background_top-01.svg";
 
 

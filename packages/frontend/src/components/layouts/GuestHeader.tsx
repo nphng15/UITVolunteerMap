@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import { useEffect, useState, useRef } from "react";
-
 import bndLogo from "@/assets/icons/bnd.png";
 
 const SECTIONS = ["info", "teams", "activities"] as const;
@@ -24,7 +23,7 @@ export default function GuestHeader() {
       {
         rootMargin: "-90px 0px -50% 0px",
         threshold: 0,
-      }
+      },
     );
 
     SECTIONS.forEach((id) => {
@@ -35,13 +34,29 @@ export default function GuestHeader() {
     return () => observer.disconnect();
   }, []);
 
-  const handleClick = (id: SectionId) => {
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    id: SectionId,
+  ) => {
+    e.preventDefault();
     isClickingRef.current = true;
     setActive(id);
 
+    const element = document.getElementById(id);
+    if (element) {
+      const headerOffset = 80;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+
     setTimeout(() => {
       isClickingRef.current = false;
-    }, 400);
+    }, 800);
   };
 
   const navItem = (id: SectionId, label: string) => {
@@ -51,14 +66,13 @@ export default function GuestHeader() {
       <a
         key={id}
         href={`#${id}`}
-        onClick={() => handleClick(id)}
-        style={{ fontFamily: 'DVN-Righteous, system-ui, sans-serif' }}
+        onClick={(e) => handleClick(e, id)}
         className={`
-          relative inline-block
+          relative inline-block font-heading
           text-lg font-black
           transition-all duration-200
           group
-          ${isActive ? "text-red-600" : "text-black hover:text-red-600"}
+          ${isActive ? "text-red-600" : "text-black hover:text-red-500"}
         `}
       >
         {label}
@@ -70,7 +84,11 @@ export default function GuestHeader() {
             bg-red-600
             origin-left
             transition-transform duration-200
-            ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}
+            ${
+              isActive
+                ? "scale-x-100"
+                : "scale-x-0 group-hover:scale-x-100 hover:text-red-500"
+            }
           `}
         />
       </a>

@@ -31,9 +31,6 @@ export default function PublicHeader() {
             alt="UITVolunteer"
             className="h-7 w-auto drop-shadow-sm"
           />
-          <span className="font-extrabold text-white tracking-wide">
-            UITVolunteer
-          </span>
         </div>
 
         <Link
