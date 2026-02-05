@@ -23,11 +23,18 @@ export default function CampaignPage() {
 
   return (
     <div>
+      <section className="max-w-4xl mx-auto mt-8 px-4">
+          <div className="flex justify-center gap-8">
+            <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
+            <img src={xtnLogo} className="h-20 object-contain" alt="XTN Logo" />
+          </div>
+      </section>
       {hoverData && <EventCard visible={true} data={null} />}
       {selectedEvent && (
         <GuestPostOverPlay post={mockPost} onClose={handleClose} />
       )}
       <main className="flex-1 pt-20">
+
         <section className="max-w-4xl mx-auto px-4">
           <div className="p-3 rounded-md flex">
             <div
@@ -52,13 +59,6 @@ export default function CampaignPage() {
             <Statistic />
           </div>
           <TimeSelect />
-        </section>
-
-        <section className="max-w-4xl mx-auto mt-8 px-4">
-          <div className="flex justify-center gap-8">
-            <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
-            <img src={xtnLogo} className="h-20 object-contain" alt="XTN Logo" />
-          </div>
         </section>
 
         <section id="info" className="max-w-6xl mx-auto mt-16 px-6">
