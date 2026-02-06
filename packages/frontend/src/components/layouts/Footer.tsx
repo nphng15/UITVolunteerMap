@@ -45,7 +45,7 @@ export default function Footer() {
             Liên kết nhanh
           </h3>
 
-          <div className="flex flex-col space-y-6">
+          <div className="flex flex-col space-y-8">
             <Link to="/" className="text-sm text-white/80 hover:text-white">
               UIT Volunteer
             </Link>
@@ -63,7 +63,7 @@ export default function Footer() {
           </div>
         </div>
           <div className="flex flex-col">
-          <h3 className="font-semibold text-base mb-6">
+          <h3 className="font-semibold text-base mb-8">
             Liên hệ
           </h3>
 
