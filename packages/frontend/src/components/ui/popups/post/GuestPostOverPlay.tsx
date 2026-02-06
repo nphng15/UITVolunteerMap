@@ -37,7 +37,7 @@ export default function GuestPostOverPlay( { post, onClose }: GuestPostOverlayPr
     setCurrent((current - 1 + images.length) % images.length);
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 text-black" onClick={onClose}>
+    <div className="fixed top-15 inset-0 bg-black/60 flex items-center justify-center z-9999 text-black" onClick={onClose}>
         <div className="w-[1000px] h-[650px] bg-white rounded-lg overflow-hidden flex" onClick={(e) => e.stopPropagation()}>
 
             {/* LEFT - IMAGE SLIDER */}

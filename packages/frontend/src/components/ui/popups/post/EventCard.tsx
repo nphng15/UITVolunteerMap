@@ -50,7 +50,7 @@ const EventCard: React.FC<EventCardProps> = ({ visible, data }) => {
   return (
     <div 
       ref={cardRef}
-      className="fixed z-[9999] w-72 overflow-hidden rounded-[30px] shadow-2xl bg-[#FFF5DE] border-2 border-[#660000]/10 pointer-events-none transition-transform duration-75 ease-out"
+      className="fixed z-9999 w-72 overflow-hidden rounded-[30px] shadow-2xl bg-[#FFF5DE] border-2 border-[#660000]/10 pointer-events-none transition-transform duration-75 ease-out"
       style={{ 
         left: `${mousePos.x}px`, 
         top: `${mousePos.y}px`,
@@ -79,10 +79,6 @@ const EventCard: React.FC<EventCardProps> = ({ visible, data }) => {
         <p className="text-gray-700 text-[12px] leading-relaxed mb-4 line-clamp-3 italic">
           "{displayData.description}"
         </p>
-
-        <button className="bg-[#ED7A2D] hover:bg-[#d66a24] text-white font-bold py-2 px-8 rounded-full text-[11px] shadow-lg transition-colors uppercase">
-          Xem chi tiết
-        </button>
       </div>
 
       {/* Trang trí góc (Optional - cho giống style skeuomorphic) */}
