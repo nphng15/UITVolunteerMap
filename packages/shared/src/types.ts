@@ -86,16 +86,18 @@ export interface Post {
   postId: number;
   title: string;
   content: string;
+  photos?: string[];
   isDeleted: number;
+  teamId: number;
+  location: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface Photo {
   photoId: number;
   title?: string | null;
   imageUrl: string;
-  uploadedAt: string;
 }
 
 export interface VolunteerLocation {

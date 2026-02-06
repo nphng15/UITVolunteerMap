@@ -1,54 +1,43 @@
 import { useState, useEffect } from "react";
-import ShareIcon from "@/components/ui/icon/ShareIcon";
-import ArrowLeft from "@/components/ui/icon/ArrowLeft";
-import ArrowRight from "@/components/ui/icon/ArrowRight";
-
-// types/post.ts (hoặc ngay trong file)
-export interface Post {
-  id: number | string;
-  title: string;
-  caption: string;
-  images: string[];
-  createdAt: string;
-  location?: string;
-}
-
-
+import LinkIcon from "@heroicons/react/24/outline/LinkIcon";
+import ArrowLeft from "@heroicons/react/24/outline/ArrowLeftIcon";
+import ArrowRight from "@heroicons/react/24/outline/ArrowRightIcon";
+import type { Post } from "@uit-volunteer-map/shared";
 interface GuestPostOverlayProps {
   post: Post | null;
   onClose?: () => void;
 }
 
 export default function GuestPostOverPlay( { post, onClose }: GuestPostOverlayProps) {
-  const { title, caption, images = [], createdAt, location } = post || {};
+  const { title, content, photos = [], createdAt, location } = post || {};
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     // Reset slider khi mở post mới
     setCurrent(0);
-  }, [post?.id]);
+  }, [post?.postId]);
 
   if (!post) return null;
 
   const next = () =>
-    setCurrent((current + 1) % images.length);
+    setCurrent((current + 1) % photos.length);
 
   const prev = () =>
-    setCurrent((current - 1 + images.length) % images.length);
+    setCurrent((current - 1 + photos.length) % photos.length);
 
   return (
     <div className="fixed top-15 inset-0 bg-black/60 flex items-center justify-center z-9999 text-black" onClick={onClose}>
-        <div className="w-[1000px] h-[650px] bg-white rounded-lg overflow-hidden flex" onClick={(e) => e.stopPropagation()}>
+        <div className="w-250 h-162.5 bg-white rounded-lg overflow-hidden flex" onClick={(e) => e.stopPropagation()}>
 
             {/* LEFT - IMAGE SLIDER */}
             <div className="relative w-[50%] bg-black flex items-center justify-center">
-            {images.length > 0 && (
+            {photos.length > 0 && (
                 <img
-                src={images[current]}
+                src={photos[current]}
                 alt=""
                 className="w-full h-full object-cover"
             />)}
-            {images.length > 1 && (
+            {photos.length > 1 && (
             <>
             {/* Prev */}
             <button
@@ -66,7 +55,7 @@ export default function GuestPostOverPlay( { post, onClose }: GuestPostOverlayPr
                     transition
                 "
                 >
-                <ArrowLeft />
+                <ArrowLeft className="w-6 h-6"/>
             </button>
 
             {/* Next */}
@@ -85,11 +74,11 @@ export default function GuestPostOverPlay( { post, onClose }: GuestPostOverlayPr
                     transition
                 "
                 >
-                <ArrowRight />
+                <ArrowRight className="w-6 h-6"/>
             </button>
             {/* Dots */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {images.map((_: string, index: number) => (
+                {photos.map((_: string, index: number) => (
                   <button
                     key={index}
                     onClick={() => setCurrent(index)}
@@ -105,24 +94,24 @@ export default function GuestPostOverPlay( { post, onClose }: GuestPostOverlayPr
 
             {/* Header */}
             <div className="flex items-center gap-3 p-2 mt-10 mx-5">
-                <span className="font-semibold text-3xl">{title}</span>
+                <span className="text-3xl font-heading">{title}</span>
             </div>
 
             {/* Caption */}
-            <div className="flex-1 p-2 overflow-y-auto text-sm mx-5">
-              {caption}
+            <div className="flex-1 p-2 whitespace-pre-line overflow-y-auto text-sm mx-5 font-body">
+              {content}
             </div>
 
             {/* Footer */}
             <div className="p-2 text-sm text-gray-500 mx-5">
                 {/* Actions */}
                 <div className="flex items-center gap-4 mb-3">
-                    {/* Share icon */}
+                    {/* Copy Link icon */}
                     <button
                     title="Share"
                     className="flex items-center hover:text-blue-500 transition"
                     >
-                        <ShareIcon size={22} color="#262626" />
+                        <LinkIcon className="w-6 h-6" />
                     </button>
                     {createdAt && <span className="leading-none">{new Date(createdAt).toLocaleDateString("vi-VN")}</span>}
                     {location && <span className="leading-none">{location}</span>}
