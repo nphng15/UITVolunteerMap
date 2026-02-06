@@ -19,17 +19,16 @@ export default function Footer() {
                 className="h-12 w-auto"
               />
             </Link>
-
             <p
               className="
                 text-white
                 text-justify
                 font-googleSans
-                text-[24px]
+                text-[16px]
                 font-medium
-                leading-[1.3]
-                w-[544px]
-                max-w-[544px]
+                leading-[1.5]
+                w-[420px]
+                max-w-full
                 break-words
               "
             >
