@@ -37,6 +37,11 @@ const resetLabel = (marker: L.Marker) => {
   el.classList.remove("label-highlight");
 };
 
+const mapBounds = L.latLngBounds(
+  [2, 95],
+  [30, 120]
+);
+
 const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
   const mapRef = useRef<L.Map | null>(null);
 
@@ -46,6 +51,9 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
     // ===============================
     // 1. Init Map
     // ===============================
+    
+    
+
     const map = L.map("map", {
       minZoom: 4,
       maxZoom: 14,
@@ -56,6 +64,7 @@ const MapView: React.FC<MapViewProps> = ({ onMarkerClick, onMarkerHover }) => {
       touchZoom: true,
       boxZoom: true,
       keyboard: true,
+      maxBounds: mapBounds,
 
       dragging: true,
       zoomControl: true,
