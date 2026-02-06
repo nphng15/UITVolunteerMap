@@ -40,12 +40,12 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col md:ml-8">
           <h3 className="font-semibold text-base mb-6">
             Liên kết nhanh
           </h3>
 
-          <div className="flex flex-col space-y-12">
+          <div className="flex flex-col space-y-14">
             <Link to="/" className="text-sm text-white/80 hover:text-white">
               UIT Volunteer
             </Link>
@@ -67,7 +67,7 @@ export default function Footer() {
             Liên hệ
           </h3>
 
-          <div className="flex flex-col space-y-12">
+          <div className="flex flex-col space-y-14">
             <div className="flex items-start gap-3 text-sm text-white/80">
               <img src={locationIcon} className="w-4 h-4 mt-0.5" />
               <span>Khu phố 34, Phường Linh Xuân, TP.HCM</span>
