@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white">
       <div className="max-w-6xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-24 gap-y-10 items-start">
           <div className="flex flex-col gap-4">
             <Link to="/">
               <img
@@ -41,7 +41,7 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col md:ml-8">
-          <h3 className="font-semibold text-base mb-6">
+          <h3 className="font-semibold text-lg mb-14">
             Liên kết nhanh
           </h3>
 
@@ -63,7 +63,7 @@ export default function Footer() {
           </div>
         </div>
           <div className="flex flex-col">
-          <h3 className="font-semibold text-base mb-8">
+          <h3 className="font-semibold text-lg mb-14">
             Liên hệ
           </h3>
 
