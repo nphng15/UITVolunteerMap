@@ -20,7 +20,7 @@ export default function Footer() {
               />
             </Link>
 
-            <p className="text-sm text-white/80 leading-relaxed">
+           <p className="text-sm text-white/80 leading-relaxed max-w-sm text-left">
               UIT Volunteer là một trang web tổng hợp các chiến dịch tình nguyện
               tại Trường Đại học Công Nghệ Thông Tin – ĐHQG TP.HCM. Đây không
               những là nơi các bạn sinh viên nhìn lại chặng đường đã qua, mà còn
@@ -45,8 +45,8 @@ export default function Footer() {
               Xuân Tình Nguyện
             </Link>
 
-            <span className="text-sm text-white/40 cursor-not-allowed">
-              Mùa Hè Xanh (sắp mở)
+            <span className="text-sm text-white/80">
+              Mùa Hè Xanh
             </span>
           </div>
           <div className="flex flex-col gap-4">
@@ -69,15 +69,15 @@ export default function Footer() {
               />
               <span>hsvdhcntt@hoisinhvientphcm.com</span>
             </div>
-
-            <div className="flex items-center gap-2 text-sm text-white/80">
-              <img
-                src={fbIcon}
-                alt="Facebook"
-                className="w-4 h-4"
-              />
+            <a
+              href="https://www.facebook.com/tuoitre.uit"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm text-white/80 hover:text-white"
+            >
+              <img src={fbIcon} className="w-4 h-4" />
               <span>facebook.com/tuoitre.uit</span>
-            </div>
+            </a>
           </div>
         </div>
         <div className="border-t border-white/20 my-6" />
