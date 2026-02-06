@@ -20,11 +20,24 @@ export default function Footer() {
               />
             </Link>
 
-           <p className="text-sm text-white/80 leading-relaxed max-w-sm text-left">
+            <p
+              className="
+                text-white
+                text-justify
+                font-googleSans
+                text-[24px]
+                font-medium
+                leading-[1.3]
+                w-[544px]
+                max-w-[544px]
+                break-words
+              "
+            >
               UIT Volunteer là một trang web tổng hợp các chiến dịch tình nguyện
               tại Trường Đại học Công Nghệ Thông Tin – ĐHQG TP.HCM. Đây không
-              những là nơi các bạn sinh viên nhìn lại chặng đường đã qua, mà còn
-              là một nguồn lan tỏa nét đẹp tình nguyện UIT với mọi người.
+              những là nơi các bạn chiến sĩ tình nguyện nhìn lại chặng đường đã
+              qua, mà còn là một nguồn lan tỏa nét đẹp tình nguyện UIT với mọi
+              người.
             </p>
           </div>
 
