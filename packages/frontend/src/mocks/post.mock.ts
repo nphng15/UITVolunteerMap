@@ -9,7 +9,7 @@ export const mockPost: Post = {
     "https://picsum.photos/id/1016/800/800",
     "https://picsum.photos/id/1018/800/800",
   ],
-  teamId: 1,
+  teamName: "Vị Xuân",
   isDeleted: 0,
   createdAt: "2026-01-20T10:00:00Z",
   location: "Hà Nội",

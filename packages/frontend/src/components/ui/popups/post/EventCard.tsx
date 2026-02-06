@@ -12,7 +12,7 @@ const NO_DATA: Post = {
   title: "Không tìm thấy sự kiện",
   content: "",
   photos: [],
-  teamId: 0,
+  teamName: "",
   isDeleted: 0,
   createdAt: new Date().toISOString(),
   location: "",

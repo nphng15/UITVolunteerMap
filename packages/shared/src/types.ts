@@ -88,7 +88,7 @@ export interface Post {
   content: string;
   photos?: string[];
   isDeleted: number;
-  teamId: number;
+  teamName: string;
   location: string;
   createdAt: string;
   updatedAt?: string;
