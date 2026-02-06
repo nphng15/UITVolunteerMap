@@ -1,5 +1,6 @@
 import { useRef, useState, useCallback } from "react";
 import { cloudinaryApi, type UploadProgress } from "@/api";
+import uploadFileLogo from "@/assets/icons/upload_file_logo.svg"; 
 
 interface ImageItem {
   id: string;
@@ -188,7 +189,7 @@ export default function PostCreatePopup({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            <div className="text-4xl">📷</div>
+            <img src={uploadFileLogo} className="w-16 h-16" />
             <div className="text-gray-300 text-sm">
               {isDragging ? "Thả tệp vào đây" : "Kéo thả tệp vào đây"}
             </div>

@@ -35,6 +35,9 @@ export class User {
   @Column("text", { name : "avatarUrl", nullable: true })
   avatarUrl?: string | null;
 
+  @Column("integer", { name: "isDeleted", nullable: false, default: 0 })
+  isDeleted!: number;
+
   @ManyToOne("Team", "users")
   @JoinColumn({ name: "TeamId" })
   team!: Relation<Team>;
