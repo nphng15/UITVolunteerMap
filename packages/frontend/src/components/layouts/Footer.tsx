@@ -45,7 +45,7 @@ export default function Footer() {
             Liên kết nhanh
           </h3>
 
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-6">
             <Link to="/" className="text-sm text-white/80 hover:text-white">
               UIT Volunteer
             </Link>
@@ -67,8 +67,8 @@ export default function Footer() {
             Liên hệ
           </h3>
 
-          <div className="flex flex-col space-y-4">
-            <div className="flex items-start gap-2 text-sm text-white/80">
+          <div className="flex flex-col space-y-6">
+            <div className="flex items-start gap-3 text-sm text-white/80">
               <img src={locationIcon} className="w-4 h-4 mt-0.5" />
               <span>Khu phố 34, Phường Linh Xuân, TP.HCM</span>
             </div>
