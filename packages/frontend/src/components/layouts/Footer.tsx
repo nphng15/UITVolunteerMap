@@ -40,19 +40,19 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <h3 className="font-semibold text-base">Liên kết nhanh</h3>
+          <div className="flex flex-col">
+          <h3 className="font-semibold text-base mb-6">
+            Liên kết nhanh
+          </h3>
 
-            <Link
-              to="/"
-              className="text-sm text-white/80 hover:text-white transition"
-            >
+          <div className="flex flex-col space-y-4">
+            <Link to="/" className="text-sm text-white/80 hover:text-white">
               UIT Volunteer
             </Link>
 
             <Link
               to="/campaign/xuan-tinh-nguyen"
-              className="text-sm text-white/80 hover:text-white transition"
+              className="text-sm text-white/80 hover:text-white"
             >
               Xuân Tình Nguyện
             </Link>
@@ -61,26 +61,23 @@ export default function Footer() {
               Mùa Hè Xanh
             </span>
           </div>
-          <div className="flex flex-col gap-4">
-            <h3 className="font-semibold text-base">Liên hệ</h3>
+        </div>
+          <div className="flex flex-col">
+          <h3 className="font-semibold text-base mb-6">
+            Liên hệ
+          </h3>
 
+          <div className="flex flex-col space-y-4">
             <div className="flex items-start gap-2 text-sm text-white/80">
-              <img
-                src={locationIcon}
-                alt="Location"
-                className="w-4 h-4 mt-0.5"
-              />
+              <img src={locationIcon} className="w-4 h-4 mt-0.5" />
               <span>Khu phố 34, Phường Linh Xuân, TP.HCM</span>
             </div>
 
             <div className="flex items-center gap-2 text-sm text-white/80">
-              <img
-                src={mailIcon}
-                alt="Email"
-                className="w-4 h-4"
-              />
+              <img src={mailIcon} className="w-4 h-4" />
               <span>hsvdhcntt@hoisinhvientphcm.com</span>
             </div>
+
             <a
               href="https://www.facebook.com/tuoitre.uit"
               target="_blank"
@@ -91,6 +88,7 @@ export default function Footer() {
               <span>facebook.com/tuoitre.uit</span>
             </a>
           </div>
+        </div>
         </div>
         <div className="border-t border-white/20 my-6" />
         <div className="flex items-center justify-between">
