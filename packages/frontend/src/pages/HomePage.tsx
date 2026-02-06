@@ -131,7 +131,7 @@ export default function HomePage() {
           </div>
 
           <h2 className="text-center mt-24 mb-20 text-5xl font-extrabold tracking-widest">
-            Chiến Dịch
+            CHIẾN DỊCH
           </h2>
 
           <div className="max-w-4xl mx-auto grid grid-cols-2 gap-24 place-items-center">
