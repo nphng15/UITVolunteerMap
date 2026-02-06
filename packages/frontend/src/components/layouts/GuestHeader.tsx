@@ -69,7 +69,7 @@ export default function GuestHeader() {
         onClick={(e) => handleClick(e, id)}
         className={`
           relative inline-block font-heading
-          text-lg font-black
+          text-lg
           transition-all duration-200
           group
           ${isActive ? "text-red-600" : "text-black hover:text-red-500"}
