@@ -1,4 +1,3 @@
-import { Post } from '@uit-volunteer-map/shared';
 import React, { useState, useEffect, useRef } from 'react';
 
 interface EventCardProps {

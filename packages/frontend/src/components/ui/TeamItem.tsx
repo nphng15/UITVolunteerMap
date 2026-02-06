@@ -1,14 +1,7 @@
 import { Link } from "react-router";
 import { useEffect, useRef, useState } from "react";
 import banhChungPin from "@/assets/icons/Formation-pin-slider.png";
-
-export interface TeamData {
-  id: string;
-  name: string;
-  leader: string;
-  vice: string;
-  image: string;
-}
+import { TeamData } from "@/mocks/team.mock";
 
 interface TeamItemProps {
   team: TeamData;
@@ -76,32 +69,32 @@ const TeamItem = ({ team }: TeamItemProps) => {
       {/* Content */}
       <div className="grow pt-2">
         <h3 className="text-[3.5rem] font-black text-red-700 mb-2 leading-none">
-          {team.name}
+          {team.teamName}
         </h3>
         <div className="flex gap-10 text-2xl text-black mb-6">
           <span>
             <span className="font-bold">Đội trưởng:</span>{" "}
-            <span className="font-normal">{team.leader}</span>
+            <span className="font-normal">{team.leader.name}</span>
           </span>
 
           <span>
             <span className="font-bold">Đội phó:</span>{" "}
-            <span className="font-normal">{team.vice}</span>
+            <span className="font-normal">{team.vice[0].name}</span>
           </span>
         </div>
         <div className="flex gap-10 items-center">
           {/* Image */}
           <div className="flex-7 rounded-[35px] overflow-hidden shadow-2xl group">
             <img
-              src={team.image}
-              alt={team.name}
+              src={team.images[0]}
+              alt={team.teamName}
               className="w-full block transition-transform duration-500 group-hover:scale-[1.08]"
             />
           </div>
           {/* Button */}
           <div className="flex-3">
             <Link
-              to={`team/${team.id}`}
+              to={`team/${team.teamId}`}
               className="inline-block bg-red-700 text-white text-2xl font-extrabold py-5 px-16 rounded-full shadow-[0_15px_35px_rgba(185,28,28,0.4)] transition-all duration-300 hover:bg-rose-600 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(185,28,28,0.5)] whitespace-nowrap"
             >
               Xem thêm
