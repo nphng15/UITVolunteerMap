@@ -10,26 +10,21 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white">
       <div className="max-w-6xl mx-auto px-6 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-24 gap-y-10 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[50%_1fr_1fr] md:gap-x-8 gap-y-10 items-start">
           <div className="flex flex-col gap-4">
             <Link to="/">
-              <img
-                src={uitLogo}
-                alt="UITVolunteer"
-                className="h-12 w-auto"
-              />
+              <img src={uitLogo} alt="UITVolunteer" className="h-12 w-auto" />
             </Link>
             <p
               className="
                 text-white
                 text-justify
-                font-googleSans
+                font-body
                 text-[16px]
-                font-medium
-                leading-[1.5]
-                w-[420px]
+                font-light
+                leading-normal
                 max-w-full
-                break-words
+                wrap-break-word
               "
             >
               UIT Volunteer là một trang web tổng hợp các chiến dịch tình nguyện
@@ -41,54 +36,48 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col md:ml-8">
-          <h3 className="font-semibold text-lg mb-14">
-            Liên kết nhanh
-          </h3>
+            <h3 className="font-semibold text-lg mb-8">Liên kết nhanh</h3>
 
-          <div className="flex flex-col space-y-14">
-            <Link to="/" className="text-sm text-white/80 hover:text-white">
-              UIT Volunteer
-            </Link>
+            <div className="flex flex-col space-y-6">
+              <Link to="/" className="text-sm text-white/80 hover:text-white">
+                UIT Volunteer
+              </Link>
 
-            <Link
-              to="/campaign/xuan-tinh-nguyen"
-              className="text-sm text-white/80 hover:text-white"
-            >
-              Xuân Tình Nguyện
-            </Link>
+              <Link
+                to="/campaign/xuan-tinh-nguyen"
+                className="text-sm text-white/80 hover:text-white"
+              >
+                Xuân Tình Nguyện
+              </Link>
 
-            <span className="text-sm text-white/80">
-              Mùa Hè Xanh
-            </span>
+              <span className="text-sm text-white/80">Mùa Hè Xanh</span>
+            </div>
           </div>
-        </div>
           <div className="flex flex-col">
-          <h3 className="font-semibold text-lg mb-14">
-            Liên hệ
-          </h3>
+            <h3 className="font-semibold text-lg mb-8">Liên hệ</h3>
 
-          <div className="flex flex-col space-y-14">
-            <div className="flex items-start gap-3 text-sm text-white/80">
-              <img src={locationIcon} className="w-4 h-4 mt-0.5" />
-              <span>Khu phố 34, Phường Linh Xuân, TP.HCM</span>
+            <div className="flex flex-col space-y-6">
+              <div className="flex items-start gap-3 text-sm text-white/80">
+                <img src={locationIcon} className="w-4 h-4 mt-0.5" />
+                <span>Khu phố 34, Phường Linh Xuân, TP.HCM</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-sm text-white/80">
+                <img src={mailIcon} className="w-4 h-4" />
+                <span>hsvdhcntt@hoisinhvientphcm.com</span>
+              </div>
+
+              <a
+                href="https://www.facebook.com/tuoitre.uit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm text-white/80 hover:text-white"
+              >
+                <img src={fbIcon} className="w-4 h-4" />
+                <span>facebook.com/tuoitre.uit</span>
+              </a>
             </div>
-
-            <div className="flex items-center gap-2 text-sm text-white/80">
-              <img src={mailIcon} className="w-4 h-4" />
-              <span>hsvdhcntt@hoisinhvientphcm.com</span>
-            </div>
-
-            <a
-              href="https://www.facebook.com/tuoitre.uit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-white/80 hover:text-white"
-            >
-              <img src={fbIcon} className="w-4 h-4" />
-              <span>facebook.com/tuoitre.uit</span>
-            </a>
           </div>
-        </div>
         </div>
         <div className="border-t border-white/20 my-6" />
         <div className="flex items-center justify-between">
@@ -96,11 +85,7 @@ export default function Footer() {
             UITVolunteer © 2026. All rights reserved.
           </span>
 
-          <img
-            src={creditIcon}
-            alt="Credits"
-            className="w-20 h-auto"
-          />
+          <img src={creditIcon} alt="Credits" className="w-20 h-auto" />
         </div>
       </div>
     </footer>
