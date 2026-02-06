@@ -70,14 +70,14 @@ export default function MyTeamPage() {
           <div className="relative flex items-end justify-center">
 
             {/* MAIN IMAGE */}
-            <div className="relative z-20 w-[440px] h-[280px] rounded-2xl overflow-hidden shadow-lg bg-white flex items-center justify-center">
+            <div className="relative z-20 w-110 h-70 rounded-2xl overflow-hidden shadow-lg bg-white flex items-center justify-center">
               <span className="text-gray-400 text-sm">Ảnh chính</span>
             </div>
 
             {/* LEFT IMAGE */}
             <div className="
-              absolute left-[-160px] bottom-[50px]
-              z-10 w-[260px] h-[180px]
+              absolute -left-40 bottom-12.5
+              z-10 w-65 h-45
               rounded-xl overflow-hidden shadow-md bg-white
               flex items-center justify-center
             ">
@@ -86,8 +86,8 @@ export default function MyTeamPage() {
 
             {/* RIGHT IMAGE */}
             <div className="
-              absolute right-[-160px] bottom-[50px]
-              z-10 w-[260px] h-[180px]
+              absolute -right-40 bottom-12.5
+              z-10 w-65 h-45
               rounded-xl overflow-hidden shadow-md bg-white
               flex items-center justify-center
             ">
@@ -97,7 +97,7 @@ export default function MyTeamPage() {
           </div>
 
           {/* EDIT BUTTON */}
-          <div className="w-full max-w-[960px] flex justify-end mr-1">
+          <div className="w-full max-w-240 flex justify-end mr-1">
             <button
               onClick={() => setShowOverall(true)}
               className="flex items-center gap-1 text-xs font-bold text-gray-600 hover:scale-110 transition mr-20"

@@ -6,7 +6,7 @@ import MapPinIcon from "@heroicons/react/24/outline/MapPinIcon";
 import UserGroupIcon from "@heroicons/react/24/outline/UserGroupIcon";
 import ArrowLeft from "@heroicons/react/24/outline/ArrowLeftIcon";
 import ArrowRight from "@heroicons/react/24/outline/ArrowRightIcon";
-import type { Post } from "@uit-volunteer-map/shared";
+import type { Post } from "@/mocks/post.mock";
 interface GuestPostOverlayProps {
   post: Post | null;
   onClose?: () => void;
@@ -39,7 +39,7 @@ export default function GuestPostOverPlay({
 
   return createPortal(
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-[10000] text-black"
+      className="fixed inset-0 bg-black/60 flex items-center justify-center z-10000 text-black"
       onClick={onClose}
     >
       <div

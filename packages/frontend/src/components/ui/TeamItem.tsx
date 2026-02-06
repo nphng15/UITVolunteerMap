@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import banhChungPin from "@/assets/icons/Formation-pin-slider.png";
 
 export interface TeamData {
-  slug: string;
+  id: string;
   name: string;
   leader: string;
   vice: string;
@@ -101,7 +101,7 @@ const TeamItem = ({ team }: TeamItemProps) => {
           {/* Button */}
           <div className="flex-3">
             <Link
-              to={`team/${team.slug}`}
+              to={`team/${team.id}`}
               className="inline-block bg-red-700 text-white text-2xl font-extrabold py-5 px-16 rounded-full shadow-[0_15px_35px_rgba(185,28,28,0.4)] transition-all duration-300 hover:bg-rose-600 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(185,28,28,0.5)] whitespace-nowrap"
             >
               Xem thêm

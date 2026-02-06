@@ -2,7 +2,7 @@ import { useState } from "react";
 import MapView, { MarkerData } from "@/components/layouts/MapView";
 import Statistic from "@/components/layouts/Statistic";
 import GuestPostOverPlay from "@/components/ui/popups/post/GuestPostOverPlay";
-import { mockPost } from "@/mocks/post.mock";
+import { mockPosts } from "@/mocks/post.mock";
 import { mockTeams } from "@/mocks/team.mock";
 import TimeSelect from "@/components/layouts/TimeSelect";
 import EventCard from "@/components/ui/popups/post/EventCard";
@@ -33,7 +33,7 @@ export default function CampaignPage() {
       </section>
       {hoverData && <EventCard visible={true} data={null} />}
       {selectedEvent && (
-        <GuestPostOverPlay post={mockPost} onClose={handleClose} />
+        <GuestPostOverPlay post={mockPosts[0]} onClose={handleClose} />
       )}
       <main className="flex-1">
         <section id="mapSection" className="max-w-6xl mx-auto px-4">
@@ -97,7 +97,7 @@ export default function CampaignPage() {
             {mockTeams.map((team, index) => {
               return (
                 <div
-                  key={`${team.slug}-${index}`}
+                  key={`${team.id}-${index}`}
                   className="flex items-center justify-center"
                 >
                   <div
