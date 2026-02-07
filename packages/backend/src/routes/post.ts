@@ -25,11 +25,10 @@ const postService = new PostService();
 router.get("/", async (_req, res) => {
   try {
     const result = await postService.getAll();
-    const response: ApiResponse<Post[]> = {
+    return res.status(HTTP_STATUS.OK).json({
       success: true,
       data: result,
-    };
-    return res.status(HTTP_STATUS.OK).json(response);
+    });
   } catch (err: unknown) {
     if (err instanceof HttpError) {
       const response: ApiResponse<null> = {
@@ -75,12 +74,11 @@ router.use(authenticateToken, requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]));
 router.post("/", validate(createPostSchema), async (req, res) => {
   try {
     const result = await postService.create(req.body);
-    const response: ApiResponse<Post> = {
+    return res.status(HTTP_STATUS.OK).json({
       success: true,
       data: result,
       message: POST_MESSAGES.CREATED,
-    };
-    return res.status(HTTP_STATUS.OK).json(response);
+    });
   } catch (err: unknown) {
     if (err instanceof HttpError) {
       const response: ApiResponse<null> = {

@@ -31,7 +31,7 @@ export default function CampaignPage() {
         alt="background top"
         className="absolute top-0 left-0 w-full z-15 pointer-events-none"
       />
-      <section id="logoTop" className="max-w-4xl mx-auto px-4 pt-2">
+      <section id="logoTop" className="max-w-4xl mx-auto px-4">
         <div className="flex justify-center">
           <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
         </div>
@@ -69,10 +69,10 @@ export default function CampaignPage() {
 
         <section id="info" className="max-w-6xl mx-auto mt-16 px-6">
           <h2 className="text-center font-black text-black mb-12 text-5xl">
-            Thông Tin Chung
+            THÔNG TIN CHUNG
           </h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <p className="text-black text-2xl text-justify font-semibold leading-relaxed indent-[2em]">
+            <p className="text-black text-2xl font-bold leading-relaxed">
               Chiến dịch Xuân Tình Nguyện – Trường Đại học Công nghệ Thông tin,
               ĐHQG-HCM là hoạt động tình nguyện ý nghĩa được tổ chức thường niên
               với sự tham gia của hàng trăm sinh viên thuộc nhiều đội hình khác
@@ -90,7 +90,7 @@ export default function CampaignPage() {
         <section id="teams" className="max-w-7xl mx-auto mt-32 px-10 relative">
           <div className="mb-12">
             <h2 className="text-center font-black text-5xl text-black">
-              Đội Hình
+              ĐỘI HÌNH
             </h2>
           </div>
 
@@ -122,7 +122,7 @@ export default function CampaignPage() {
 
         <section id="activities" className="max-w-6xl mx-auto mt-32 px-6 pb-32">
           <h2 className="text-center font-black text-5xl mb-16 text-black tracking-widest">
-            Hoạt Động
+            HOẠT ĐỘNG
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
             {posts.map((post, i) => (

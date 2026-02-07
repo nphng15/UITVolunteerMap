@@ -1,10 +1,13 @@
 import { useParams, Link, useLocation } from "react-router";
 import editIcon from "@/assets/icons/edit.svg";
+import deleteIcon from "@/assets/icons/delete.svg";
 import { useState } from "react";
 import FormationEditOverall from "@/components/ui/popups/FormationEditOverall";
 import FormationEditRole from "@/components/ui/popups/FormationEditRole";
 import PostCreatePopup from "@/components/ui/popups/post/PostCreatePopup";
 import PostDetailPopup from "@/components/ui/popups/post/PostDetailPopup";
+import ConfirmDeletePopup from "@/components/ui/popups/ConfirmDeletePopup";
+
 
 export default function MyTeamPage() {
   const { teamId } = useParams<{ teamId: string }>();
@@ -18,6 +21,12 @@ export default function MyTeamPage() {
 
   const commanders = Array.from({ length: 3 });
   const activities = Array.from({ length: 8 });
+
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<number | null>(null);
+
+  
+
 
   return (
     <>
@@ -50,6 +59,25 @@ export default function MyTeamPage() {
           }}
         />
       )}
+
+        {showDeletePopup && (
+        <ConfirmDeletePopup
+          onConfirm={() => {
+            console.log("Delete post:", selectedPost);
+
+            // chỗ này sau này gọi API xóa thật
+            // handleDeletePost(selectedPost)
+
+            setShowDeletePopup(false);
+            setSelectedPost(null);
+          }}
+          onCancel={() => {
+            setShowDeletePopup(false);
+            setSelectedPost(null);
+          }}
+        />
+      )}
+
 
       {/* ===== PAGE ===== */}
       <div className="pt-8 pb-4">
@@ -119,13 +147,6 @@ export default function MyTeamPage() {
         <section className="max-w-4xl mx-auto px-4 mb-14 relative">
           <h2 className="text-center font-black mb-6">Ban chỉ huy</h2>
 
-          <button
-            onClick={() => setShowRole(true)}
-            className="absolute flex gap-1 right-4 top-0 text-xs underline"
-          >
-            <img src={editIcon} className="w-4 h-4" />
-            Edit chỉ huy
-          </button>
 
           <div className="grid grid-cols-3 gap-8">
             {commanders.map((_, i) => (
@@ -159,6 +180,8 @@ export default function MyTeamPage() {
           <div className="grid grid-cols-4 gap-6">
             {activities.map((_, i) => (
               <div key={i} className="relative group">
+
+                {/* POST THUMBNAIL */}
                 <Link
                   to={`post/${i + 1}`}
                   state={{ backgroundLocation: location }}
@@ -167,13 +190,77 @@ export default function MyTeamPage() {
                   <div className="w-12 h-12 border-2 border-white rotate-45" />
                 </Link>
 
-                <Link
-                  to={`post/${i + 1}`}
-                  state={{ backgroundLocation: location }}
-                  className="absolute top-1 right-1 text-[10px] bg-white px-1 rounded opacity-0 group-hover:opacity-100 transition"
+                {/* ACTION BUTTONS (DELETE + EDIT) */}
+                <div
+                  className="
+                    absolute inset-0 
+                    opacity-0 group-hover:opacity-100 
+                    transition
+                    flex items-center justify-center
+                  "
                 >
-                  Edit
-                </Link>
+
+                  {/* CONTAINER chứa 2 nút + dấu gạch */}
+                  <div className="relative w-full h-full">
+
+                    {/* DELETE BUTTON */}
+                    <button
+                      onClick={() => {
+                        setSelectedPost(i);
+                        setShowDeletePopup(true);
+                      }}
+                      className="
+                        absolute
+                        top-[18%] left-[18%]
+                        w-14 h-14 rounded-full bg-red-400
+                        flex items-center justify-center
+                        hover:scale-110 transition
+                        shadow-lg z-20
+                      "
+                    >
+                      <img src={deleteIcon} className="w-6 h-6" />
+                    </button>
+
+                    {/* DẤU GẠCH CHÉO Ở GIỮA */}
+                <div
+                  className="
+                    absolute inset-0
+                    flex items-center justify-center
+                    pointer-events-none
+                  "
+                >
+                  <div
+                    className="
+                      w-[120px] h-[6px]
+                      bg-white
+                      -rotate-45
+                      rounded-full
+                      opacity-100
+                      shadow
+                    "
+                  />
+                </div>
+
+
+                    {/* EDIT BUTTON */}
+                    <Link
+                      to={`post/${i + 1}`}
+                      state={{ backgroundLocation: location }}
+                      className="
+                        absolute
+                        bottom-[18%] right-[18%]
+                        w-14 h-14 rounded-full bg-gray-400
+                        flex items-center justify-center
+                        hover:scale-110 transition
+                        shadow-lg z-20
+                      "
+                    >
+                      <img src={editIcon} className="w-6 h-6" />
+                    </Link>
+
+                  </div>
+                </div>
+
               </div>
             ))}
           </div>
