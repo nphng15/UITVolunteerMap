@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape*/
 export interface PostData {
   postId: number;
   title: string;
