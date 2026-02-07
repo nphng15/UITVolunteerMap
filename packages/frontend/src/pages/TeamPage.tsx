@@ -12,7 +12,6 @@ export default function TeamPage() {
   const { data: posts = [] } = usePosts();
 
   const commanders = Array.from({ length: 3 });
-  const activities = Array.from({ length: 8 });
 
   return (
     <div className="py-8">
