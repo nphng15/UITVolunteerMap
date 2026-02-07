@@ -6,9 +6,9 @@ import MapPinIcon from "@heroicons/react/24/outline/MapPinIcon";
 import UserGroupIcon from "@heroicons/react/24/outline/UserGroupIcon";
 import ArrowLeft from "@heroicons/react/24/outline/ArrowLeftIcon";
 import ArrowRight from "@heroicons/react/24/outline/ArrowRightIcon";
-import type { Post } from "@/mocks/post.mock";
+import type { PostData } from "@/mocks/post.mock";
 interface GuestPostOverlayProps {
-  post: Post | null;
+  post: PostData | null;
   onClose?: () => void;
 }
 
@@ -22,7 +22,7 @@ export default function GuestPostOverPlay({
     photos = [],
     createdAt,
     location,
-    teamName,
+    teamId,
   } = post || {};
   const [current, setCurrent] = useState(0);
 
@@ -147,10 +147,10 @@ export default function GuestPostOverPlay({
                   </span>
                 )}
               </div>
-              {teamName && (
+              {teamId && (
                 <span className="flex items-center gap-1 leading-none">
                   <UserGroupIcon className="w-4 h-4" />
-                  {teamName}
+                  {teamId}
                 </span>
               )}
             </div>

@@ -1,18 +1,18 @@
+import { PostData } from '@/mocks/post.mock';
 import React, { useState, useEffect, useRef } from 'react';
 
 interface EventCardProps {
   visible: boolean;
-  data: Post | null;
+  data: PostData | null;
 }
 
 // Data khi không có data từ props
-const NO_DATA: Post = {
+const NO_DATA: PostData = {
   postId: 0,
   title: "Không tìm thấy sự kiện",
   content: "",
   photos: [],
-  teamName: "",
-  isDeleted: 0,
+  teamId: 0,
   createdAt: new Date().toISOString(),
   location: "",
 };

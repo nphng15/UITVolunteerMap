@@ -17,8 +17,8 @@ export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
   const [hoverData, setHoverData] = useState<MarkerData | null>(null);
 
-  const { data: teams = [], isLoading: teamsLoading } = useTeams();
-  const { data: posts = [], isLoading: postsLoading } = usePosts();
+  const { data: teams = [] } = useTeams();
+  const { data: posts = [] } = usePosts();
 
   const handleClose = () => {
     setSelectedEvent(null);
