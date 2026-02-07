@@ -1,14 +1,17 @@
 import { useParams, Link, useLocation } from "react-router";
 import avatarFrame from "@/assets/background/avar_frame.svg";
+import { PostItem } from "@/components/ui/PostItem";
+import { usePosts } from "@/hooks/usePosts";
+
 
 
 
 export default function TeamPage() {
   const { teamId } = useParams<{ teamId: string }>();
   const location = useLocation();
+  const { data: posts = [] } = usePosts();
 
   const commanders = Array.from({ length: 3 });
-  const activities = Array.from({ length: 8 });
 
   return (
     <div className="py-8">
@@ -77,15 +80,15 @@ export default function TeamPage() {
       <section className="max-w-4xl mx-auto px-4">
         <h2 className="text-center font-black mb-6">Hoạt động</h2>
 
-        <div className="grid grid-cols-4 gap-6">
-          {activities.map((_, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+          {posts.map((post, i) => (
             <Link
               key={i}
-              to={`post/${i + 1}`}
+              to={`post/${post.postId}`}
               state={{ backgroundLocation: location }}
-              className="bg-[#E6E6E6] aspect-square flex items-center justify-center rounded-md hover:scale-105 transition"
+              className="hover:scale-105 transition"
             >
-              <div className="w-12 h-12 border-2 border-white rotate-45" />
+              <PostItem post={post} />
             </Link>
           ))}
         </div>

@@ -1,19 +1,21 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { STORAGE_KEYS } from "@uit-volunteer-map/shared";
+import LogoutConfirmPopup from "@/components/ui/popups/LogoutConfirmPopup";
 
 export default function LeaderDropdown() {
   const [open, setOpen] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  
-
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.AUTH_USER);
     navigate("/login");
   };
 
-  // đóng dropdown khi click ra ngoài
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -70,19 +72,21 @@ export default function LeaderDropdown() {
 
       {/* DROPDOWN MENU */}
       {open && (
-          <div
-            className="
-              absolute right-0 mt-2 w-30 bg-white
-              border-2 border-[#8B0000] rounded-lg
-              shadow-lg z-40 overflow-hidden p-1
-            "
-          >
-
+        <div
+          className="
+            absolute right-0 mt-2 w-40 bg-white
+            border-2 border-[#8B0000] rounded-lg
+            shadow-lg z-40 overflow-hidden p-1
+          "
+        >
           <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 font-semibold outline-none focus:outline-none"
+            onClick={() => {
+              setOpen(false);
+              setShowPopup(true);
+            }}
+            className="flex items-center justify-between w-full px-3 py-2 hover:bg-gray-100 rounded-md font-semibold"
           >
-            <span className="font-semibold">Đăng xuất</span>
+            <span>Đăng xuất</span>
 
             {/* Icon logout */}
             <svg
@@ -97,6 +101,14 @@ export default function LeaderDropdown() {
             </svg>
           </button>
         </div>
+      )}
+
+      {/* POPUP CONFIRM */}
+      {showPopup && (
+        <LogoutConfirmPopup
+          onConfirm={handleLogout}
+          onCancel={() => setShowPopup(false)}
+        />
       )}
     </div>
   );
