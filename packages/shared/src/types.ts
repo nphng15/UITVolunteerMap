@@ -80,6 +80,8 @@ export interface Team {
   teamId: number;
   teamName: string;
   description?: string | null;
+  imageUrl?: string | null;
+  attachments?: Attachment[];
 }
 
 export interface Post {
@@ -89,6 +91,8 @@ export interface Post {
   isDeleted: number;
   createdAt: string;
   updatedAt: string;
+  thumbnail?: Photo | null;
+  photos?: Photo[];
 }
 
 export interface Photo {
@@ -96,6 +100,14 @@ export interface Photo {
   title?: string | null;
   imageUrl: string;
   uploadedAt: string;
+  isFirstImage?: number;
+}
+
+export interface Attachment {
+  attachmentId: number;
+  imageUrl: string;
+  uploadedAt: string;
+  position?: number | null;
 }
 
 export interface VolunteerLocation {
