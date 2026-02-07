@@ -14,8 +14,43 @@ export class PostService {
   private photoRepo = AppDataSource.getRepository(Photo);
 
   async getAll() {
-    const posts = await this.postRepo.find();
-    return posts.filter((post) => post.isDeleted === 0);
+    const posts = await this.postRepo.find({
+      where: { isDeleted: 0 },
+      relations: ["photos", "team", "author"],
+    });
+
+    return posts.map((post) => {
+      const photos = post.photos?.filter((p) => p.isDeleted === 0) || [];
+      const thumbnail =
+        photos.find((p) => p.isFirstImage === 1) || photos[0] || null;
+
+      return {
+        postId: post.postId,
+        title: post.title,
+        content: post.content,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+        thumbnail: thumbnail
+          ? {
+              photoId: thumbnail.photoId,
+              imageUrl: thumbnail.imageUrl,
+              title: thumbnail.title,
+            }
+          : null,
+        team: post.team
+          ? {
+              teamId: post.team.teamId,
+              teamName: post.team.teamName,
+            }
+          : null,
+        author: post.author
+          ? {
+              userId: post.author.userId,
+              fullName: post.author.fullName,
+            }
+          : null,
+      };
+    });
   }
 
   async getOne(id: number) {
@@ -35,7 +70,26 @@ export class PostService {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
-    return await this.postRepo.save(newPost);
+    const savedPost = await this.postRepo.save(newPost);
+
+    if (data.photos && data.photos.length > 0) {
+      const photosToCreate = data.photos.map((photo, index) =>
+        this.photoRepo.create({
+          title: photo.title ?? undefined,
+          imageUrl: photo.imageUrl,
+          uploadedAt: new Date().toISOString(),
+          isFirstImage: photo.isFirstImage ?? (index === 0 ? 1 : 0),
+          isDeleted: 0,
+          post: { postId: savedPost.postId } as Photo["post"],
+        })
+      );
+      await this.photoRepo.save(photosToCreate);
+    }
+
+    return await this.postRepo.findOne({
+      where: { postId: savedPost.postId },
+      relations: ["photos", "team", "author"],
+    });
   }
 
   async update(id: number, data: UpdatePostInput) {

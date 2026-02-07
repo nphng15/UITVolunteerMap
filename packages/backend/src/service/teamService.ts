@@ -2,7 +2,8 @@ import { AppDataSource } from "../db/data-source.js";
 import { Team } from "../entities/Team.js";
 import { User } from "../entities/User.js";
 import { Campaign } from "../entities/Campaign.js";
-import { CreateTeamInput, UpdateTeamInput } from "../schemas/team.js";
+import { Attachment } from "../entities/Attachment.js";
+import { CreateTeamInput, UpdateTeamInput, type AttachmentInput } from "../schemas/team.js";
 import { HttpError } from "../errors/HttpError.js";
 import { HTTP_STATUS, TEAM_ERRORS, RoleEnum, type JwtPayload } from "@uit-volunteer-map/shared";
 
@@ -10,6 +11,7 @@ export class TeamService {
   private teamRepo = AppDataSource.getRepository(Team);
   private userRepo = AppDataSource.getRepository(User);
   private campaignRepo = AppDataSource.getRepository(Campaign);
+  private attachmentRepo = AppDataSource.getRepository(Attachment);
   async getAll(userRole?: string) {
     const teams = await this.teamRepo.find({
       where: { isDeleted: 0 },
@@ -154,7 +156,24 @@ export class TeamService {
       isDeleted: 0,
     });
 
-    return await this.teamRepo.save(newTeam);
+    const savedTeam = await this.teamRepo.save(newTeam);
+
+    if (data.attachments && data.attachments.length > 0) {
+      const attachmentsToCreate = data.attachments.map((attachment, index) =>
+        this.attachmentRepo.create({
+          imageUrl: attachment.imageUrl,
+          uploadedAt: new Date().toISOString(),
+          position: attachment.position ?? index,
+          team: { teamId: savedTeam.teamId } as any,
+        })
+      );
+      await this.attachmentRepo.save(attachmentsToCreate);
+    }
+
+    return await this.teamRepo.findOne({
+      where: { teamId: savedTeam.teamId },
+      relations: ["attachments", "leader"],
+    });
   }
 
   async delete(id: number) {
@@ -199,5 +218,52 @@ export class TeamService {
 
     return await this.teamRepo.save(team);
   }
-}
 
+  async addAttachments(teamId: number, attachments: AttachmentInput[], currentUser: JwtPayload) {
+    await this.getTeamEntity(teamId);
+
+    if (currentUser.role === RoleEnum.LEADER) {
+      const leaderUser = await this.userRepo.findOne({
+        where: { account: { accId: currentUser.accId }, isDeleted: 0 },
+        relations: ["team"],
+      });
+
+      if (!leaderUser || !leaderUser.team || leaderUser.team.teamId !== teamId) {
+        throw new HttpError(TEAM_ERRORS.FORBIDDEN_ACCESS, HTTP_STATUS.FORBIDDEN);
+      }
+    }
+
+    const existingAttachments = await this.attachmentRepo.find({
+      where: { team: { teamId } },
+      order: { position: "DESC" },
+    });
+    const maxPosition = existingAttachments.length > 0 
+      ? (existingAttachments[0].position ?? 0) 
+      : -1;
+
+    const attachmentsToCreate = attachments.map((attachment, index) =>
+      this.attachmentRepo.create({
+        imageUrl: attachment.imageUrl,
+        uploadedAt: new Date().toISOString(),
+        position: attachment.position ?? (maxPosition + 1 + index),
+        team: { teamId } as any,
+      })
+    );
+
+    const savedAttachments = await this.attachmentRepo.save(attachmentsToCreate);
+    return savedAttachments;
+  }
+
+  async getTeamWithAttachments(teamId: number) {
+    const team = await this.teamRepo.findOne({
+      where: { teamId, isDeleted: 0 },
+      relations: ["attachments", "leader"],
+    });
+
+    if (!team) {
+      throw new HttpError(TEAM_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+    }
+
+    return team;
+  }
+}

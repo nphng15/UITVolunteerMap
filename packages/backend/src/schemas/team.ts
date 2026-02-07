@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export const attachmentInputSchema = z.object({
+  imageUrl: z.string().url("Invalid image URL"),
+  position: z.number().int().min(0).optional().nullable(),
+});
+
 export const createTeamSchema = z.object({
   teamName: z
     .string()
@@ -9,6 +14,7 @@ export const createTeamSchema = z.object({
   campaignId: z.number().int().positive("Campaign ID is required"),
   description: z.string().optional().nullable(),
   imageUrl: z.string().url("Invalid image URL").optional().nullable(),
+  attachments: z.array(attachmentInputSchema).optional(),
 });
 
 export type CreateTeamInput = z.infer<typeof createTeamSchema>;
@@ -21,3 +27,9 @@ export const updateTeamSchema = z.object({
 
 export type UpdateTeamInput = z.infer<typeof updateTeamSchema>;
 
+export const addTeamAttachmentsSchema = z.object({
+  attachments: z.array(attachmentInputSchema).min(1, "At least one attachment is required"),
+});
+
+export type AddTeamAttachmentsInput = z.infer<typeof addTeamAttachmentsSchema>;
+export type AttachmentInput = z.infer<typeof attachmentInputSchema>;

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { TeamService } from "../service/teamService.js";
 import { validate } from "../middleware/validate.js";
-import { createTeamSchema, updateTeamSchema } from "../schemas/team.js";
+import { createTeamSchema, updateTeamSchema, addTeamAttachmentsSchema } from "../schemas/team.js";
 import { authenticateToken, requireRole } from "../middleware/auth.js";
 import { HttpError } from "../errors/HttpError.js";
 import {
@@ -15,7 +15,6 @@ import {
 const router = Router();
 const teamService = new TeamService();
 
-// Public route (Guest can view teams - limited info)
 router.get("/", async (req, res) => {
   try {
     const userRole = req.user?.role;
@@ -34,7 +33,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Public route (Guest can view team details)
 router.get("/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
@@ -59,7 +57,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Admin only routes
 router.post(
   "/",
   authenticateToken,
@@ -87,7 +84,6 @@ router.post(
   },
 );
 
-// Update team (Admin: any team, Leader: own team only)
 router.put(
   "/:id",
   authenticateToken,
@@ -103,7 +99,6 @@ router.put(
         });
       }
       
-      // Pass currentUser (req.user) for permission checking in service
       const data = await teamService.update(id, req.body, req.user!);
       res.status(HTTP_STATUS.OK).json({
         success: true,
@@ -155,5 +150,67 @@ router.delete(
     }
   },
 );
+
+router.post(
+  "/:id/attachments",
+  authenticateToken,
+  requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]),
+  validate(addTeamAttachmentsSchema),
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          error: TEAM_ERRORS.INVALID_ID,
+        });
+      }
+      const data = await teamService.addAttachments(
+        id,
+        req.body.attachments,
+        req.user!
+      );
+      res.status(HTTP_STATUS.CREATED).json({
+        success: true,
+        message: "Attachments added successfully",
+        data,
+      });
+    } catch (err: unknown) {
+      if (err instanceof HttpError) {
+        return res
+          .status(err.statusCode)
+          .json({ success: false, error: err.message });
+      }
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
+    }
+  },
+);
+
+router.get("/:id/attachments", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        error: TEAM_ERRORS.INVALID_ID,
+      });
+    }
+    const data = await teamService.getTeamWithAttachments(id);
+    res.status(HTTP_STATUS.OK).json({ success: true, data });
+  } catch (err: unknown) {
+    if (err instanceof HttpError) {
+      return res
+        .status(err.statusCode)
+        .json({ success: false, error: err.message });
+    }
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+    });
+  }
+});
 
 export { router as teamRouter };
