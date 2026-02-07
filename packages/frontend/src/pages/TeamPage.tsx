@@ -1,5 +1,4 @@
 import { useParams, Link, useLocation } from "react-router";
-import BackgroundLayout from "@/components/layouts/BackgroundLayout";
 import avatarFrame from "@/assets/background/avar_frame.svg";
 
 
@@ -12,7 +11,6 @@ export default function TeamPage() {
   const activities = Array.from({ length: 8 });
 
   return (
-  <BackgroundLayout>
     <div className="py-8">
       <section className="max-w-4xl mx-auto px-4">
         <h1 className="text-center text-3xl font-black mb-8">
@@ -93,7 +91,6 @@ export default function TeamPage() {
         </div>
       </section>
     </div>
-  </BackgroundLayout>
 );
 }
 

@@ -2,19 +2,23 @@ import { useState } from "react";
 import MapView, { MarkerData } from "@/components/layouts/MapView";
 import Statistic from "@/components/layouts/Statistic";
 import GuestPostOverPlay from "@/components/ui/popups/post/GuestPostOverPlay";
-import { mockPost } from "@/mocks/post.mock";
-import { mockTeams } from "@/mocks/team.mock";
 import TimeSelect from "@/components/layouts/TimeSelect";
 import EventCard from "@/components/ui/popups/post/EventCard";
 import TeamItem from "@/components/ui/TeamItem";
 
-import bndLogo from "@/assets/icons/bnd-ko-logo-1.png";
-import xtnLogo from "@/assets/icons/xtn.png";
+import { useTeams } from "@/hooks/useTeams";
+import { usePosts } from "@/hooks/usePosts";
+
+import bndLogo from "@/assets/icons/bnd.png";
 import bgTop from "@/assets/background/background_top-01.svg";
+import { PostItem } from "@/components/ui/PostItem";
 
 export default function CampaignPage() {
   const [selectedEvent, setSelectedEvent] = useState<MarkerData | null>(null);
   const [hoverData, setHoverData] = useState<MarkerData | null>(null);
+
+  const { data: teams = [] } = useTeams();
+  const { data: posts = [] } = usePosts();
 
   const handleClose = () => {
     setSelectedEvent(null);
@@ -30,12 +34,11 @@ export default function CampaignPage() {
       <section id="logoTop" className="max-w-4xl mx-auto px-4">
         <div className="flex justify-center">
           <img src={bndLogo} className="h-16 object-contain" alt="BND Logo" />
-          <img src={xtnLogo} className="h-16 object-contain" alt="XTN Logo" />
         </div>
       </section>
       {hoverData && <EventCard visible={true} data={null} />}
       {selectedEvent && (
-        <GuestPostOverPlay post={mockPost} onClose={handleClose} />
+        <GuestPostOverPlay post={posts[0]} onClose={handleClose} />
       )}
       <main className="flex-1">
         <section id="mapSection" className="max-w-6xl mx-auto px-4">
@@ -96,10 +99,10 @@ export default function CampaignPage() {
 
           {/* Teams list */}
           <div className="relative z-2 mt-16 space-y-24">
-            {mockTeams.map((team, index) => {
+            {teams.map((team, index) => {
               return (
                 <div
-                  key={`${team.slug}-${index}`}
+                  key={`${team.teamId}-${index}`}
                   className="flex items-center justify-center"
                 >
                   <div
@@ -122,26 +125,8 @@ export default function CampaignPage() {
             HOẠT ĐỘNG
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div
-                key={i}
-                className="rounded-3xl p-6 shadow-xl
-                            bg-gradient-to-b
-                            from-[#F7CC1D]
-                            via-[#FCF2DA]
-                            to-[#F7CC1D]"
-              >
-                <h3 className="font-black text-xl text-black mb-4">
-                  Tên hoạt động
-                </h3>
-                <div className="bg-[#DDE1E6] rounded-2xl aspect-[4/3] mb-4 flex items-center justify-center">
-                  <div className="w-16 h-16 border-4 border-white rotate-45 opacity-40" />
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-red-600 text-xl">❤</span>
-                  <div className="flex-1 h-1 bg-black/50 rounded-full" />
-                </div>
-              </div>
+            {posts.map((post, i) => (
+              <PostItem key={i} post={post} />
             ))}
           </div>
         </section>
