@@ -36,6 +36,7 @@ router.post('/login', validate(loginSchema), async (req, res) => {
 router.post('/logout', (_req, res) => {
   const response: ApiResponse<null> = {
     success: true,
+    data: null,
     message: SUCCESS_MESSAGES.LOGGED_OUT,
   };
   res.status(HTTP_STATUS.OK).json(response);

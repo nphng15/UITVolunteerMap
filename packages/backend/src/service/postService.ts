@@ -54,6 +54,55 @@ export class PostService {
   }
 
   async getOne(id: number) {
+    const post = await this.postRepo.findOne({
+      where: { postId: id },
+      relations: ["photos", "team", "author"],
+    });
+    if (!post || post.isDeleted === 1)
+      throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+
+    const photos = (post.photos ?? []).filter((p) => p.isDeleted === 0);
+    const thumbnail =
+      photos.find((p) => p.isFirstImage === 1) || photos[0] || null;
+
+    return {
+      postId: post.postId,
+      title: post.title,
+      content: post.content,
+      isDeleted: post.isDeleted,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      thumbnail: thumbnail
+        ? {
+            photoId: thumbnail.photoId,
+            imageUrl: thumbnail.imageUrl,
+            title: thumbnail.title,
+          }
+        : null,
+      photos: photos.map((p) => ({
+        photoId: p.photoId,
+        title: p.title,
+        imageUrl: p.imageUrl,
+        uploadedAt: p.uploadedAt,
+        isFirstImage: p.isFirstImage,
+        isDeleted: p.isDeleted,
+      })),
+      team: post.team
+        ? {
+            teamId: post.team.teamId,
+            teamName: post.team.teamName,
+          }
+        : null,
+      author: post.author
+        ? {
+            userId: post.author.userId,
+            fullName: post.author.fullName,
+          }
+        : null,
+    };
+  }
+
+  private async getPostEntity(id: number) {
     const post = await this.postRepo.findOneBy({ postId: id });
     if (!post || post.isDeleted === 1)
       throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
@@ -93,7 +142,7 @@ export class PostService {
   }
 
   async update(id: number, data: UpdatePostInput) {
-    const post = await this.getOne(id);
+    const post = await this.getPostEntity(id);
     if (!post || post.isDeleted === 1)
       throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
 
@@ -113,7 +162,7 @@ export class PostService {
   }
 
   async delete(id: number) {
-    const post = await this.getOne(id);
+    const post = await this.getPostEntity(id);
     if (!post || post.isDeleted === 1)
       throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     post.isDeleted = 1;
@@ -121,7 +170,7 @@ export class PostService {
   }
 
   async addPhoto(postId: number, data: CreatePostImageInput) {
-    const post = await this.getOne(postId);
+    const post = await this.getPostEntity(postId);
     if (!post || post.isDeleted === 1)
       throw new HttpError(POST_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
       const newPhoto = this.photoRepo.create({

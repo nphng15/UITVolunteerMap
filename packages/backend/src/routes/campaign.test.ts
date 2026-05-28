@@ -108,11 +108,11 @@ describe('Campaign CRUD Routes', () => {
       expect(res.body.data).toHaveLength(2);
     });
 
-    it('should return 401 without token', async () => {
+    it('should return 200 without token (public read)', async () => {
       const res = await request(app).get('/api/campaigns');
 
-      expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
-      expect(res.body.success).toBe(false);
+      expect(res.status).toBe(HTTP_STATUS.OK);
+      expect(res.body.success).toBe(true);
     });
 
     it('should allow leader to access campaigns', async () => {
@@ -339,20 +339,31 @@ describe('Campaign CRUD Routes', () => {
   });
 
   describe('Authentication & Authorization', () => {
-    it('should reject requests without token', async () => {
-      const res = await request(app).get('/api/campaigns');
+    it('should reject write requests without token', async () => {
+      const res = await request(app)
+        .post('/api/campaigns')
+        .send({
+          campaignName: 'X',
+          startDate: '2024-01-01',
+          endDate: '2024-01-31',
+        });
       expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
     });
 
-    it('should reject requests with invalid token', async () => {
+    it('should reject write requests with invalid token', async () => {
       const res = await request(app)
-        .get('/api/campaigns')
-        .set('Authorization', 'Bearer invalid-token');
+        .post('/api/campaigns')
+        .set('Authorization', 'Bearer invalid-token')
+        .send({
+          campaignName: 'X',
+          startDate: '2024-01-01',
+          endDate: '2024-01-31',
+        });
 
       expect([HTTP_STATUS.UNAUTHORIZED, HTTP_STATUS.FORBIDDEN]).toContain(res.status);
     });
 
-    it('should reject expired tokens', async () => {
+    it('should reject expired tokens on writes', async () => {
       const expiredToken = jwt.sign(
         { accId: 1, role: RoleEnum.ADMIN },
         JWT_SECRET,
@@ -360,8 +371,13 @@ describe('Campaign CRUD Routes', () => {
       );
 
       const res = await request(app)
-        .get('/api/campaigns')
-        .set('Authorization', `Bearer ${expiredToken}`);
+        .post('/api/campaigns')
+        .set('Authorization', `Bearer ${expiredToken}`)
+        .send({
+          campaignName: 'X',
+          startDate: '2024-01-01',
+          endDate: '2024-01-31',
+        });
 
       expect(res.status).toBe(HTTP_STATUS.UNAUTHORIZED);
       expect(res.body.success).toBe(false);

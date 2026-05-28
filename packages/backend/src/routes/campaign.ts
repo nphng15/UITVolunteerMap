@@ -15,8 +15,6 @@ import {
 const router = Router();
 const campaignService = new CampaignService();
 
-router.use(authenticateToken, requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]));
-
 router.get('/', async (_req, res) => {
   try {
     const data = await campaignService.getAll();
@@ -54,7 +52,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', validate(createCampaignSchema), async (req, res) => {
+router.post('/', authenticateToken, requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]), validate(createCampaignSchema), async (req, res) => {
   try {
     const data = await campaignService.create(req.body);
     res.status(HTTP_STATUS.CREATED).json({ success: true, data });
@@ -69,7 +67,7 @@ router.post('/', validate(createCampaignSchema), async (req, res) => {
   }
 });
 
-router.put('/:id', validate(updateCampaignSchema), async (req, res) => {
+router.put('/:id', authenticateToken, requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]), validate(updateCampaignSchema), async (req, res) => {
   try {
     const id = Number(req.params.id);
     if (isNaN(id)) {
@@ -91,7 +89,7 @@ router.put('/:id', validate(updateCampaignSchema), async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]), async (req, res) => {
   try {
     const id = Number(req.params.id);
     if (isNaN(id)) {
@@ -101,7 +99,7 @@ router.delete('/:id', async (req, res) => {
       });
     }
     await campaignService.delete(id);
-    res.status(HTTP_STATUS.OK).json({ success: true, message: CAMPAIGN_MESSAGES.DELETED });
+    res.status(HTTP_STATUS.OK).json({ success: true, data: null, message: CAMPAIGN_MESSAGES.DELETED });
   } catch (err: unknown) {
     if (err instanceof HttpError) {
       return res.status(err.statusCode).json({ success: false, error: err.message });

@@ -34,6 +34,7 @@ export interface LoginResponse {
 
 export interface AuthUser {
   accId: number;
+  userId?: number | null;
   username: string;
   role: UserRole;
 }
@@ -91,8 +92,26 @@ export interface Post {
   isDeleted: number;
   createdAt: string;
   updatedAt: string;
-  thumbnail?: Photo | null;
+  thumbnail?: PostThumbnail | null;
   photos?: Photo[];
+  team?: PostTeamRef | null;
+  author?: PostAuthorRef | null;
+}
+
+export interface PostThumbnail {
+  photoId: number;
+  imageUrl: string;
+  title?: string | null;
+}
+
+export interface PostTeamRef {
+  teamId: number;
+  teamName: string;
+}
+
+export interface PostAuthorRef {
+  userId: number;
+  fullName: string;
 }
 
 export interface Photo {

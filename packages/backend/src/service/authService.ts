@@ -12,7 +12,7 @@ export class AuthService {
   async login(data: LoginInput): Promise<LoginResponse> {
     const account = await this.accountRepo.findOne({
       where: { username: data.username },
-      relations: ['role'],
+      relations: ['role', 'user'],
     });
 
     if (!account) {
@@ -56,6 +56,7 @@ export class AuthService {
       token,
       user: {
         accId: account.accId,
+        userId: account.user?.userId ?? null,
         username: account.username,
         role: account.role.roleName as UserRole,
       },

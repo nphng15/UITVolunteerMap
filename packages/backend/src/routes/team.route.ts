@@ -135,6 +135,7 @@ router.delete(
       await teamService.delete(id);
       res.status(HTTP_STATUS.OK).json({
         success: true,
+        data: null,
         message: TEAM_MESSAGES.DELETED,
       });
     } catch (err: unknown) {
