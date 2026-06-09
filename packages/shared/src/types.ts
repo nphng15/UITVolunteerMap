@@ -52,6 +52,9 @@ export interface CreateCampaignInput {
   description?: string | null;
   startDate: string;
   endDate: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  checkInRadius?: number | null;
 }
 
 export type UpdateCampaignInput = Partial<CreateCampaignInput>;
@@ -75,6 +78,9 @@ export interface Campaign {
   startDate: string;
   endDate: string;
   description?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  checkInRadius?: number | null;
 }
 
 export interface Team {
@@ -138,4 +144,35 @@ export interface VolunteerLocation {
   address: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+// ============================================
+// Check-in Types
+// ============================================
+
+export interface CheckInRequest {
+  campaignId: number;
+  latitude: number;
+  longitude: number;
+}
+
+export interface CheckInResponse {
+  checkInId: number;
+  campaignId: number;
+  accId: number;
+  latitude: number;
+  longitude: number;
+  distance: number;
+  checkedInAt: string;
+}
+
+export interface CheckInRecord {
+  checkInId: number;
+  campaignId: number;
+  accId: number;
+  latitude: number;
+  longitude: number;
+  distance: number;
+  checkedInAt: string;
+  campaign?: Campaign;
 }

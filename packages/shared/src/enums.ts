@@ -5,6 +5,7 @@
 export enum RoleEnum {
   ADMIN = 'admin',
   LEADER = 'leader',
+  VOLUNTEER = 'volunteer',
 }
 
 export type UserRole = `${RoleEnum}`;

@@ -25,6 +25,15 @@ export class Campaign {
   @Column("text", { name: "Description", nullable: true })
   description?: string | null;
 
+  @Column("real", { name: "Latitude", nullable: true })
+  latitude?: number | null;
+
+  @Column("real", { name: "Longitude", nullable: true })
+  longitude?: number | null;
+
+  @Column("real", { name: "CheckInRadius", nullable: true, default: 100 })
+  checkInRadius?: number | null;
+
   @OneToMany("Team", "campaign")
   teams!: Relation<Team[]>;
 

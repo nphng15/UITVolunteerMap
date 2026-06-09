@@ -9,6 +9,8 @@ import { Campaign } from './src/entities/Campaign.js';
 import { Post } from './src/entities/Post.js';
 import { Photo } from './src/entities/Photo.js';
 import { Attachment } from './src/entities/Attachment.js';
+import { CheckIn } from './src/entities/CheckIn.js';
+import { CampaignPhoto } from './src/entities/CampaignPhoto.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,7 +20,7 @@ export default new DataSource({
   database: join(__dirname, 'src/data/database.sqlite'),
   synchronize: false,
   logging: true,
-  entities: [User, Account, Role, Team, Campaign, Post, Photo, Attachment],
+  entities: [User, Account, Role, Team, Campaign, Post, Photo, Attachment, CheckIn, CampaignPhoto],
   migrations: [join(__dirname, 'src/db/migrations/**/*.ts')],
   subscribers: [],
 });

@@ -4,6 +4,7 @@ import { seedCampaigns } from "./campaigns.seed.js";
 import { seedPosts } from "./posts.seed.js";
 import { seedRoles } from "./roles.seed.js";
 import { seedTeams } from "./teams.seed.js";
+import { seedVolunteers } from "./volunteers.seed.js";
 
 const runSeed = async () => {
   try {
@@ -16,6 +17,7 @@ const runSeed = async () => {
     await seedAccounts(AppDataSource);
     await seedCampaigns(AppDataSource);
     await seedTeams(AppDataSource);
+    await seedVolunteers(AppDataSource);
     await seedPosts(AppDataSource);
     console.log("Completed seeding");
 

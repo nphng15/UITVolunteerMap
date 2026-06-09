@@ -8,6 +8,10 @@ const testCampaigns = [
       "Chiến dịch tình nguyện hè tại Linh Trung, Củ Chi và các địa bàn vùng ven.",
     startDate: "2026-06-01",
     endDate: "2026-08-30",
+    // Toạ độ UIT (Khu phố 6, Linh Trung, Thủ Đức) để test điểm danh GPS.
+    latitude: 10.8700,
+    longitude: 106.8030,
+    checkInRadius: 150,
   },
   {
     campaignName: "Xuân Tình Nguyện 2026",
@@ -29,6 +33,11 @@ export const seedCampaigns = async (dataSource: DataSource) => {
       campaign.description = data.description;
       campaign.startDate = data.startDate;
       campaign.endDate = data.endDate;
+      campaign.latitude = data.latitude ?? null;
+      campaign.longitude = data.longitude ?? null;
+      if (data.checkInRadius != null) {
+        campaign.checkInRadius = data.checkInRadius;
+      }
     } else {
       campaign = repo.create(data);
     }
