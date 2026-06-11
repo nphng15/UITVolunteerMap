@@ -1,12 +1,17 @@
 import app from './app.js';
 import { AppDataSource } from './db/data-source.js';
+import { runSeeds } from './db/seeds/index.js';
 
 const PORT = process.env.PORT || 5000;
 
 // Initialize database and start server
 AppDataSource.initialize()
-  .then(() => {
+  .then(async () => {
     console.log('Database connected successfully');
+
+    if (process.env.SEED_ON_START !== 'false') {
+      await runSeeds(AppDataSource);
+    }
 
     app.listen(PORT, () => {
       console.log(`Server is running on http://localhost:${PORT}`);

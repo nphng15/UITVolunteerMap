@@ -22,6 +22,9 @@ import { campaignPhotoRouter } from './routes/campaignPhoto.route.js';
 
 const app = express();
 
+// Trust the first hop (nginx) so req.ip / X-Forwarded-* are correct in production
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet());
 app.use(cors());

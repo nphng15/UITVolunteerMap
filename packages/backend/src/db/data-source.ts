@@ -19,6 +19,7 @@ export const AppDataSource = new DataSource({
   type: 'sqlite',
   database: join(__dirname, '../data/database.sqlite'),
   synchronize: false,
+  migrationsRun: true,
   logging: process.env.NODE_ENV === 'development',
   entities: [User, Account, Role, Team, Campaign, Post, Photo, Attachment, CheckIn, CampaignPhoto],
   migrations: [
