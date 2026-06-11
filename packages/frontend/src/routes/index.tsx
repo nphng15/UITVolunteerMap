@@ -11,7 +11,10 @@ import LeaderLayout from "@/components/layouts/LeaderLayout";
 import CampaignPage from "@/pages/CampaignPage";
 import TeamPage from "@/pages/TeamPage";
 import MyTeamPage from "@/pages/leader/MyTeamPage";
-import TeamModalWrapper from "@/components/layouts/TeamModalWrapper";
+import CampaignManagementPage from "@/pages/admin/CampaignManagementPage";
+import TeamManagementPage from "@/pages/admin/TeamManagementPage";
+import AccountManagementPage from "@/pages/admin/AccountManagementPage";
+import CampaignLayout from "@/components/layouts/CampaignLayout";
 
 export const router = createBrowserRouter([
   {
@@ -22,15 +25,12 @@ export const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       {
         path: "campaign/:campaignId",
+        element: <CampaignLayout />,
         children: [
           { index: true, element: <CampaignPage /> },
           {
             path: "team/:teamId",
-            element: <TeamModalWrapper />,
-            children: [
-              { index: true, element: <TeamPage /> },
-              { path: "post/:postId", element: null },      
-            ],
+            element: <TeamPage />,
           },
         ],
       },
@@ -40,11 +40,16 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element:<Navigate to="/admin/dashboard" replace />,
+            element: <Navigate to="/admin/dashboard" replace />,
           },
           {
             element: <AdminLayout />,
-            children: [{ path: "dashboard", element: <AdminDashboard /> }],
+            children: [
+              { path: "dashboard", element: <AdminDashboard /> },
+              { path: "campaigns", element: <CampaignManagementPage /> },
+              { path: "teams", element: <TeamManagementPage /> },
+              { path: "accounts", element: <AccountManagementPage /> },
+            ],
           },
         ],
       },

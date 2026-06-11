@@ -8,6 +8,9 @@ import { Team } from '../entities/Team.js';
 import { Campaign } from '../entities/Campaign.js';
 import { Post } from '../entities/Post.js';
 import { Photo } from '../entities/Photo.js';
+import { Attachment } from '../entities/Attachment.js';
+import { CheckIn } from '../entities/CheckIn.js';
+import { CampaignPhoto } from '../entities/CampaignPhoto.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,8 +19,9 @@ export const AppDataSource = new DataSource({
   type: 'sqlite',
   database: join(__dirname, '../data/database.sqlite'),
   synchronize: false,
+  migrationsRun: true,
   logging: process.env.NODE_ENV === 'development',
-  entities: [User, Account, Role, Team, Campaign, Post, Photo],
+  entities: [User, Account, Role, Team, Campaign, Post, Photo, Attachment, CheckIn, CampaignPhoto],
   migrations: [
     join(__dirname, './migrations/**/*.{ts,js}'),
   ],

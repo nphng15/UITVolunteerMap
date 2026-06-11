@@ -1,0 +1,39 @@
+services:
+  backend:
+    image: ${DOCKER_USERNAME:-nphng15}/uit-volunteer-map-backend:${TAG:-latest}
+    build:
+      context: ../..
+      dockerfile: packages/backend/Dockerfile
+    expose:
+      - "5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET is required}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-2h}
+      - CLOUDINARY_URL=${CLOUDINARY_URL:-}
+    volumes:
+      - backend_data:/app/data
+    restart: unless-stopped
+    networks:
+      - app_net
+
+  nginx:
+    image: ${DOCKER_USERNAME:-nphng15}/uit-volunteer-map-nginx:${TAG:-latest}
+    build:
+      context: ./deploy/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - app_net
+
+networks:
+  app_net:
+    driver: bridge
+
+volumes:
+  backend_data:

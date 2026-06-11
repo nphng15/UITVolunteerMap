@@ -19,13 +19,16 @@
     "seed": "tsx src/db/seeds/index.ts"
   },
   "dependencies": {
+    "@types/multer": "^2.1.0",
     "@uit-volunteer-map/shared": "*",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.10.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
     "reflect-metadata": "^0.2.2",
     "sqlite3": "^5.1.7",
     "typeorm": "^0.3.28",

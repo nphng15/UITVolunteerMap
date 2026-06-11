@@ -35,6 +35,32 @@ export const USER_ERRORS = {
   EMAIL_TAKEN: 'Email is already taken',
 } as const;
 
+export const POST_MESSAGES = {
+  CREATED: 'Post created successfully',
+  UPDATED: 'Post updated successfully',
+  DELETED: 'Post deleted successfully'
+} as const;
+
+export const POST_ERRORS = {
+  NOT_FOUND: 'Post not found'
+} as const;
+
+export const TEAM_ERRORS = {
+  NOT_FOUND: 'Team not found',
+  ALREADY_EXISTS: 'Team name already exists',
+  INVALID_ID: 'Invalid team ID',
+  LEADER_NOT_FOUND: 'Leader not found',
+  LEADER_INVALID_ROLE: 'User must have LEADER role',
+  CAMPAIGN_NOT_FOUND: "Campaign not found",
+  FORBIDDEN_ACCESS: 'You are not allowed to update this team',
+} as const;
+
+export const TEAM_MESSAGES = {
+  CREATED: 'Team created successfully',
+  UPDATED: 'Team updated successfully',
+  DELETED: 'Team deleted successfully',
+} as const;
+
 export const SUCCESS_MESSAGES = {
   LOGGED_OUT: 'Logged out successfully',
   ADMIN_ACCESS_GRANTED: 'Admin access granted',
@@ -59,3 +85,27 @@ export const USER_PROFILE_FIELDS = [
   'Email',
   'PhoneNumber',
 ] as const;
+
+export const CHECKIN_ERRORS = {
+  CAMPAIGN_NOT_FOUND: 'Campaign not found',
+  CAMPAIGN_NO_LOCATION: 'Campaign does not have a check-in location configured',
+  OUT_OF_RANGE: 'You are not within the allowed check-in radius',
+  ALREADY_CHECKED_IN: 'You have already checked in to this campaign today',
+  CAMPAIGN_NOT_ACTIVE: 'Campaign is not currently active',
+} as const;
+
+export const CHECKIN_MESSAGES = {
+  SUCCESS: 'Check-in successful',
+} as const;
+
+export const CAMPAIGN_PHOTO_ERRORS = {
+  NOT_CHECKED_IN: 'You must check in to this campaign before sharing moments',
+  PHOTO_NOT_FOUND: 'Photo not found',
+  FORBIDDEN: 'You can only delete your own photos',
+  NO_CAMPAIGN: 'You are not assigned to any campaign',
+} as const;
+
+export const CAMPAIGN_PHOTO_MESSAGES = {
+  CREATED: 'Moment shared successfully',
+  DELETED: 'Photo removed successfully',
+} as const;

@@ -3,10 +3,12 @@ import { RoleEnum, HTTP_STATUS, ERROR_MESSAGES, USER_PROFILE_FIELDS } from '@uit
 import { authenticateToken, requireRole } from '../middleware/auth.js';
 import { updateUserProfileSchema } from '../schemas/userProfile.js';
 import { UserProfileService } from '../service/userProfileService.js';
+import { MyCampaignService } from '../service/myCampaignService.js';
 import { HttpError } from '../errors/HttpError.js';
 
 const router = Router();
 const service = new UserProfileService();
+const myCampaignService = new MyCampaignService();
 
 const ALLOWED_KEYS = new Set<string>(USER_PROFILE_FIELDS);
 
@@ -77,5 +79,20 @@ router.put(
     }
   }
 );
+
+router.get('/me/campaign', authenticateToken, async (req, res) => {
+  try {
+    const data = await myCampaignService.getMyCampaign(req.user!.accId);
+    return res.status(HTTP_STATUS.OK).json({ success: true, data });
+  } catch (err: unknown) {
+    if (err instanceof HttpError) {
+      return res.status(err.statusCode).json({ success: false, error: err.message });
+    }
+    return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+    });
+  }
+});
 
 export { router as userRouter };
