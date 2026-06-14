@@ -58,4 +58,25 @@ router.get(
   }
 );
 
+router.get(
+  '/team',
+  authenticateToken,
+  requireRole([RoleEnum.LEADER, RoleEnum.ADMIN]),
+  async (req, res) => {
+    try {
+      const date = typeof req.query.date === 'string' ? req.query.date : undefined;
+      const data = await checkInService.getTeamAttendance(req.user!.accId, date);
+      res.status(HTTP_STATUS.OK).json({ success: true, data });
+    } catch (err: unknown) {
+      if (err instanceof HttpError) {
+        return res.status(err.statusCode).json({ success: false, error: err.message });
+      }
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
+    }
+  }
+);
+
 export { router as checkInRouter };

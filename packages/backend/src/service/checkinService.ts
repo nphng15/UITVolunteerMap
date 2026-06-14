@@ -2,6 +2,7 @@ import { AppDataSource } from '../db/data-source.js';
 import { CheckIn } from '../entities/CheckIn.js';
 import { Campaign } from '../entities/Campaign.js';
 import { CampaignPhoto } from '../entities/CampaignPhoto.js';
+import { User } from '../entities/User.js';
 import { CheckInInput } from '../schemas/checkin.js';
 import { HttpError } from '../errors/HttpError.js';
 import { HTTP_STATUS, CHECKIN_ERRORS } from '@uit-volunteer-map/shared';
@@ -10,6 +11,7 @@ export class CheckInService {
   private checkInRepo = AppDataSource.getRepository(CheckIn);
   private campaignRepo = AppDataSource.getRepository(Campaign);
   private campaignPhotoRepo = AppDataSource.getRepository(CampaignPhoto);
+  private userRepo = AppDataSource.getRepository(User);
 
   private haversineDistance(
     lat1: number, lon1: number,
@@ -100,5 +102,62 @@ export class CheckInService {
       order: { checkedInAt: 'DESC' },
       relations: ['campaign'],
     });
+  }
+
+  /**
+   * Danh sách điểm danh để leader quản lý: suy ra team của leader qua
+   * account -> user -> team -> campaign, rồi liệt kê TẤT CẢ thành viên team
+   * kèm trạng thái điểm danh trong ngày (mặc định hôm nay).
+   */
+  async getTeamAttendance(accId: number, date?: string) {
+    const leader = await this.userRepo.findOne({
+      where: { account: { accId }, isDeleted: 0 },
+      relations: { team: { campaign: true } },
+    });
+
+    const team = leader?.team;
+    if (!team) {
+      throw new HttpError(CHECKIN_ERRORS.NO_TEAM, HTTP_STATUS.NOT_FOUND);
+    }
+
+    const campaign = team.campaign ?? null;
+    const targetDate = date ?? new Date().toISOString().split('T')[0];
+
+    const members = await this.userRepo.find({
+      where: { team: { teamId: team.teamId }, isDeleted: 0 },
+      relations: { account: true },
+      order: { fullName: 'ASC' },
+    });
+
+    let checkInsByAcc = new Map<number, CheckIn>();
+    if (campaign) {
+      const checkIns = await this.checkInRepo
+        .createQueryBuilder('ci')
+        .where('ci.CampaignId = :campaignId', { campaignId: campaign.campaignId })
+        .andWhere('ci.CheckedInAt LIKE :day', { day: `${targetDate}%` })
+        .getMany();
+      checkInsByAcc = new Map(checkIns.map((ci) => [ci.accId, ci]));
+    }
+
+    return {
+      teamId: team.teamId,
+      teamName: team.teamName,
+      campaignId: campaign?.campaignId ?? null,
+      campaignName: campaign?.campaignName ?? null,
+      date: targetDate,
+      members: members.map((m) => {
+        const ci = m.account ? checkInsByAcc.get(m.account.accId) : undefined;
+        return {
+          userId: m.userId,
+          fullName: m.fullName,
+          mssv: m.mssv ?? null,
+          avatarUrl: m.avatarUrl ?? null,
+          hasCheckedIn: ci != null,
+          checkedInAt: ci?.checkedInAt ?? null,
+          distance: ci?.distance ?? null,
+          imageUrl: ci?.imageUrl ?? null,
+        };
+      }),
+    };
   }
 }
