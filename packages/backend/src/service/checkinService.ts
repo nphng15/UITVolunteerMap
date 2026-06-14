@@ -2,6 +2,8 @@ import { AppDataSource } from '../db/data-source.js';
 import { CheckIn } from '../entities/CheckIn.js';
 import { Campaign } from '../entities/Campaign.js';
 import { CampaignPhoto } from '../entities/CampaignPhoto.js';
+import { User } from '../entities/User.js';
+import { Team } from '../entities/Team.js';
 import { CheckInInput } from '../schemas/checkin.js';
 import { HttpError } from '../errors/HttpError.js';
 import { HTTP_STATUS, CHECKIN_ERRORS } from '@uit-volunteer-map/shared';
@@ -10,6 +12,8 @@ export class CheckInService {
   private checkInRepo = AppDataSource.getRepository(CheckIn);
   private campaignRepo = AppDataSource.getRepository(Campaign);
   private campaignPhotoRepo = AppDataSource.getRepository(CampaignPhoto);
+  private userRepo = AppDataSource.getRepository(User);
+  private teamRepo = AppDataSource.getRepository(Team);
 
   private haversineDistance(
     lat1: number, lon1: number,
@@ -100,5 +104,104 @@ export class CheckInService {
       order: { checkedInAt: 'DESC' },
       relations: ['campaign'],
     });
+  }
+
+  /**
+   * Các đội leader QUẢN LÝ (Team.leader trỏ tới user của leader), kèm chiến dịch.
+   * Trả mảng rỗng nếu leader chưa quản lý đội nào.
+   */
+  async getManagedTeams(accId: number) {
+    const leader = await this.userRepo.findOne({
+      where: { account: { accId }, isDeleted: 0 },
+    });
+    if (!leader) {
+      return [];
+    }
+
+    const teams = await this.teamRepo.find({
+      where: { leader: { userId: leader.userId }, isDeleted: 0 },
+      relations: { campaign: true },
+      order: { teamName: 'ASC' },
+    });
+
+    return teams.map((team) => ({
+      teamId: team.teamId,
+      teamName: team.teamName,
+      campaignId: team.campaign?.campaignId ?? null,
+      campaignName: team.campaign?.campaignName ?? null,
+    }));
+  }
+
+  /**
+   * Danh sách điểm danh để leader quản lý. Suy ra các đội leader QUẢN LÝ qua
+   * Team.leader; nếu truyền teamId thì phải là đội leader quản lý, nếu không
+   * truyền thì lấy đội đầu tiên. Liệt kê TẤT CẢ thành viên đội kèm trạng thái
+   * điểm danh trong ngày (mặc định hôm nay).
+   */
+  async getTeamAttendance(accId: number, teamId?: number, date?: string) {
+    const leader = await this.userRepo.findOne({
+      where: { account: { accId }, isDeleted: 0 },
+    });
+
+    const managedTeams = leader
+      ? await this.teamRepo.find({
+          where: { leader: { userId: leader.userId }, isDeleted: 0 },
+          relations: { campaign: true },
+          order: { teamName: 'ASC' },
+        })
+      : [];
+
+    let team;
+    if (teamId != null) {
+      team = managedTeams.find((t) => t.teamId === teamId);
+      if (!team) {
+        throw new HttpError(CHECKIN_ERRORS.FORBIDDEN_TEAM, HTTP_STATUS.FORBIDDEN);
+      }
+    } else {
+      if (managedTeams.length === 0) {
+        throw new HttpError(CHECKIN_ERRORS.NO_TEAM, HTTP_STATUS.NOT_FOUND);
+      }
+      team = managedTeams[0];
+    }
+
+    const campaign = team.campaign ?? null;
+    const targetDate = date ?? new Date().toISOString().split('T')[0];
+
+    const members = await this.userRepo.find({
+      where: { team: { teamId: team.teamId }, isDeleted: 0 },
+      relations: { account: true },
+      order: { fullName: 'ASC' },
+    });
+
+    let checkInsByAcc = new Map<number, CheckIn>();
+    if (campaign) {
+      const checkIns = await this.checkInRepo
+        .createQueryBuilder('ci')
+        .where('ci.CampaignId = :campaignId', { campaignId: campaign.campaignId })
+        .andWhere('ci.CheckedInAt LIKE :day', { day: `${targetDate}%` })
+        .getMany();
+      checkInsByAcc = new Map(checkIns.map((ci) => [ci.accId, ci]));
+    }
+
+    return {
+      teamId: team.teamId,
+      teamName: team.teamName,
+      campaignId: campaign?.campaignId ?? null,
+      campaignName: campaign?.campaignName ?? null,
+      date: targetDate,
+      members: members.map((m) => {
+        const ci = m.account ? checkInsByAcc.get(m.account.accId) : undefined;
+        return {
+          userId: m.userId,
+          fullName: m.fullName,
+          mssv: m.mssv ?? null,
+          avatarUrl: m.avatarUrl ?? null,
+          hasCheckedIn: ci != null,
+          checkedInAt: ci?.checkedInAt ?? null,
+          distance: ci?.distance ?? null,
+          imageUrl: ci?.imageUrl ?? null,
+        };
+      }),
+    };
   }
 }

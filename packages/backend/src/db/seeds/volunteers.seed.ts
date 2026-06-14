@@ -12,6 +12,9 @@ const testVolunteer = {
   password: "volunteer123",
   fullName: "Nguyễn Tình Nguyện",
   email: "volunteer@test.local",
+  mssv: "21520999",
+  class: "KHTN2021",
+  phoneNumber: "0905123456",
   teamName: "Đội Mùa Hè Xanh - UIT 1",
 };
 
@@ -62,12 +65,18 @@ export const seedVolunteers = async (dataSource: DataSource) => {
   if (user) {
     user.fullName = testVolunteer.fullName;
     user.email = testVolunteer.email;
+    user.mssv = testVolunteer.mssv;
+    user.class = testVolunteer.class;
+    user.phoneNumber = testVolunteer.phoneNumber;
     user.isDeleted = 0;
     user.team = team;
   } else {
     user = userRepo.create({
       fullName: testVolunteer.fullName,
       email: testVolunteer.email,
+      mssv: testVolunteer.mssv,
+      class: testVolunteer.class,
+      phoneNumber: testVolunteer.phoneNumber,
       isDeleted: 0,
       account: savedAccount,
       team,

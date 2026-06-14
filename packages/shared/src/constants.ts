@@ -92,6 +92,8 @@ export const CHECKIN_ERRORS = {
   OUT_OF_RANGE: 'You are not within the allowed check-in radius',
   ALREADY_CHECKED_IN: 'You have already checked in to this campaign today',
   CAMPAIGN_NOT_ACTIVE: 'Campaign is not currently active',
+  NO_TEAM: 'You are not assigned to any team',
+  FORBIDDEN_TEAM: 'You do not manage this team',
 } as const;
 
 export const CHECKIN_MESSAGES = {
