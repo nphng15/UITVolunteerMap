@@ -19,6 +19,7 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 describe("User Profile Routes", () => {
   let adminToken: string;
   let leaderToken: string;
+  let volunteerToken: string;
   let adminAccount: Account;
   let leaderAccount: Account;
   let adminUser: User;
@@ -44,9 +45,11 @@ describe("User Profile Routes", () => {
 
     const adminRole = await roleRepo.save({ roleName: RoleEnum.ADMIN });
     const leaderRole = await roleRepo.save({ roleName: RoleEnum.LEADER });
+    const volunteerRole = await roleRepo.save({ roleName: RoleEnum.VOLUNTEER });
 
     const adminPass = await bcrypt.hash("admin123", 10);
     const leaderPass = await bcrypt.hash("leader123", 10);
+    const volunteerPass = await bcrypt.hash("volunteer123", 10);
 
     adminAccount = await accRepo.save({
       username: "admin",
@@ -58,6 +61,12 @@ describe("User Profile Routes", () => {
       username: "leader",
       password: leaderPass,
       roleId: leaderRole.roleId,
+    });
+
+    const volunteerAccount = await accRepo.save({
+      username: "volunteer",
+      password: volunteerPass,
+      roleId: volunteerRole.roleId,
     });
 
     adminUser = await userRepo.save({
@@ -78,6 +87,15 @@ describe("User Profile Routes", () => {
       account: leaderAccount,
     });
 
+    await userRepo.save({
+      fullName: "Volunteer User",
+      email: "volunteer@example.com",
+      phoneNumber: "0333333333",
+      mssv: "20210003",
+      class: "20213",
+      account: volunteerAccount,
+    });
+
     adminToken = jwt.sign(
       { accId: adminAccount.accId, role: RoleEnum.ADMIN },
       JWT_SECRET,
@@ -86,6 +104,12 @@ describe("User Profile Routes", () => {
 
     leaderToken = jwt.sign(
       { accId: leaderAccount.accId, role: RoleEnum.LEADER },
+      JWT_SECRET,
+      { expiresIn: "1h" },
+    );
+
+    volunteerToken = jwt.sign(
+      { accId: volunteerAccount.accId, role: RoleEnum.VOLUNTEER },
       JWT_SECRET,
       { expiresIn: "1h" },
     );
@@ -153,6 +177,22 @@ describe("User Profile Routes", () => {
       expect(leaderRes.status).toBe(HTTP_STATUS.OK);
       expect(adminRes.body.data.Email).toBe("admin@example.com");
       expect(leaderRes.body.data.Email).toBe("leader@example.com");
+    });
+
+    it("should allow a volunteer to access their own profile", async () => {
+      const res = await request(app)
+        .get("/api/users/profile")
+        .set("Authorization", `Bearer ${volunteerToken}`);
+
+      expect(res.status).toBe(HTTP_STATUS.OK);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data).toMatchObject({
+        FullName: "Volunteer User",
+        Email: "volunteer@example.com",
+        PhoneNumber: "0333333333",
+        Mssv: "20210003",
+        Class: "20213",
+      });
     });
 
     it("should return 404 when user associated with account does not exist", async () => {

@@ -23,7 +23,7 @@ function forbidden(body: unknown): boolean {
 router.get(
   '/profile',
   authenticateToken,
-  requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]),
+  requireRole([RoleEnum.ADMIN, RoleEnum.LEADER, RoleEnum.VOLUNTEER]),
   async (req, res) => {
     try {
       const data = await service.getUserProfile(req.user!.accId);
@@ -43,7 +43,7 @@ router.get(
 router.put(
   '/profile',
   authenticateToken,
-  requireRole([RoleEnum.ADMIN, RoleEnum.LEADER]),
+  requireRole([RoleEnum.ADMIN, RoleEnum.LEADER, RoleEnum.VOLUNTEER]),
   async (req, res) => {
     try {
       if (forbidden(req.body)) {
