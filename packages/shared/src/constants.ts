@@ -93,6 +93,7 @@ export const CHECKIN_ERRORS = {
   ALREADY_CHECKED_IN: 'You have already checked in to this campaign today',
   CAMPAIGN_NOT_ACTIVE: 'Campaign is not currently active',
   NO_TEAM: 'You are not assigned to any team',
+  FORBIDDEN_TEAM: 'You do not manage this team',
 } as const;
 
 export const CHECKIN_MESSAGES = {

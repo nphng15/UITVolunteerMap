@@ -59,13 +59,40 @@ router.get(
 );
 
 router.get(
+  '/team/managed',
+  authenticateToken,
+  requireRole([RoleEnum.LEADER, RoleEnum.ADMIN]),
+  async (req, res) => {
+    try {
+      const data = await checkInService.getManagedTeams(req.user!.accId);
+      res.status(HTTP_STATUS.OK).json({ success: true, data });
+    } catch (err: unknown) {
+      if (err instanceof HttpError) {
+        return res.status(err.statusCode).json({ success: false, error: err.message });
+      }
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
+    }
+  }
+);
+
+router.get(
   '/team',
   authenticateToken,
   requireRole([RoleEnum.LEADER, RoleEnum.ADMIN]),
   async (req, res) => {
     try {
       const date = typeof req.query.date === 'string' ? req.query.date : undefined;
-      const data = await checkInService.getTeamAttendance(req.user!.accId, date);
+      const teamId =
+        typeof req.query.teamId === 'string' ? Number(req.query.teamId) : undefined;
+      if (teamId != null && Number.isNaN(teamId)) {
+        return res
+          .status(HTTP_STATUS.BAD_REQUEST)
+          .json({ success: false, error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR });
+      }
+      const data = await checkInService.getTeamAttendance(req.user!.accId, teamId, date);
       res.status(HTTP_STATUS.OK).json({ success: true, data });
     } catch (err: unknown) {
       if (err instanceof HttpError) {
