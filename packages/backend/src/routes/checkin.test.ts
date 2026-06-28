@@ -17,8 +17,6 @@ import { CampaignPhoto } from '../entities/CampaignPhoto.js';
 import { RoleEnum, HTTP_STATUS, CHECKIN_ERRORS, CHECKIN_MESSAGES } from '@uit-volunteer-map/shared';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const TEAM_NOT_ASSIGNED_ERROR = 'Volunteer is not assigned to a team in this campaign';
-const TEAM_NO_LOCATION_ERROR = 'Team check-in location is not configured';
 
 // UIT campus coordinates for testing
 const UIT_LAT = 10.8700;
@@ -233,7 +231,25 @@ describe('Check-in Routes', () => {
 
       expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toBe(TEAM_NOT_ASSIGNED_ERROR);
+      expect(res.body.error).toBe(CHECKIN_ERRORS.NO_TEAM);
+    });
+
+    it('should return 404 when volunteer team belongs to another campaign', async () => {
+      const campaignRepo = AppDataSource.getRepository(Campaign);
+      const secondCampaign = await campaignRepo.save({
+        campaignName: 'Second Active Campaign',
+        startDate: '2020-01-01',
+        endDate: '2030-12-31',
+      });
+
+      const res = await request(app)
+        .post('/api/checkin')
+        .set('Authorization', `Bearer ${volunteerToken}`)
+        .send({ campaignId: secondCampaign.campaignId, latitude: UIT_LAT, longitude: UIT_LNG });
+
+      expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error).toBe(CHECKIN_ERRORS.NO_TEAM);
     });
 
     it('should return 400 when team has no configured check-in location', async () => {
@@ -250,7 +266,7 @@ describe('Check-in Routes', () => {
 
       expect(res.status).toBe(HTTP_STATUS.BAD_REQUEST);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toBe(TEAM_NO_LOCATION_ERROR);
+      expect(res.body.error).toBe(CHECKIN_ERRORS.TEAM_NO_LOCATION);
     });
 
     it('should return 400 when campaign is not active', async () => {
@@ -367,7 +383,7 @@ describe('Check-in Routes', () => {
 
       expect(res.status).toBe(HTTP_STATUS.NOT_FOUND);
       expect(res.body.success).toBe(false);
-      expect(res.body.error).toBe(TEAM_NOT_ASSIGNED_ERROR);
+      expect(res.body.error).toBe(CHECKIN_ERRORS.NO_TEAM);
     });
   });
 

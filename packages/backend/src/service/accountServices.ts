@@ -2,11 +2,9 @@ import { AppDataSource } from '../db/data-source.js';
 import { Account } from '../entities/Account.js';
 import bcrypt from 'bcrypt';
 import { User } from '../entities/User.js';
-import { Team } from '../entities/Team.js';
 import { Role } from '../entities/Role.js';
 export class AccountService {
     private accountRepo = AppDataSource.getRepository(Account);
-    private userRepo = AppDataSource.getRepository(User);
     private roleRepo = AppDataSource.getRepository(Role);
     async getAllAccounts() {
         const accounts = await this.accountRepo.find({
@@ -50,40 +48,51 @@ export class AccountService {
 
     async createAccount(data: any) {
         return await AppDataSource.transaction(async (transactionalEntityManager) => {
-        //Check if username already exists
-            const existing = await this.accountRepo.findOne({ where: { username: data.username } });
-            
-        if (existing) throw new Error('Username already exists');
- 
-        const hashedPassword = await bcrypt.hash(data.password, 10);
-        const role = await transactionalEntityManager.findOneBy('Role', { roleId: 2 });
-            if (!role) throw new Error(`Role not found`);
-            
-        const newAccount = this.accountRepo.create({
-            username: data.username,
-            password: hashedPassword,
-            createdAt: new Date().toISOString(),
-            role: role, 
-            isDeleted: false
+            const accountRepo = transactionalEntityManager.getRepository(Account);
+            const roleRepo = transactionalEntityManager.getRepository(Role);
+            const userRepo = transactionalEntityManager.getRepository(User);
+
+            //Check if username already exists
+            const existing = await accountRepo.findOne({ where: { username: data.username } });
+
+            if (existing) throw new Error('Username already exists');
+
+            const hashedPassword = await bcrypt.hash(data.password, 10);
+            const role = await roleRepo.findOne({ where: { roleName: data.role } });
+            if (!role) throw new Error('Role not found');
+
+            const account = accountRepo.create({
+                username: data.username,
+                password: hashedPassword,
+                roleId: role.roleId,
+                createdAt: new Date().toISOString(),
+                isDeleted: false
+            });
+
+            let savedAccount;
+            try {
+                savedAccount = await accountRepo.save(account);
+            } catch (error: any) {
+                const message = String(error?.message ?? '');
+                if (error?.code === 'SQLITE_CONSTRAINT' || error?.code === '23505' || message.includes('UNIQUE constraint failed')) {
+                    throw new Error('Username already exists');
+                }
+                throw error;
+            }
+
+            const user = userRepo.create({
+                fullName: data.fullname,
+                mssv: data.mssv,
+                class: data.class,
+                email: data.email,
+                phoneNumber: data.phoneNumber,
+                account: savedAccount,
+                isDeleted: 0
+            });
+
+            return await userRepo.save(user);
         });
-            const savedAccount = await transactionalEntityManager.save(newAccount);
-            
-        const team = await transactionalEntityManager.findOneBy(Team, { teamId: data.teamId });
-        if (!team) throw new Error(`Team with ID ${data.teamId} not found`);
-        
-        const newUser = this.userRepo.create({
-            fullName: data.fullname,
-            mssv: data.mssv,
-            class: data.class,
-            email: data.email,
-            phoneNumber: data.phoneNumber,
-            team: team,
-            account: savedAccount 
-        });
-    
-        return await transactionalEntityManager.save(newUser);
-    });
-}
+    }
 
     async updateAccount(id: number, data: any) {
     const account = await this.accountRepo.findOne({
