@@ -27,6 +27,20 @@ export const updateTeamSchema = z.object({
 
 export type UpdateTeamInput = z.infer<typeof updateTeamSchema>;
 
+export const updateTeamCheckInLocationSchema = z.object({
+  latitude: z.number().min(-90).max(90),
+  longitude: z.number().min(-180).max(180),
+  radius: z.number().positive(),
+});
+
+export type UpdateTeamCheckInLocationInput = z.infer<typeof updateTeamCheckInLocationSchema>;
+
+export const assignTeamMemberSchema = z.object({
+  userId: z.number().int().positive("User ID is required"),
+});
+
+export type AssignTeamMemberInput = z.infer<typeof assignTeamMemberSchema>;
+
 export const addTeamAttachmentsSchema = z.object({
   attachments: z.array(attachmentInputSchema).min(1, "At least one attachment is required"),
 });
