@@ -9,12 +9,25 @@ export class AccountService {
     async getAllAccounts() {
         const accounts = await this.accountRepo.find({
             where: { isDeleted: false },
-            relations: { role: true },
+            relations: {
+                role: true,
+                user: { team: true },
+            },
             select: {
                 accId: true,
                 username: true,
                 createdAt: true,
-                role: { roleName: true }
+                role: { roleName: true },
+                user: {
+                    userId: true,
+                    fullName: true,
+                    email: true,
+                    avatarUrl: true,
+                    team: {
+                        teamId: true,
+                        teamName: true,
+                    },
+                },
             }
         });
         return accounts.map(acc => {
@@ -26,7 +39,13 @@ export class AccountService {
                 accId: acc.accId,
                 username: acc.username,
                 createdAt: formattedDate,
-                roleName: acc.role?.roleName
+                roleName: acc.role?.roleName,
+                userId: acc.user?.userId ?? null,
+                fullName: acc.user?.fullName ?? null,
+                email: acc.user?.email ?? null,
+                avatarUrl: acc.user?.avatarUrl ?? null,
+                teamId: acc.user?.team?.teamId ?? null,
+                teamName: acc.user?.team?.teamName ?? null
             }
         });
 }

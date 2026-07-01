@@ -120,15 +120,17 @@ export class TeamService {
       relations: ["account", "account.role"],
     });
 
+    const displayLeaders = leaders.length > 0 ? leaders : team.leader ? [team.leader] : [];
+
     return {
       teamId: team.teamId,
       teamName: team.teamName,
       description: team.description,
       imageUrl: team.imageUrl,
-      leaders: leaders.map((leader) => ({
+      leaders: displayLeaders.map((leader) => ({
         userId: leader.userId,
         fullName: leader.fullName,
-        role: leader.account?.role?.roleName,
+        role: leader.account?.role?.roleName ?? RoleEnum.LEADER,
         avatarUrl: leader.avatarUrl,
       })),
     };
@@ -261,9 +263,13 @@ export class TeamService {
     if (currentUser.role === RoleEnum.LEADER) {
       const leaderUser = await this.userRepo.findOne({
         where: { account: { accId: currentUser.accId }, isDeleted: 0 },
+        relations: ["team"],
       });
 
-      if (!leaderUser || team.leader?.userId !== leaderUser.userId) {
+      const isPrimaryLeader = team.leader?.userId === leaderUser?.userId;
+      const isAssignedLeader = leaderUser?.team?.teamId === team.teamId;
+
+      if (!leaderUser || (!isPrimaryLeader && !isAssignedLeader)) {
         throw new HttpError(TEAM_ERRORS.FORBIDDEN_ACCESS, HTTP_STATUS.FORBIDDEN);
       }
     }

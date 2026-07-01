@@ -1,6 +1,7 @@
 import app from './app.js';
 import { AppDataSource } from './db/data-source.js';
 import { runSeeds } from './db/seeds/index.js';
+import { seedRemoteImages } from './scripts/seedRemoteImages.js';
 
 const PORT = process.env.PORT || 5000;
 
@@ -11,6 +12,7 @@ AppDataSource.initialize()
 
     if (process.env.SEED_ON_START !== 'false') {
       await runSeeds(AppDataSource);
+      await seedRemoteImages(AppDataSource);
     }
 
     app.listen(PORT, () => {

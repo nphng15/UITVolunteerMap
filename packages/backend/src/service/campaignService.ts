@@ -9,7 +9,10 @@ export class CampaignService {
 
   // 1. GET ALL
   async getAll() {
-    return await this.campaignRepo.find();
+    const campaigns = await this.campaignRepo.find({ order: { campaignId: "ASC" } });
+    return campaigns.filter((campaign) =>
+      ["Mùa Hè Xanh 2026", "Xuân Tình Nguyện 2026"].includes(campaign.campaignName),
+    );
   }
 
   // 2. GET ONE
