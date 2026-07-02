@@ -38,13 +38,31 @@ export class CheckInService {
       throw new HttpError(CHECKIN_ERRORS.CAMPAIGN_NOT_FOUND, HTTP_STATUS.NOT_FOUND);
     }
 
-    if (campaign.latitude == null || campaign.longitude == null) {
-      throw new HttpError(CHECKIN_ERRORS.CAMPAIGN_NO_LOCATION, HTTP_STATUS.BAD_REQUEST);
-    }
-
     const now = new Date().toISOString().split('T')[0];
     if (now < campaign.startDate || now > campaign.endDate) {
       throw new HttpError(CHECKIN_ERRORS.CAMPAIGN_NOT_ACTIVE, HTTP_STATUS.BAD_REQUEST);
+    }
+
+    const user = await this.userRepo.findOne({
+      where: { account: { accId }, isDeleted: 0 },
+      relations: ['team'],
+    });
+
+    if (!user || !user.team) {
+      throw new HttpError(CHECKIN_ERRORS.NO_TEAM, HTTP_STATUS.NOT_FOUND);
+    }
+
+    const team = await this.teamRepo.findOne({
+      where: { teamId: user.team.teamId, isDeleted: 0 },
+      relations: ['campaign'],
+    });
+
+    if (!team || team.campaign?.campaignId !== data.campaignId) {
+      throw new HttpError(CHECKIN_ERRORS.NO_TEAM, HTTP_STATUS.NOT_FOUND);
+    }
+
+    if (team.checkInLatitude == null || team.checkInLongitude == null) {
+      throw new HttpError(CHECKIN_ERRORS.TEAM_NO_LOCATION, HTTP_STATUS.BAD_REQUEST);
     }
 
     const today = new Date().toISOString().split('T')[0];
@@ -60,11 +78,13 @@ export class CheckInService {
     }
 
     const distance = this.haversineDistance(
-      data.latitude, data.longitude,
-      campaign.latitude, campaign.longitude
+      data.latitude,
+      data.longitude,
+      team.checkInLatitude,
+      team.checkInLongitude,
     );
 
-    const radius = campaign.checkInRadius ?? 100;
+    const radius = team.checkInRadius ?? 100;
     if (distance > radius) {
       throw new HttpError(CHECKIN_ERRORS.OUT_OF_RANGE, HTTP_STATUS.FORBIDDEN);
     }

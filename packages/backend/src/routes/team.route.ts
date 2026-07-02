@@ -1,7 +1,13 @@
 import { Router } from "express";
 import { TeamService } from "../service/teamService.js";
 import { validate } from "../middleware/validate.js";
-import { createTeamSchema, updateTeamSchema, addTeamAttachmentsSchema } from "../schemas/team.js";
+import {
+  createTeamSchema,
+  updateTeamSchema,
+  updateTeamCheckInLocationSchema,
+  addTeamAttachmentsSchema,
+  assignTeamMemberSchema,
+} from "../schemas/team.js";
 import { authenticateToken, requireRole } from "../middleware/auth.js";
 import { HttpError } from "../errors/HttpError.js";
 import {
@@ -18,7 +24,18 @@ const teamService = new TeamService();
 router.get("/", async (req, res) => {
   try {
     const userRole = req.user?.role;
-    const data = await teamService.getAll(userRole);
+    const campaignId = req.query.campaignId
+      ? Number(req.query.campaignId)
+      : undefined;
+
+    if (campaignId !== undefined && Number.isNaN(campaignId)) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        error: "Invalid campaign ID",
+      });
+    }
+
+    const data = await teamService.getAll(userRole, campaignId);
     res.status(HTTP_STATUS.OK).json({ success: true, data });
   } catch (err: unknown) {
     if (err instanceof HttpError) {
@@ -32,6 +49,35 @@ router.get("/", async (req, res) => {
     });
   }
 });
+
+router.patch(
+  "/:id/check-in-location",
+  authenticateToken,
+  requireRole([RoleEnum.LEADER, RoleEnum.ADMIN]),
+  validate(updateTeamCheckInLocationSchema),
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          error: TEAM_ERRORS.INVALID_ID,
+        });
+      }
+
+      const data = await teamService.updateCheckInLocation(id, req.body, req.user!);
+      res.status(HTTP_STATUS.OK).json({ success: true, data, message: TEAM_MESSAGES.UPDATED });
+    } catch (err: unknown) {
+      if (err instanceof HttpError) {
+        return res.status(err.statusCode).json({ success: false, error: err.message });
+      }
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
+    }
+  },
+);
 
 router.get("/:id", async (req, res) => {
   try {
@@ -69,6 +115,101 @@ router.post(
         success: true,
         message: TEAM_MESSAGES.CREATED,
         data,
+      });
+    } catch (err: unknown) {
+      if (err instanceof HttpError) {
+        return res
+          .status(err.statusCode)
+          .json({ success: false, error: err.message });
+      }
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
+    }
+  },
+);
+
+router.get("/:id/members", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        success: false,
+        error: TEAM_ERRORS.INVALID_ID,
+      });
+    }
+
+    const data = await teamService.getMembers(id);
+    res.status(HTTP_STATUS.OK).json({ success: true, data });
+  } catch (err: unknown) {
+    if (err instanceof HttpError) {
+      return res
+        .status(err.statusCode)
+        .json({ success: false, error: err.message });
+    }
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+    });
+  }
+});
+
+router.post(
+  "/:id/members",
+  authenticateToken,
+  requireRole([RoleEnum.ADMIN]),
+  validate(assignTeamMemberSchema),
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          error: TEAM_ERRORS.INVALID_ID,
+        });
+      }
+
+      const data = await teamService.assignMember(id, req.body.userId);
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        message: "Member assigned successfully",
+        data,
+      });
+    } catch (err: unknown) {
+      if (err instanceof HttpError) {
+        return res
+          .status(err.statusCode)
+          .json({ success: false, error: err.message });
+      }
+      res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+        success: false,
+        error: ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
+      });
+    }
+  },
+);
+
+router.delete(
+  "/:id/members/:userId",
+  authenticateToken,
+  requireRole([RoleEnum.ADMIN]),
+  async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const userId = Number(req.params.userId);
+      if (isNaN(id) || isNaN(userId)) {
+        return res.status(HTTP_STATUS.BAD_REQUEST).json({
+          success: false,
+          error: TEAM_ERRORS.INVALID_ID,
+        });
+      }
+
+      await teamService.removeMember(id, userId);
+      res.status(HTTP_STATUS.OK).json({
+        success: true,
+        data: null,
+        message: "Member removed successfully",
       });
     } catch (err: unknown) {
       if (err instanceof HttpError) {

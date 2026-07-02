@@ -29,6 +29,15 @@ export class Team {
   @Column("text", { name: "ImageUrl", nullable: true})
   imageUrl?: string | null;
 
+  @Column("real", { name: "CheckInLatitude", nullable: true })
+  checkInLatitude?: number | null;
+
+  @Column("real", { name: "CheckInLongitude", nullable: true })
+  checkInLongitude?: number | null;
+
+  @Column("real", { name: "CheckInRadius", nullable: true })
+  checkInRadius?: number | null;
+
   @ManyToOne("User", { nullable: true })
   @JoinColumn({ name: "LeaderId" })
   leader?: Relation<User>;

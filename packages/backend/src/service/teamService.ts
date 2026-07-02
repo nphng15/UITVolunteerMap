@@ -3,7 +3,7 @@ import { Team } from "../entities/Team.js";
 import { User } from "../entities/User.js";
 import { Campaign } from "../entities/Campaign.js";
 import { Attachment } from "../entities/Attachment.js";
-import { CreateTeamInput, UpdateTeamInput, type AttachmentInput } from "../schemas/team.js";
+import { CreateTeamInput, UpdateTeamInput, type AttachmentInput, type UpdateTeamCheckInLocationInput } from "../schemas/team.js";
 import { HttpError } from "../errors/HttpError.js";
 import { HTTP_STATUS, TEAM_ERRORS, RoleEnum, type JwtPayload } from "@uit-volunteer-map/shared";
 
@@ -12,40 +12,49 @@ export class TeamService {
   private userRepo = AppDataSource.getRepository(User);
   private campaignRepo = AppDataSource.getRepository(Campaign);
   private attachmentRepo = AppDataSource.getRepository(Attachment);
-  async getAll(userRole?: string) {
+  async getAll(userRole?: string, campaignId?: number) {
     const teams = await this.teamRepo.find({
-      where: { isDeleted: 0 },
-      relations: ["leader", "users", "users.account", "users.account.role"],
+      where: {
+        isDeleted: 0,
+        ...(campaignId ? { campaign: { campaignId } } : {}),
+      },
+      relations: [
+        "campaign",
+        "leader",
+        "leader.account",
+        "leader.account.role",
+        "users",
+        "users.account",
+        "users.account.role",
+      ],
+      order: { teamId: "ASC" },
     });
-   if (userRole === "guest" || !userRole) {
+
+    if (userRole === "guest" || !userRole) {
       return teams.map((team) => {
-        const leaders = team.users.filter(
-          (u) =>
-            u.isDeleted === 0 && u.account?.role?.roleName === RoleEnum.LEADER,
-        );
+        const leaders = this.getTeamLeaders(team);
 
         return {
           teamId: team.teamId,
           teamName: team.teamName,
           imageUrl: team.imageUrl,
-          leaders: leaders.map((l) => ({
-            userId: l.userId,
-            fullName: l.fullName,
-            role: l.account?.role?.roleName,
+          campaignId: team.campaign?.campaignId ?? null,
+          campaignName: team.campaign?.campaignName ?? null,
+          leaders: leaders.map((leader) => ({
+            userId: leader.userId,
+            fullName: leader.fullName,
+            role: leader.account?.role?.roleName,
+            avatarUrl: leader.avatarUrl ?? null,
           })),
         };
       });
     }
 
     return teams.map((team) => {
-      const leaders = team.users.filter(
-        (u) =>
-          u.isDeleted === 0 && u.account?.role?.roleName === RoleEnum.LEADER,
-      );
-
-      const leaderIds = leaders.map((l) => l.userId);
+      const leaders = this.getTeamLeaders(team);
+      const leaderIds = leaders.map((leader) => leader.userId);
       const members = team.users.filter(
-        (u) => u.isDeleted === 0 && !leaderIds.includes(u.userId),
+        (user) => user.isDeleted === 0 && !leaderIds.includes(user.userId),
       );
 
       return {
@@ -53,17 +62,33 @@ export class TeamService {
         teamName: team.teamName,
         description: team.description,
         imageUrl: team.imageUrl,
-        leaders: leaders.map((l) => ({
-          userId: l.userId,
-          fullName: l.fullName,
-          role: l.account?.role?.roleName,
+        campaignId: team.campaign?.campaignId ?? null,
+        campaignName: team.campaign?.campaignName ?? null,
+        leaders: leaders.map((leader) => ({
+          userId: leader.userId,
+          fullName: leader.fullName,
+          role: leader.account?.role?.roleName,
+          avatarUrl: leader.avatarUrl ?? null,
         })),
-        members: members.map((m) => ({
-          userId: m.userId,
-          fullName: m.fullName,
+        members: members.map((member) => ({
+          userId: member.userId,
+          fullName: member.fullName,
         })),
       };
     });
+  }
+
+  private getTeamLeaders(team: Team) {
+    const userLeaders = team.users.filter(
+      (user) =>
+        user.isDeleted === 0 && user.account?.role?.roleName === RoleEnum.LEADER,
+    );
+
+    if (userLeaders.length > 0) {
+      return userLeaders;
+    }
+
+    return team.leader ? [team.leader] : [];
   }
 
   private async getTeamEntity(id: number) {
@@ -95,15 +120,17 @@ export class TeamService {
       relations: ["account", "account.role"],
     });
 
+    const displayLeaders = leaders.length > 0 ? leaders : team.leader ? [team.leader] : [];
+
     return {
       teamId: team.teamId,
       teamName: team.teamName,
       description: team.description,
       imageUrl: team.imageUrl,
-      leaders: leaders.map((leader) => ({
+      leaders: displayLeaders.map((leader) => ({
         userId: leader.userId,
         fullName: leader.fullName,
-        role: leader.account?.role?.roleName,
+        role: leader.account?.role?.roleName ?? RoleEnum.LEADER,
         avatarUrl: leader.avatarUrl,
       })),
     };
@@ -219,6 +246,48 @@ export class TeamService {
     return await this.teamRepo.save(team);
   }
 
+  async updateCheckInLocation(
+    id: number,
+    data: UpdateTeamCheckInLocationInput,
+    currentUser: JwtPayload,
+  ) {
+    const team = await this.teamRepo.findOne({
+      where: { teamId: id, isDeleted: 0 },
+      relations: ["leader", "leader.account"],
+    });
+
+    if (!team) {
+      throw new HttpError(TEAM_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+    }
+
+    if (currentUser.role === RoleEnum.LEADER) {
+      const leaderUser = await this.userRepo.findOne({
+        where: { account: { accId: currentUser.accId }, isDeleted: 0 },
+        relations: ["team"],
+      });
+
+      const isPrimaryLeader = team.leader?.userId === leaderUser?.userId;
+      const isAssignedLeader = leaderUser?.team?.teamId === team.teamId;
+
+      if (!leaderUser || (!isPrimaryLeader && !isAssignedLeader)) {
+        throw new HttpError(TEAM_ERRORS.FORBIDDEN_ACCESS, HTTP_STATUS.FORBIDDEN);
+      }
+    }
+
+    team.checkInLatitude = data.latitude;
+    team.checkInLongitude = data.longitude;
+    team.checkInRadius = data.radius;
+
+    const saved = await this.teamRepo.save(team);
+    return {
+      teamId: saved.teamId,
+      teamName: saved.teamName,
+      checkInLatitude: saved.checkInLatitude,
+      checkInLongitude: saved.checkInLongitude,
+      checkInRadius: saved.checkInRadius,
+    };
+  }
+
   async addAttachments(teamId: number, attachments: AttachmentInput[], currentUser: JwtPayload) {
     await this.getTeamEntity(teamId);
 
@@ -252,6 +321,73 @@ export class TeamService {
 
     const savedAttachments = await this.attachmentRepo.save(attachmentsToCreate);
     return savedAttachments;
+  }
+
+  async getMembers(teamId: number) {
+    const team = await this.teamRepo.findOne({
+      where: { teamId, isDeleted: 0 },
+    });
+    if (!team) {
+      throw new HttpError(TEAM_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+    }
+
+    const users = await this.userRepo.find({
+      where: { team: { teamId }, isDeleted: 0 },
+      relations: ["account", "account.role", "team"],
+      order: { fullName: "ASC" },
+    });
+
+    return users.map((user) => ({
+      userId: user.userId,
+      fullName: user.fullName,
+      email: user.email,
+      mssv: user.mssv,
+      class: user.class,
+      phoneNumber: user.phoneNumber,
+      avatarUrl: user.avatarUrl ?? null,
+      role: user.account?.role?.roleName ?? null,
+      teamId,
+    }));
+  }
+
+  async assignMember(teamId: number, userId: number) {
+    const team = await this.teamRepo.findOne({
+      where: { teamId, isDeleted: 0 },
+    });
+    if (!team) {
+      throw new HttpError(TEAM_ERRORS.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+    }
+
+    const user = await this.userRepo.findOne({
+      where: { userId, isDeleted: 0 },
+      relations: ["account", "account.role", "team"],
+    });
+    if (!user) {
+      throw new HttpError("User not found", HTTP_STATUS.NOT_FOUND);
+    }
+
+    user.team = team;
+    const saved = await this.userRepo.save(user);
+
+    return {
+      userId: saved.userId,
+      fullName: saved.fullName,
+      role: saved.account?.role?.roleName ?? null,
+      teamId,
+    };
+  }
+
+  async removeMember(teamId: number, userId: number) {
+    const user = await this.userRepo.findOne({
+      where: { userId, team: { teamId }, isDeleted: 0 },
+      relations: ["team"],
+    });
+    if (!user) {
+      throw new HttpError("Team member not found", HTTP_STATUS.NOT_FOUND);
+    }
+
+    user.team = null as any;
+    await this.userRepo.save(user);
   }
 
   async getTeamWithAttachments(teamId: number) {

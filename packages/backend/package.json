@@ -5,18 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc && cp -R src/db/sample-assets dist/db/sample-assets",
     "start": "node dist/index.js",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
-    "test:run": "vitest run",
+    "test:run": "NODE_ENV=test vitest run --no-file-parallelism --maxWorkers=1",
     "typeorm": "typeorm-ts-node-esm",
     "migration:generate": "npm run typeorm -- migration:generate -d typeorm.config.ts",
     "migration:run": "npm run typeorm -- migration:run -d typeorm.config.ts",
     "migration:revert": "npm run typeorm -- migration:revert -d typeorm.config.ts",
     "migration:create": "npm run typeorm -- migration:create src/db/migrations",
-    "seed": "tsx src/db/seeds/index.ts"
+    "seed": "tsx src/db/seeds/index.ts",
+    "seed:remote-images": "tsx src/scripts/seedRemoteImages.ts"
   },
   "dependencies": {
     "@types/multer": "^2.1.0",

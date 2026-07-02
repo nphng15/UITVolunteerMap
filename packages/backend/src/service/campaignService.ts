@@ -9,7 +9,7 @@ export class CampaignService {
 
   // 1. GET ALL
   async getAll() {
-    return await this.campaignRepo.find();
+    return await this.campaignRepo.find({ order: { campaignId: "ASC" } });
   }
 
   // 2. GET ONE

@@ -11,11 +11,11 @@ export const createAccountSchema = z.object({
             message: "Chỉ chấp nhận email sinh viên UIT (@gm.uit.edu.vn)",
         }
         ),
-    teamId: z.number(),
+    role: z.enum([RoleEnum.VOLUNTEER, RoleEnum.LEADER]),
     phoneNumber: z.string().min(10, "Số điện thoại ít nhất 10 số"),
     username: z.string().min(3),
     password: z.string().min(6),
-    
+
 });
 export const updateAccountSchema = z.object({
     password: z.string().min(6).optional(),

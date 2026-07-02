@@ -43,6 +43,9 @@ export class MyCampaignService {
       checkInRadius: campaign.checkInRadius ?? null,
       teamId: user!.team.teamId,
       teamName: user!.team.teamName,
+      teamCheckInLatitude: user!.team.checkInLatitude ?? null,
+      teamCheckInLongitude: user!.team.checkInLongitude ?? null,
+      teamCheckInRadius: user!.team.checkInRadius ?? null,
       hasCheckedIn: checkedInToday,
       checkedInAt: checkedInToday ? checkIn!.checkedInAt : null,
     };
