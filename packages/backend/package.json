@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
-    "test:run": "vitest run",
+    "test:run": "NODE_ENV=test vitest run --no-file-parallelism --maxWorkers=1",
     "typeorm": "typeorm-ts-node-esm",
     "migration:generate": "npm run typeorm -- migration:generate -d typeorm.config.ts",
     "migration:run": "npm run typeorm -- migration:run -d typeorm.config.ts",
