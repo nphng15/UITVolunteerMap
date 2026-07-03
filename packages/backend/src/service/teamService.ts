@@ -185,6 +185,9 @@ export class TeamService {
 
     const savedTeam = await this.teamRepo.save(newTeam);
 
+    leader.team = savedTeam;
+    await this.userRepo.save(leader);
+
     if (data.attachments && data.attachments.length > 0) {
       const attachmentsToCreate = data.attachments.map((attachment, index) =>
         this.attachmentRepo.create({
