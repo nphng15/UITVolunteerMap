@@ -1,9 +1,11 @@
 import { AppDataSource } from '../db/data-source.js';
 import { User } from '../entities/User.js';
+import { Team } from '../entities/Team.js';
 import { CheckIn } from '../entities/CheckIn.js';
 
 export class MyCampaignService {
   private userRepo = AppDataSource.getRepository(User);
+  private teamRepo = AppDataSource.getRepository(Team);
   private checkInRepo = AppDataSource.getRepository(CheckIn);
 
   /**
@@ -16,10 +18,26 @@ export class MyCampaignService {
       relations: { team: { campaign: true } },
     });
 
-    const campaign = user?.team?.campaign;
-    if (!campaign) {
+    let team = user?.team;
+
+    if (!team && user) {
+      team = await this.teamRepo.findOne({
+        where: { leader: { userId: user.userId }, isDeleted: 0 },
+        relations: { campaign: true },
+      }) ?? undefined;
+
+      if (team) {
+        user.team = team;
+        await this.userRepo.save(user);
+      }
+    }
+
+    if (!team?.campaign) {
       return null;
     }
+
+    const resolvedTeam = team;
+    const campaign = resolvedTeam.campaign;
 
     const checkIn = await this.checkInRepo.findOne({
       where: { campaignId: campaign.campaignId, accId },
@@ -41,11 +59,11 @@ export class MyCampaignService {
       latitude: campaign.latitude ?? null,
       longitude: campaign.longitude ?? null,
       checkInRadius: campaign.checkInRadius ?? null,
-      teamId: user!.team.teamId,
-      teamName: user!.team.teamName,
-      teamCheckInLatitude: user!.team.checkInLatitude ?? null,
-      teamCheckInLongitude: user!.team.checkInLongitude ?? null,
-      teamCheckInRadius: user!.team.checkInRadius ?? null,
+      teamId: resolvedTeam.teamId,
+      teamName: resolvedTeam.teamName,
+      teamCheckInLatitude: resolvedTeam.checkInLatitude ?? null,
+      teamCheckInLongitude: resolvedTeam.checkInLongitude ?? null,
+      teamCheckInRadius: resolvedTeam.checkInRadius ?? null,
       hasCheckedIn: checkedInToday,
       checkedInAt: checkedInToday ? checkIn!.checkedInAt : null,
     };
